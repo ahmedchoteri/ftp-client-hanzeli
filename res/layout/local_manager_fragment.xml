@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/background_black" >
+	
+	
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_black" >
+
+        <ImageButton
+            android:id="@+id/LOCimageButtonGoParent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:contentDescription="@string/manager_goparent_image"
+            android:src="@drawable/image_goparent" />
+
+        <ImageButton
+            android:id="@+id/LOCimageButtonGoHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:contentDescription="@string/manager_gohome_image"
+            android:src="@drawable/image_home" />
+
+        <TextView
+            android:id="@+id/LOCtextViewWorkinDirectory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal|center"
+            android:layout_marginLeft="10dip"
+            android:gravity="center_vertical"
+            android:text="@string/manager_working_direktory"
+            android:textColor="@color/manager_text_white" />
+    </LinearLayout>
+	
+	
+    <GridLayout
+        android:id="@+id/gridBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/background_black"
+        android:columnCount="3"
+        android:rowCount="3" >
+		
+		<View
+        	android:layout_width="fill_parent"
+        	android:layout_columnSpan="3"
+        	android:layout_height="3dp"
+        	android:background="@color/manager_line_blue" />
+        <Button
+            android:id="@+id/LOCButtonUpload"
+            android:layout_width="105dip"
+            android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/upload"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/frag_upload" />
+
+        <Button
+            android:id="@+id/LOCButtonAll"
+            android:layout_width="105dip"
+            android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/checked"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/frag_all" />
+
+        <Button
+            android:id="@+id/LOCButtonNew"
+            android:layout_width="105dip"
+            android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/new_folder"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/frag_new_folder" />
+
+        <Button
+            android:id="@+id/LOCButtonSort"
+            android:layout_width="105dip"
+            android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/sort_asc"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/frag_sort" />
+
+        <Button
+            android:id="@+id/LOCButtonDelete"
+            android:layout_width="105dip"
+            android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/delete"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/frag_delete" />
+
+        <Button
+            android:id="@+id/LOCButtonRename"
+            android:layout_width="105dip"
+            android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/rename"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/frag_rename" />
+    </GridLayout>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/gridBottom"
+	    android:layout_below="@+id/topBar"
+	    android:background="@color/background_black"
+	    android:orientation="vertical" >
+
+    	<View
+        	android:layout_width="fill_parent"
+        	android:layout_height="3dp"
+        	android:background="@color/manager_line_blue" />
+
+    	<ListView
+        	android:id="@+id/listViewLocal"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:background="@color/background_black" >
+    	</ListView>
+	</LinearLayout>
+</RelativeLayout>

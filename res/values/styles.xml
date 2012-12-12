@@ -1,0 +1,6 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+    <dimen name="edit_screen_text_size">25dp</dimen>
+
+</resources>
