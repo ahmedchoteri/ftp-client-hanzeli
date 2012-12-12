@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: sebb
+Build-Jdk: 1.6.0_29
+Specification-Title: Commons Net
+Specification-Version: 3.1
+Specification-Vendor: The Apache Software Foundation
+Implementation-Title: Commons Net
+Implementation-Version: 3.1
+Implementation-Vendor-Id: commons-net
+Implementation-Vendor: The Apache Software Foundation
+
