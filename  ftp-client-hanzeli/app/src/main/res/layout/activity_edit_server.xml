@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" >
+
+<LinearLayout
+    android:id="@+id/LinearView0"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_black"
+    android:orientation="vertical" >
+
+<LinearLayout 
+    android:id="@+id/LinearView1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:baselineAligned="false"
+    android:background="@color/background_black"
+    tools:context=".EditServerActivity" >
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/edit_screen_name"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+        <TextView
+            android:id="@+id/textViewHost"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/edit_screen_host"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+        <TextView
+            android:id="@+id/textViewUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/edit_screen_username"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+        <TextView
+            android:id="@+id/textViewPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/edit_screen_password"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+        <TextView
+            android:id="@+id/textViewPort"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/edit_screen_port"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+        <TextView
+            android:id="@+id/textViewAnonym"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/edit_screen_anonym"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+        <TextView
+            android:id="@+id/textViewLocal"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/edit_screen_local_dir"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:id="@+id/textViewRemote"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:scrollHorizontally="false"
+            android:text="@string/edit_screen_remote_dir"
+            android:textColor="@color/manager_text_white"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="" />
+
+        <EditText
+            android:id="@+id/editTextHost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="" />
+
+        <EditText
+            android:id="@+id/editTextUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="" />
+
+        <EditText
+            android:id="@+id/editTextPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edit_screen_default_port" />
+
+        <CheckBox
+            android:id="@+id/checkBoxAnonym"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/editTextLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_screen_local_text" 
+            android:hint=""/>
+
+        <EditText
+            android:id="@+id/editTextRemote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edit_screen_remote_hint" >
+
+            <requestFocus />
+        </EditText>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+<Button
+    android:id="@+id/editButtonSave"
+    android:layout_width="150dip"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="50dip"
+    android:text="@string/edit_screen_btn_save" />
+
+</LinearLayout>
+</ScrollView>
