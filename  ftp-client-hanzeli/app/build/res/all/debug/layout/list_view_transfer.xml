@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dip"
+    android:orientation="horizontal" >
+    <CheckBox
+        android:id="@+id/trf_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" 
+        android:layout_gravity="center"/>
+
+    <ImageView
+        android:id="@+id/trf_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/trf_icon"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/trf_source"
+        android:layout_width="50dip"
+        android:layout_height="match_parent"
+        
+        android:gravity="center_vertical"
+        android:textColor="@color/manager_text_white"
+        android:paddingLeft="10dip" />
+
+    <TextView
+        android:id="@+id/trf_destination"
+        android:layout_width="50dip"
+        android:layout_height="match_parent"
+        
+        android:textColor="@color/manager_text_white"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/trf_fsize"
+        android:layout_width="50dip"
+        
+        android:layout_height="match_parent"
+        android:textColor="@color/manager_text_white"
+        android:gravity="center_vertical" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+	    <TextView
+	        android:id="@+id/trf_status"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:text="@string/trf_status"
+	        android:textColor="@color/manager_text_white"
+	        android:gravity="center_vertical" />
+    
+        <ProgressBar
+            android:id="@+id/trf_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/AndronFTP/app/src/main/res/layout/list_view_transfer.xml -->

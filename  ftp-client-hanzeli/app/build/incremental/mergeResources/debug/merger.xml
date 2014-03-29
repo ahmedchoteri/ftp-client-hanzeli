@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res" >
+            <file
+                name="checked"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\checked.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="clear"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\clear.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="delete"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\delete.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="download"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\download.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ftp"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\ftp.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\ic_launcher.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="image_folder"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\image_folder.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="image_goparent"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\image_goparent.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="image_home"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\image_home.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="image_unknown"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\image_unknown.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="new_folder"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\new_folder.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="rename"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\rename.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="sort_asc"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\sort_asc.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="sort_desc"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\sort_desc.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="stop"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\stop.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="upload"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-hdpi\upload.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-ldpi\ic_launcher.png"
+                qualifiers="ldpi"
+                type="drawable" />
+            <file
+                name="ic_action_search"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-mdpi\ic_action_search.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-mdpi\ic_launcher.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_action_search"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-xhdpi\ic_action_search.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\drawable-xhdpi\ic_launcher.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="activity_edit_server"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\activity_edit_server.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_main"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\activity_main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_view_file"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\list_view_file.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_view_transfer"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\list_view_transfer.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="local_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\local_manager_fragment.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="remote_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\remote_manager_fragment.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="server_screen"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\server_screen.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="spinner_bkg"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\spinner_bkg.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="transfer_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\layout\transfer_fragment.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_edit_server"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\menu\activity_edit_server.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="activity_main"
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\menu\activity_main.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\values\colors.xml"
+                qualifiers="" >
+                <color name="manager_line_blue" >#0000cd
+                </color>
+                <color name="manager_text_white" >#ffffff
+                </color>
+                <color name="background_black" >#000000
+                </color>
+            </file>
+            <file
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\values\strings.xml"
+                qualifiers="" >
+                <string name="btn_edit" >Edit
+                </string>
+                <string name="title_activity_main" >MainActivity
+                </string>
+                <string name="tab_remote" >Remote
+                </string>
+                <string name="edit_screen_host" >Host
+                </string>
+                <string name="edit_screen_password" >Password
+                </string>
+                <string name="frag_delete" >Del
+                </string>
+                <string name="edit_screen_default_port" >default is 21
+                </string>
+                <string name="frag_download" >Downl
+                </string>
+                <string name="edit_screen_local_text" >/sdcard
+                </string>
+                <string name="ok" >OK
+                </string>
+                <string name="btn_delete" >Delete
+                </string>
+                <string name="trf_status" >Status
+                </string>
+                <string name="frag_rename" >Rename
+                </string>
+                <string name="frag_upload" >Upload
+                </string>
+                <string name="edit_screen_username" >Username
+                </string>
+                <string name="file_icon" >File icon
+                </string>
+                <string name="title_activity_edit_server" >EditServerActivity
+                </string>
+                <string name="tab_local" >Local
+                </string>
+                <string name="btn_new" >New
+                </string>
+                <string name="file_folder" >Folder
+                </string>
+                <string name="frag_stop" >Stop
+                </string>
+                <string name="menu_settings" >Settings
+                </string>
+                <string name="file_unknown" >Unknown
+                </string>
+                <string name="frag_sort" >Sort
+                </string>
+                <string name="manager_working_direktory" >Working directory
+                </string>
+                <string name="edit_screen_local_dir" >Local dir.
+                </string>
+                <string name="edit_screen_remote_hint" >/folder
+                </string>
+                <string name="tab_transfer" >Transfer
+                </string>
+                <string name="frag_new_folder" >New
+                </string>
+                <string name="edit_screen_remote_dir" >Remote dir.
+                </string>
+                <string name="edit_screen_port" >Port number
+                </string>
+                <string name="edit_screen_name" >Name
+                </string>
+                <string name="frag_clear" >Clear
+                </string>
+                <string name="app_name" >KarlFTP
+                </string>
+                <string name="ftp_image" >ftp_image
+                </string>
+                <string name="edit_screen_btn_save" >Save
+                </string>
+                <string name="manager_goparent_image" >Goparent_button
+                </string>
+                <string name="frag_all" >All
+                </string>
+                <string name="trf_icon" >icon
+                </string>
+                <string name="manager_gohome_image" >Home button
+                </string>
+                <string name="edit_screen_anonym" >Anonymous
+                </string>
+                <string name="btn_connect" >Connect
+                </string>
+            </file>
+            <file
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\values\styles.xml"
+                qualifiers="" >
+                <dimen name="edit_screen_text_size" >25dp
+                </dimen>
+
+                <style
+                    name="AppTheme"
+                    parent="android:Theme.Light" />
+            </file>
+            <file
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\values-v11\styles.xml"
+                qualifiers="v11" >
+
+                <style
+                    name="AppTheme"
+                    parent="android:Theme.Holo.Light" />
+            </file>
+            <file
+                path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\res\values-v14\styles.xml"
+                qualifiers="v14" >
+
+                <style
+                    name="AppTheme"
+                    parent="android:Theme.Holo.Light.DarkActionBar" />
+            </file>
+        </source>
+        <source path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\build\res\rs\debug" />
+        <source path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\build\res\generated\debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\debug\res" />
+    </dataSet>
+
+</merger>
