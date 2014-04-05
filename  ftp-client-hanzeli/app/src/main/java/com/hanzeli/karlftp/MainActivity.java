@@ -63,12 +63,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 		}
 
 		
-
+        //inicializacia manazerov a
 		MainApplication.getInstance().initManagers(this, bundle);
 
-		
 		//connect both file managers
 		MainApplication.getInstance().connect();
+
     }
 
 	public void managerEvent(ManagerEvent type) {

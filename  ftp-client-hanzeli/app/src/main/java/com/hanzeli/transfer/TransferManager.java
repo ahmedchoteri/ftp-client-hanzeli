@@ -6,12 +6,17 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.net.ftp.FTPClient;
 
+import com.hanzeli.fragments.TransferFragment;
+import com.hanzeli.karlftp.MainActivity;
 import com.hanzeli.karlftp.MainApplication;
 import com.hanzeli.managers.FileInfo;
 import com.hanzeli.managers.AsyncTaskResult;
@@ -23,29 +28,36 @@ import com.hanzeli.values.EventTypes;
 
 public class TransferManager {
 	
-	private TransferProcessListener fragListener;	//listener for updating status of task
-	private int transferNum;
-	private List<Transfer> allTransfers;
-	//private List<TransferHandler> allTrAsyncTasks;
-	private FTPClient client;
-	private ManagerListener managerListener;
+	private final String TAG = "TransferManager";
+
+    private TransferFragment resultListener;    //listener ktory reaguje na vysledok
+    private MainActivity errorListener;         //listener ktory reaguje na chybu
+    public int transferNum;
+    private List<Transfer> allTransfers;
+    private FTPClient client;
     private boolean busy;
-	
-	
+
+    //private TransferProcessListener fragListener;	//listener for updating status of task
+	//private List<TransferHandler> allTrAsyncTasks;
+	//private ManagerListener managerListener;
+
 	public TransferManager(){	
 		allTransfers = new ArrayList<Transfer>();
 		//allTrAsyncTasks=new ArrayList<TransferHandler>();
 		transferNum=0;
-		
-		
 	}
-	
-	public void setManList(ManagerListener listener){
-		managerListener=listener;
+
+	public void attachResultListener(TransferFragment listener){
+		resultListener=listener;
 	}
-	public void setFragList(TransferProcessListener fragList){
-		fragListener = fragList;
+
+    public void detachReslutListener(){ resultListener = null; }
+
+    public void attachErrorListener(MainActivity listener){
+		errorListener = listener;
 	}
+
+    public void detachErrorListener() { errorListener = null; }
 	
 	public void setClient(FTPClient client){
 		this.client=client;
@@ -75,22 +87,20 @@ public class TransferManager {
 		}
 
 		allTransfers.add(tr);
-		managerListener.managerEvent(new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE));
+		resultListener.managerEvent(new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE));
 	}
 	
 	public void processTransfers() {
 
-		if (((allTransfers == null) || allTransfers.isEmpty()) && busy) {
-			return;
+		if (allTransfers != null && !allTransfers.isEmpty() && !busy) {
+            Log.d(TAG,"Starting processTransfer");
+            Transfer transfer = allTransfers.get(0);
+            busy=true;
+            TransferHandler trTask = new TransferHandler(transfer, ManagerTask.START_TRANSFER);
+            trTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 		else{
-            Transfer transfer = allTransfers.get(0);
-            allTransfers.remove(0);
-            busy=true;
-			TransferHandler trTask = new TransferHandler(ManagerTask.START_TRANSFER);
-			//allTrAsyncTasks.add(trTask);
-			trTask.execute(transfer);
-			//new TransferTaskHandler(ManagerTask.START_TRANSFER).execute(allTransfers.toArray(new Transfer[allTransfers.size()]));
+            Log.d(TAG,"ProcessTransfer started with empty queue");
 		}
 	}
 	
@@ -100,75 +110,82 @@ public class TransferManager {
 	
 	
 	
-	private class TransferHandler extends AsyncTask<Transfer, Integer, AsyncTaskResult>{
+	private class TransferHandler extends AsyncTask<Void, Void, AsyncTaskResult>{
 		
 		private ManagerTask managTask;
-		private List<Transfer> allTransfers; 
 		private Transfer transfer;
-		public TransferHandler(ManagerTask task){
-			managTask =  task;
+		public TransferHandler(Transfer transfer, ManagerTask task){
+			this.transfer = transfer;
+            managTask =  task;
 		}
 		
 		@Override
 		protected void onPreExecute(){
 			super.onPreExecute();
+            transfer.setWaiting(false);
 			ManagerEvent event = new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE);
-			managerListener.managerEvent(event);
+			resultListener.managerEvent(event);
 		}
 		
 		@Override
-		protected AsyncTaskResult doInBackground(Transfer... params) {
+		protected AsyncTaskResult doInBackground(Void ... params) {
 			AsyncTaskResult result = new AsyncTaskResult();
-            this.transfer = params[0];
-			switch(managTask.getTask()){
-			case START:
-				try{
-					if (transfer.isWaiting()){
-								transfer.setWaiting(false);
-								if(transfer.getDirection()==0){
-									doDownload();
-								}
-								else doUpload();
-					}
-					
-				}catch(ManagerException e){
-					result.addEvent(new ManagerEvent(e.getEvent()));
-				}
-				break;
-			case STOP:
-				try{
-					doStop();
-				}catch(ManagerException e){
-					result.addEvent(new ManagerEvent(e.getEvent()));
-				}
-			default:
-				break;
-			}
-			
+
+            try {
+                switch (managTask.getTask()) {
+                    case START:
+                        if (transfer.getDirection() == 0) {
+                                doDownload();
+                        } else doUpload();
+                        break;
+                    case STOP:
+                        doStop();
+                        break;
+                    default:
+                        break;
+                }
+                result.setResult(true);
+            } catch (ManagerException e){
+                result.setResult(false);
+                result.addEvent(new ManagerEvent(e.getEvent()));
+            }
 			return result;
 		}
 		
 		@Override
-		protected void onProgressUpdate(Integer... values){
+		protected void onProgressUpdate(Void... values){
 			super.onProgressUpdate(values);
-			fragListener.onProcessUpdate(values[0], values[1]);
+            //update pre progress bar
+            resultListener.onProcessUpdate();
 		}
 		
 		@Override
 		protected void onPostExecute(AsyncTaskResult result){
 			super.onPostExecute(result);
-			/*for(ManagerEvent event : result.getEvents()){
-				manListener.managerEvent(event);
-			}*/
+            if(result.getResult()){
+                transfer.setDone(true);
+                ManagerEvent event = new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE);
+                resultListener.managerEvent(event);
+            }else{
+                //nastala chyba a error listener musi reagovat
+                for (ManagerEvent event : result.getEvents()) {
+                    errorListener.managerEvent(event);
+                }
+            }
 		}
 		
 		private void doDownload() throws ManagerException{
-			if (client == null){
+            Log.d(TAG,"Starting download");
+            if (client == null){
+                Log.d(TAG,"client is null during download, reconnecting");
 				connectClient();
 			}
+
 			if (!client.isConnected()){
+                Log.d(TAG,"client is not connected, reconnecting");
 				connectClient();
 			}
+
 			try{
 				if(!client.printWorkingDirectory().equals(transfer.getFromPath())){
 					client.changeWorkingDirectory(transfer.getFromPath());
@@ -182,20 +199,34 @@ public class TransferManager {
 						int progress = Math.round((getCount() * 100) / transfer.getSize());
 						transfer.setProgress(progress);
 						//skusit brzdit publish progress
-						publishProgress(transfer.getId(), progress);
+                        publishProgress();
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 					}
 				};
 				client.retrieveFile(transfer.getFileName(), cos);
 				cos.close();
-				publishProgress(transfer.getId(),100);
+                transfer.setProgress(100);
+                Log.d(TAG,"File downloaded");
+				publishProgress();
 				
 			} catch (IOException e){
-				e.printStackTrace();
+                Log.d(TAG,"Downloading of file failed");
+				throw new ManagerException(EventTypes.DOWNLOAD_ERR);
 			}
 		}
 		
 		private void doUpload() throws ManagerException{
-			if (!client.isConnected()){
+            Log.d(TAG,"Starting upload");
+            if (client == null){
+                Log.d(TAG,"client is null during upload, reconnecting");
+                connectClient();
+            }
+            if (!client.isConnected()){
+                Log.d(TAG,"client is not connected during upload, reconnecting");
 				connectClient();
 			}
 			try{
@@ -210,22 +241,27 @@ public class TransferManager {
 
 						int progress = Math.round((getCount() * 100) / transfer.getSize());
 						transfer.setProgress(progress);
-						publishProgress(transfer.getId(), progress);
+						publishProgress();
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 					}
 				};
 				client.storeFile(transfer.getFileName(), cis);
 				cis.close();
-				publishProgress(transfer.getId(),100);
-			} catch (SocketException e){
-				throw new ManagerException(EventTypes.UPLOAD_ERR);
-				
+                transfer.setProgress(100);
+                Log.d(TAG,"File uploaded");
+				publishProgress();
 			} catch (IOException e){
+                Log.d(TAG,"Uploading of file failed");
 				throw new ManagerException(EventTypes.UPLOAD_ERR);
 			}
 		}
 		
 		private void doStop() throws ManagerException{
-			
+			//TODO dorobit odstavenie klienta
 		}
 
 	}

@@ -213,6 +213,13 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
 		return count;
 	}
 
+    public void update(List<Transfer> list){
+        if (list != null && !list.isEmpty()) {
+            allTransfers = list;
+        }
+        else allTransfers = null;
+        notifyDataSetChanged();
+    }
 	public void updateProgress(int position, int value){
 		Transfer tr = allTransfers.get(position);
 		tr.setProgress(value);

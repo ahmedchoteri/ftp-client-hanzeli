@@ -192,13 +192,13 @@
                 </string>
                 <string name="frag_download" >Downl
                 </string>
-                <string name="edit_screen_local_text" >/sdcard
-                </string>
                 <string name="ok" >OK
                 </string>
-                <string name="btn_delete" >Delete
+                <string name="edit_screen_local_text" >/sdcard
                 </string>
                 <string name="trf_status" >Status
+                </string>
+                <string name="btn_delete" >Delete
                 </string>
                 <string name="frag_rename" >Rename
                 </string>
@@ -242,23 +242,23 @@
                 </string>
                 <string name="frag_clear" >Clear
                 </string>
-                <string name="app_name" >KarlFTP
-                </string>
                 <string name="ftp_image" >ftp_image
+                </string>
+                <string name="app_name" >KarlFTP
                 </string>
                 <string name="edit_screen_btn_save" >Save
                 </string>
                 <string name="manager_goparent_image" >Goparent_button
                 </string>
-                <string name="frag_all" >All
-                </string>
                 <string name="trf_icon" >icon
+                </string>
+                <string name="frag_all" >All
                 </string>
                 <string name="manager_gohome_image" >Home button
                 </string>
-                <string name="edit_screen_anonym" >Anonymous
-                </string>
                 <string name="btn_connect" >Connect
+                </string>
+                <string name="edit_screen_anonym" >Anonymous
                 </string>
             </file>
             <file

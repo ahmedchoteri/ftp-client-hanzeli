@@ -77,7 +77,7 @@ public class RemoteManager extends BasicFileManager{
 			}
 		}
 		catch(IOException e){
-			
+
 		}
 	}
 	
@@ -112,9 +112,8 @@ public class RemoteManager extends BasicFileManager{
 					client.disconnect();
 				}
 			} catch (IOException e1) {
+                throw new ManagerException(EventTypes.CONNECTION_ERROR);
 			}
-			throw new ManagerException(EventTypes.CONNECTION_ERROR);
-			
 		}
 		connection=true;
 		
