@@ -28,7 +28,8 @@ public class MainApplication extends Application{
 	
 	/** instance of this class*/
 	private static MainApplication thisApp;	//because I need to get instance of application and return statement don't allow this value
-	/**
+
+    /**
 	 * @see android.app.Application#onCreate()
 	 */
 	@Override
@@ -75,15 +76,16 @@ public class MainApplication extends Application{
 		loadPreferences(bundle);
 		// Local manager
 		localMan = new LocalManager();
-		localMan.attach(context);
+		localMan.attachErrorListener(context);
 		localMan.init(bundle);
 
 		// Server manager
 		remoteMan = new RemoteManager();
-		remoteMan.attach(context);
+		remoteMan.attachErrorListener(context);
 		remoteMan.init(bundle);	
 		
 		transferMan = new TransferManager();
+        transferMan.attachErrorListener(context);
 		
 	}
 
@@ -169,4 +171,5 @@ public class MainApplication extends Application{
 	public long getLastSelectedServer() {
 		return preferences.getLong("lastSelectedServer", -1);
 	}
+
 }

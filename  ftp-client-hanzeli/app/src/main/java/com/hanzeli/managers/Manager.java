@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.net.ftp.FTPClient;
 
+import com.hanzeli.karlftp.MainActivity;
 import com.hanzeli.values.Order;
 
 import android.os.Bundle;
@@ -127,10 +128,14 @@ public interface Manager {
 	 * assigning manager listener for sending massages
 	 * @param listener
 	 */
-	public void attach(ManagerListener listener);
+	public void attachResultListener(ManagerListener listener);
 
     /**
      * remove manager listener
      */
-    public void detach();
+    public void detachResultListener();
+
+    public void attachErrorListener(MainActivity listener);
+
+    public void detachErrorListener();
 }

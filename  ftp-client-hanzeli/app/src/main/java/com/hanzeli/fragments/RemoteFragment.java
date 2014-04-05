@@ -36,7 +36,7 @@ public class RemoteFragment extends ManagerFragment{
 		View view = inflater.inflate(fragmentId, container, false);
 		//initialize user interface
 		initBrowser(view);
-		fileManager.attach(this);
+		fileManager.attachResultListener(this);
 		checkedAll=false;
 		orderAscDesc=Order.ASC;
 		//return created view

@@ -9,6 +9,7 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import android.os.AsyncTask;
 
+import com.hanzeli.karlftp.MainActivity;
 import com.hanzeli.values.EventTypes;
 import com.hanzeli.values.Order;
 
@@ -23,7 +24,9 @@ public abstract class BasicFileManager implements Manager{
 	/** list with information about files */
 	protected ArrayList<FileInfo> fileList;
 	/** File manager listeners */
-	protected ManagerListener listener;
+	protected ManagerListener resultListener;
+    /** Error listener */
+    protected MainActivity errorListener;
 	/** Order */
 	protected Ordering orderingCompare;
 	//protected Ordering orderingAscDesc;
@@ -34,7 +37,7 @@ public abstract class BasicFileManager implements Manager{
 		rootDir = null;
 		connection = false;
 		fileList = null;
-		listener = null;
+		resultListener = null;
 		orderingCompare = new Ordering(Order.NAME,Order.ASC);
 		
 		
@@ -88,8 +91,8 @@ public abstract class BasicFileManager implements Manager{
         ArrayList<FileInfo> filesToDelete = getSelectedFiles();
         FileInfo[] aFiles = new FileInfo[filesToDelete.size()];
         filesToDelete.toArray(aFiles);
-
-        new ManagerTaskHandler(ManagerTask.DELETE).execute(aFiles);
+        //paralelne spustenie AsyncTask
+        new ManagerTaskHandler(ManagerTask.DELETE).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, aFiles);
     }
 
     public void setClient(FTPClient client){
@@ -101,19 +104,21 @@ public abstract class BasicFileManager implements Manager{
 	}
 	
 	public void connect() {
-		new ManagerTaskHandler(ManagerTask.CONNECT).execute();
+        //paralelne spustenie AsyncTask
+        new ManagerTaskHandler(ManagerTask.CONNECT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 	
 	public void disconnect() {
-		new ManagerTaskHandler(ManagerTask.DISCONNECT).execute();
+        //paralelne spustenie AsyncTask
+		new ManagerTaskHandler(ManagerTask.DISCONNECT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 	
 	/**
 	 * registering a new listener
 	 * @param listener for this manager
 	 */
-	public void attach(ManagerListener listener) {
-		this.listener=listener;
+	public void attachResultListener(ManagerListener listener) {
+		this.resultListener =listener;
 			//ManagerEvent newManagerEvent = new ManagerEvent(EventTypes.FILES_LIST_CHANGE);
 			//newManagerEvent.setManager(this);
 			//listener.managerEvent(newManagerEvent);
@@ -122,18 +127,27 @@ public abstract class BasicFileManager implements Manager{
     /**
      * removing listener
      */
-    public void detach(){
-        this.listener=null;
+    public void detachResultListener(){
+        this.resultListener =null;
     }
 
+
+    public void attachErrorListener(MainActivity listener){
+        this.errorListener = listener;
+    }
+
+
+    public void detachErrorListener(){
+        this.errorListener = null;
+    }
 	/**
 	 * notifying listeners of this manager that event happened
 	 * @param event
 	 */
 	protected void notifyListener(ManagerEvent event) {
-		if (listener!=null) {
+		if (resultListener !=null) {
 			event.setManager(this);
-			listener.managerEvent(event);
+			resultListener.managerEvent(event);
 		}
 	}
 
@@ -151,13 +165,13 @@ public abstract class BasicFileManager implements Manager{
 	public void toParDir() {
 		// Can we go to parent folder
 		if (!isRootFolder()) {
-			new ManagerTaskHandler(ManagerTask.GO_PARENT).execute();
+			new ManagerTaskHandler(ManagerTask.GO_PARENT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
 	public void toHomeDir(){
 		if (!isRootFolder()){
-			new ManagerTaskHandler(ManagerTask.GO_ROOT).execute();
+			new ManagerTaskHandler(ManagerTask.GO_ROOT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 	
@@ -175,7 +189,7 @@ public abstract class BasicFileManager implements Manager{
 			}
 		}
 
-		new ManagerTaskHandler(ManagerTask.CHNG_DIR).execute(dir);
+		new ManagerTaskHandler(ManagerTask.CHNG_DIR).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dir);
 	}
 
 	/**
@@ -186,7 +200,7 @@ public abstract class BasicFileManager implements Manager{
 		orderingCompare.setType(order);
 		//reorder list of files
 		if ((fileList != null) && !fileList.isEmpty()) {
-			new ManagerTaskHandler(ManagerTask.CHNG_ORDER).execute();
+			new ManagerTaskHandler(ManagerTask.CHNG_ORDER).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -196,7 +210,7 @@ public abstract class BasicFileManager implements Manager{
 	public void chngOrderingAscDesc(final Order order){
 		orderingCompare.setOrder(order);
 		if ((fileList != null) && !fileList.isEmpty()) {
-			new ManagerTaskHandler(ManagerTask.CHNG_ORDER).execute();
+			new ManagerTaskHandler(ManagerTask.CHNG_ORDER).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 	/**
@@ -222,7 +236,7 @@ public abstract class BasicFileManager implements Manager{
 			dir.setAbsPath(currentDir + File.separator + dirname);
 		}
 
-		new ManagerTaskHandler(ManagerTask.NEW_FOLDER).execute(dir);
+		new ManagerTaskHandler(ManagerTask.NEW_FOLDER).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dir);
 	}
 
 	/**
@@ -257,14 +271,14 @@ public abstract class BasicFileManager implements Manager{
 			newFile.setAbsPath(currentDir + File.separator + newFileName);
 		}
 
-		new ManagerTaskHandler(ManagerTask.RENAME).execute(file, newFile);
+		new ManagerTaskHandler(ManagerTask.RENAME).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, file, newFile);
 	}
 
 	/**
 	 *
 	 */
 	public void refresh() {
-		new ManagerTaskHandler(ManagerTask.REFRESH).execute();
+		new ManagerTaskHandler(ManagerTask.REFRESH).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	/**
