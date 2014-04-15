@@ -350,7 +350,7 @@ public abstract class BasicFileManager implements Manager{
 
 			} catch (ManagerException e) {
 				result.setResult(false);
-				result.addEvent(new ManagerEvent(e.getEvent()));
+				result.addmEvent(new ManagerEvent(e.getEvent()));
 			}
 			return result;
 		}
@@ -369,8 +369,8 @@ public abstract class BasicFileManager implements Manager{
 			
 			
 			// additional events if error will occur
-			if (!result.getEvents().isEmpty()) {
-				notifyListener(result.getEvents());
+			if (!result.getmEvents().isEmpty()) {
+				notifyListener(result.getmEvents());
 			}
 			
 		}

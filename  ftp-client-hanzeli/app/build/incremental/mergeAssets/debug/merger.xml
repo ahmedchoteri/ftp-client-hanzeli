@@ -2,10 +2,10 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\main\assets" />
+        <source path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="C:\Users\Mike\AndroidStudioProjects\AndronFTP\app\src\debug\assets" />
+        <source path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\debug\assets" />
     </dataSet>
 
 </merger>

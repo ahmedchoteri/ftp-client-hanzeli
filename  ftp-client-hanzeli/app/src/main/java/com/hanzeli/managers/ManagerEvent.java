@@ -33,7 +33,7 @@ public class ManagerEvent {
 	}
 
 	/**
-	 * @param manager
+	 * @param manager manager ktory vykonal event
 	 */
 	public void setManager(Manager manager) {
 		this.manager = manager;
