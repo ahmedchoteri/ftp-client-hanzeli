@@ -184,7 +184,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String name = inputText.getText().toString();
-				if (name.length() > 0) {
+				if (name != null && name.length() > 0) {
 					fileManager.newFolder(name);
 				}
 			}

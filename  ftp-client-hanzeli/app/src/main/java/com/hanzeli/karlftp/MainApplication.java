@@ -10,6 +10,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 
 
 /**
@@ -29,6 +30,8 @@ public class MainApplication extends Application{
 	/** instance of this class*/
 	private static MainApplication thisApp;	//because I need to get instance of application and return statement don't allow this value
 
+    public static LocalBroadcastManager broadcastManager;
+
     /**
 	 * @see android.app.Application#onCreate()
 	 */
@@ -38,6 +41,7 @@ public class MainApplication extends Application{
 		// load preferences for application
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		thisApp=this;
+        broadcastManager = LocalBroadcastManager.getInstance(this);
 	}
 	
 	/**

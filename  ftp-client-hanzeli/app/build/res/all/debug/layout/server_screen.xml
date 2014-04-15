@@ -64,4 +64,4 @@
         android:onClick="onClick"
         android:text="@string/btn_delete" />
 
-</LinearLayout><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/AndronFTP/app/src/main/res/layout/server_screen.xml -->
+</LinearLayout><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/KarlFTP/app/src/main/res/layout/server_screen.xml -->

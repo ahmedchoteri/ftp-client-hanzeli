@@ -178,4 +178,4 @@
     android:text="@string/edit_screen_btn_save" />
 
 </LinearLayout>
-</ScrollView><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/AndronFTP/app/src/main/res/layout/activity_edit_server.xml -->
+</ScrollView><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/KarlFTP/app/src/main/res/layout/activity_edit_server.xml -->

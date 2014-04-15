@@ -1,8 +1,11 @@
 package com.hanzeli.transfer;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.File;
 
-public class Transfer {
+public class Transfer implements Parcelable{
 	private int id;
 	private String fileName;
 	private String fromPath;
@@ -13,7 +16,6 @@ public class Transfer {
 	private boolean done;
 	private int progress;
 	private boolean checked;
-    public boolean dirty = false;
 	
 	public int getId() {
 		return id;
@@ -118,4 +120,46 @@ public class Transfer {
 		}
 		return path+fileName;
 	}
+
+    public int describeContents(){
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags){
+        out.writeInt(id);
+        out.writeString(fileName);
+        out.writeString(fromPath);
+        out.writeString(toPath);
+        out.writeLong(size);
+        out.writeInt(direction);
+        out.writeInt(progress);
+        out.writeByte((byte)(waiting ? 1 : 0));
+        out.writeByte((byte)(done ? 1 : 0));
+        out.writeByte((byte)(checked ? 1 : 0));
+    }
+
+    public static final Creator<Transfer> CREATOR = new Creator<Transfer>() {
+        public Transfer createFromParcel(Parcel in){
+            return new Transfer(in);
+        }
+        public Transfer[] newArray(int size){
+            return new Transfer[size];
+        }
+    };
+
+    public Transfer(Parcel in){
+        id = in.readInt();
+        fileName = in.readString();
+        fromPath = in.readString();
+        toPath = in.readString();
+        size = in.readLong();
+        direction = in.readInt();
+        progress = in.readInt();
+        waiting = in.readByte() != 0;
+        done = in.readByte() != 0;
+        checked = in.readByte() != 0;
+
+    }
+
+    public Transfer(){}
 }

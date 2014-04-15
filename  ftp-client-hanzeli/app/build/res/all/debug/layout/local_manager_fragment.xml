@@ -131,4 +131,4 @@
         	android:background="@color/background_black" >
     	</ListView>
 	</LinearLayout>
-</RelativeLayout><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/AndronFTP/app/src/main/res/layout/local_manager_fragment.xml -->
+</RelativeLayout><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/KarlFTP/app/src/main/res/layout/local_manager_fragment.xml -->

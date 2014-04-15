@@ -6,6 +6,9 @@ import com.hanzeli.fragments.TransferFragment;
 import com.hanzeli.managers.ManagerEvent;
 import com.hanzeli.managers.ManagerListener;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.app.Activity;
@@ -22,7 +25,8 @@ import android.graphics.drawable.ColorDrawable;
 public class MainActivity extends Activity implements ActionBar.TabListener, ManagerListener{
 	
 	private TabId tabSelected;
-	
+	private BroadcastReceiver broadcastReceiver;
+
 	protected MenuItem settings;
 	
     @Override
@@ -69,6 +73,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 		//connect both file managers
 		MainApplication.getInstance().connect();
 
+        /*broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(ManagerEvent))
+            }
+        };*/
+
     }
 
 	public void managerEvent(ManagerEvent type) {
@@ -86,9 +97,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 			warning.show();
 			break;
 		default: break;
+	    }
 	}
-		
-	}
+
+
 	
 	@Override
 	public void onStop(){

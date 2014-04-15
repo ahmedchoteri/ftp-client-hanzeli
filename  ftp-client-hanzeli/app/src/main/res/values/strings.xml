@@ -43,5 +43,7 @@
     <string name="frag_clear">Clear</string>
     <string name="trf_status">Status</string>
     <string name="trf_icon">icon</string>
+    <string name="status_waiting">Waiting</string>
+    <string name="status_done">Done</string>
 
 </resources>

@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class AsyncTaskResult {
 	
 	private boolean result;
-	private ArrayList<ManagerEvent> events = new ArrayList<ManagerEvent>();
+	private ArrayList<ManagerEvent> mEvents = new ArrayList<ManagerEvent>();    //events from Manager
+    private ArrayList<String> sEvent = new ArrayList<String>(); //events from Service
 
 	/**
 	 * @return result
@@ -25,15 +26,23 @@ public class AsyncTaskResult {
 	/**
 	 * @return the mEvents
 	 */
-	public ArrayList<ManagerEvent> getEvents() {
-		return events;
+	public ArrayList<ManagerEvent> getmEvents() {
+		return mEvents;
 	}
 
 	/**
 	 * 
 	 * @param event
 	 */
-	public void addEvent(ManagerEvent event) {
-		events.add(event);
+	public void addmEvent(ManagerEvent event) {
+		mEvents.add(event);
 	}
+
+    public void addsEvent(String event){
+        sEvent.add(event);
+    }
+
+    public ArrayList<String> getsEvents(){
+        return sEvent;
+    }
 }
