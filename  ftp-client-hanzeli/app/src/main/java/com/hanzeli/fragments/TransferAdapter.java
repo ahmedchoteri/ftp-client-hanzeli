@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hanzeli.karlftp.R;
-import com.hanzeli.transfer.Transfer;
+import com.hanzeli.managers.Transfer;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

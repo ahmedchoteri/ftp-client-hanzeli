@@ -35,7 +35,7 @@ public class LocalFragment extends ManagerFragment{
 		View view = inflater.inflate(fragmentId, container, false);
 		//initialize user interface
 		initBrowser(view);
-		fileManager.attachResultListener(this);
+		fileManager.attachResultListener(this); //pripojenie manager listenera k managerovy
 		checkedAll=false;
 		orderAscDesc=Order.ASC;
 		//return created view
@@ -53,11 +53,15 @@ public class LocalFragment extends ManagerFragment{
 		goHomeImgButton.setEnabled(true);
 		//setup current working directory text
 		currentDirTextView = (TextView) view.findViewById(R.id.LOCtextViewWorkinDirectory);
+        if (fileManager.getCurrDir() != null) {
+            currentDirTextView.setText(fileManager.getCurrDir());
+        }
 		//setup file list
 		filesListView = (ListView) view.findViewById(R.id.listViewLocal);
 		filesListView.setOnItemClickListener(this);
 		//setup list adapter
-		fileAdapter = new FileAdapter(getActivity(), this, fileManager.getFiles());
+		fileAdapter = new FileAdapter(getActivity(), "Local", fileManager.getFiles());
+        fileAdapter.setCheckBoxListener(this);
 		filesListView.setAdapter(fileAdapter);
 		//setup fragment buttons + add onClickListener
 		allButton = (Button)  view.findViewById(R.id.LOCButtonAll);

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
@@ -14,34 +16,25 @@ import com.hanzeli.values.EventTypes;
 import com.hanzeli.values.Order;
 
 import android.os.Bundle;
+import android.util.Log;
 
 
 public class RemoteManager extends BasicFileManager{
 	
 	private FTPClient client = null;	//client for connection to server
-	private String hostnameS;	//host name of server
-	private int portS;			//port of server
-	private boolean anonymousU;	//anonymous user
-	private String nameU = null;		//user name	
-	private String passwordU = null;	//user password
+    private Bundle bundle;
 	
 	
 	public void init(Bundle bundle) {
 		//ordering initialization
-		if (bundle.containsKey("remote_order")) {
+		this.bundle = bundle;
+        if (bundle.containsKey("remote_order")) {
 			orderingCompare = new Ordering((Order) bundle.get("remote.orderBy"),Order.ASC);
-		}
-		
-		hostnameS = bundle.getString("server_host");
-		portS=bundle.getInt("server_port");
-		anonymousU = bundle.getBoolean("server_anonym");
-		if (!anonymousU){
-			nameU = bundle.getString("username");
-			passwordU = bundle.getString("password");
 		}
 		currentDir = bundle.getString("remote_dir");
 		rootDir="";
-	}
+        TAG = "RemoteManager";
+    }
 	
 	@Override
 	public FTPClient getClient(){
@@ -49,85 +42,60 @@ public class RemoteManager extends BasicFileManager{
 	}
 	
 	
-	private void loadFilesInfo(){
-		//remove old list
-		fileList = null;
-		//load new list of files
-		try{
-			
-			FTPFile[] list = client.listFiles(currentDir, new FTPFileFilter() {
-				public boolean accept(FTPFile file){
-					return !file.getName().startsWith(".") && !file.isSymbolicLink() && (file.isDirectory() || file.isFile()); 
-				}
-			});
-			if ((list != null) && (list.length > 0)) {
-				fileList = new ArrayList<FileInfo>();
-				for (FTPFile file : list) {
-					FileInfo fi = new FileInfo(file.getName());
-					fi.setSize(file.getSize());
-					fi.setLastModif(file.getTimestamp().getTimeInMillis());
-					if (currentDir.endsWith(File.separator)) fi.setAbsPath(currentDir + file.getName());
-					else fi.setAbsPath(currentDir + File.separatorChar + file.getName());
-					fi.setParentPath(currentDir);	
-					fi.setType(FileTypes.getType(file));
-					fileList.add(fi);
-				}
-				//sorting of fileList
-				Collections.sort(fileList, orderingCompare);
-			}
-		}
-		catch(IOException e){
+	private void loadFilesInfo() throws IOException {
+        //remove old list
+        fileList = null;
+        //load new list of files
 
-		}
-	}
-	
+        FTPFile[] list = client.listFiles(currentDir, new FTPFileFilter() {
+            public boolean accept(FTPFile file) {
+                return !file.getName().startsWith(".") && !file.isSymbolicLink() && (file.isDirectory() || file.isFile());
+            }
+        });
+        if ((list != null) && (list.length > 0)) {
+            fileList = new ArrayList<FileInfo>();
+            for (FTPFile file : list) {
+                FileInfo fi = new FileInfo(file.getName());
+                fi.setSize(file.getSize());
+                fi.setLastModif(file.getTimestamp().getTimeInMillis());
+                if (currentDir.endsWith(File.separator)) fi.setAbsPath(currentDir + file.getName());
+                else fi.setAbsPath(currentDir + File.separatorChar + file.getName());
+                fi.setParentPath(currentDir);
+                fi.setType(FileTypes.getType(file));
+                fileList.add(fi);
+            }
+            //sorting of fileList
+            Collections.sort(fileList, orderingCompare);
+        }
+
+    }
 	
 	@Override
-	protected void execConnect()
-			throws ManagerException {
+	protected void execConnect() throws ManagerException {
 		client = new FTPClient();
-		try{
-			int reply;
-			client.connect(hostnameS, portS);
-			reply = client.getReplyCode();
-			if(!FTPReply.isPositiveCompletion(reply)) {
-				client.disconnect();
-				throw new ManagerException(EventTypes.CONNECTION_ERROR);
-			}
-			if (!anonymousU){
-				if(!client.login(nameU, passwordU)){
-					client.disconnect();
-					throw new ManagerException(EventTypes.CONNECTION_LOGIN_ERR);
-				}
-				
-			}
-			client.enterLocalPassiveMode();
-			currentDir=rootDir=client.printWorkingDirectory();
-			loadFilesInfo();
-			
-		
-		} catch(IOException e){
-			try {
-				if (client != null) {
-					client.disconnect();
-				}
-			} catch (IOException e1) {
-                throw new ManagerException(EventTypes.CONNECTION_ERROR);
-			}
-		}
-		connection=true;
-		
+        Utils.connectClient(client,bundle);
+        client.addProtocolCommandListener(new ProtocolCommandListener() {
+            public void protocolCommandSent(ProtocolCommandEvent event) {
+                Log.d("RM Command sent",event.getMessage());
+            }
+
+            public void protocolReplyReceived(ProtocolCommandEvent event) {
+                Log.d("RM Command received",event.getMessage());
+            }
+        });
+        try {
+            currentDir = rootDir = client.printWorkingDirectory();
+            loadFilesInfo();
+            connection = true;
+        } catch (IOException e){
+            throw new ManagerException(EventTypes.CONNECTION_ERROR);
+        }
 	}
 	
 	@Override
 	protected void execDisconnect() throws ManagerException{
-		try{
-			client.disconnect();
-		}
-		catch(IOException e){
-			e.printStackTrace();
-			throw new ManagerException(EventTypes.CONNECTION_ERROR);
-		}
+		Log.d(TAG,"Disconnecting client");
+        Utils.disconnectClient(client);
 	}
 	
 	@Override
@@ -142,7 +110,8 @@ public class RemoteManager extends BasicFileManager{
 				throw new ManagerException(EventTypes.CONNECTION_ERROR);
 			}
 		}catch(IOException  e){
-			e.printStackTrace();
+			Log.d(TAG,"change working directory error");
+            e.printStackTrace();
 			throw new ManagerException(EventTypes.CONNECTION_ERROR);
 		}
 		
@@ -157,7 +126,8 @@ public class RemoteManager extends BasicFileManager{
 			}
 		}
 		catch(IOException e){
-			e.printStackTrace();
+			Log.d(TAG,"Parent directory change error");
+            e.printStackTrace();
 			throw new ManagerException(EventTypes.CONNECTION_ERROR);
 		}
 		
@@ -172,14 +142,21 @@ public class RemoteManager extends BasicFileManager{
 			}
 		}
 		catch(IOException e){
-			e.printStackTrace();
+            Log.d(TAG,"Home directory change error");
+            e.printStackTrace();
 			throw new ManagerException(EventTypes.CONNECTION_ERROR);
 		}
 	}
 	
 	@Override
 	protected void execRefresh() throws ManagerException {
-		loadFilesInfo();
+		try {
+            loadFilesInfo();
+        }
+        catch(IOException e){
+            Log.d(TAG,"Refresh error");
+            throw new ManagerException(EventTypes.CONNECTION_ERROR);
+        }
 		
 	}
 

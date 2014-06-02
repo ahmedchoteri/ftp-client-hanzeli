@@ -55,11 +55,15 @@ public class RemoteFragment extends ManagerFragment{
 		goHomeImgButton.setEnabled(true);
 		//setup current working directory text
 		currentDirTextView = (TextView) view.findViewById(R.id.REMtextViewWorkinDirectory);
+        if (fileManager.getCurrDir() != null) {
+            currentDirTextView.setText(fileManager.getCurrDir());
+        }
 		//setup file list
 		filesListView = (ListView) view.findViewById(R.id.listViewRemote);
 		filesListView.setOnItemClickListener(this);
 		//setup list adapter
-		fileAdapter = new FileAdapter(getActivity(), this, fileManager.getFiles());
+		fileAdapter = new FileAdapter(getActivity(), "Remote", fileManager.getFiles());
+        fileAdapter.setCheckBoxListener(this);
 		filesListView.setAdapter(fileAdapter);
 		//setup fragment buttons + add onClickListener
 		allButton = (Button)  view.findViewById(R.id.REMButtonAll);

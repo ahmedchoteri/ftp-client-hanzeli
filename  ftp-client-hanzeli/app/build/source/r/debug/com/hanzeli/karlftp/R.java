@@ -16,7 +16,9 @@ public final class R {
         public static final int manager_text_white=0x7f040002;
     }
     public static final class dimen {
-        public static final int edit_screen_text_size=0x7f050000;
+        public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_vertical_margin=0x7f050001;
+        public static final int edit_screen_text_size=0x7f050002;
     }
     public static final class drawable {
         public static final int checked=0x7f020000;
@@ -60,7 +62,7 @@ public final class R {
         public static final int REMtextViewWorkinDirectory=0x7f09002e;
         public static final int TRFButtonClear=0x7f09003e;
         public static final int TRFButtonStop=0x7f09003d;
-        public static final int activity_main=0x7f090013;
+        public static final int action_settings=0x7f090041;
         public static final int btnConnect=0x7f090038;
         public static final int btnDelete=0x7f09003b;
         public static final int btnEdit=0x7f09003a;
@@ -85,6 +87,7 @@ public final class R {
         public static final int listViewRemote=0x7f090035;
         public static final int listViewTransfer=0x7f09003f;
         public static final int menu_settings=0x7f090040;
+        public static final int pager=0x7f090013;
         public static final int spinner1=0x7f090037;
         public static final int spinnerText=0x7f09003c;
         public static final int textViewAnonym=0x7f090007;
@@ -106,64 +109,69 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_edit_server=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int list_view_file=0x7f030002;
-        public static final int list_view_transfer=0x7f030003;
-        public static final int local_manager_fragment=0x7f030004;
-        public static final int remote_manager_fragment=0x7f030005;
-        public static final int server_screen=0x7f030006;
-        public static final int spinner_bkg=0x7f030007;
-        public static final int transfer_fragment=0x7f030008;
+        public static final int activity_example=0x7f030001;
+        public static final int activity_main=0x7f030002;
+        public static final int list_view_file=0x7f030003;
+        public static final int list_view_transfer=0x7f030004;
+        public static final int local_manager_fragment=0x7f030005;
+        public static final int remote_manager_fragment=0x7f030006;
+        public static final int server_screen=0x7f030007;
+        public static final int spinner_bkg=0x7f030008;
+        public static final int transfer_fragment=0x7f030009;
     }
     public static final class menu {
         public static final int activity_edit_server=0x7f080000;
         public static final int activity_main=0x7f080001;
+        public static final int example=0x7f080002;
     }
     public static final class string {
-        public static final int app_name=0x7f060000;
-        public static final int btn_connect=0x7f060001;
-        public static final int btn_delete=0x7f060002;
-        public static final int btn_edit=0x7f060003;
-        public static final int btn_new=0x7f060004;
-        public static final int edit_screen_anonym=0x7f060005;
-        public static final int edit_screen_btn_save=0x7f060006;
-        public static final int edit_screen_default_port=0x7f060007;
-        public static final int edit_screen_host=0x7f060008;
-        public static final int edit_screen_local_dir=0x7f060009;
-        public static final int edit_screen_local_text=0x7f06000a;
-        public static final int edit_screen_name=0x7f06000b;
-        public static final int edit_screen_password=0x7f06000c;
-        public static final int edit_screen_port=0x7f06000d;
-        public static final int edit_screen_remote_dir=0x7f06000e;
-        public static final int edit_screen_remote_hint=0x7f06000f;
-        public static final int edit_screen_username=0x7f060010;
-        public static final int file_folder=0x7f060011;
-        public static final int file_icon=0x7f060012;
-        public static final int file_unknown=0x7f060013;
-        public static final int frag_all=0x7f060014;
-        public static final int frag_clear=0x7f060015;
-        public static final int frag_delete=0x7f060016;
-        public static final int frag_download=0x7f060017;
-        public static final int frag_new_folder=0x7f060018;
-        public static final int frag_rename=0x7f060019;
-        public static final int frag_sort=0x7f06001a;
-        public static final int frag_stop=0x7f06001b;
-        public static final int frag_upload=0x7f06001c;
-        public static final int ftp_image=0x7f06001d;
-        public static final int manager_gohome_image=0x7f06001e;
-        public static final int manager_goparent_image=0x7f06001f;
-        public static final int manager_working_direktory=0x7f060020;
-        public static final int menu_settings=0x7f060021;
-        public static final int ok=0x7f060022;
-        public static final int status_done=0x7f060023;
-        public static final int status_waiting=0x7f060024;
-        public static final int tab_local=0x7f060025;
-        public static final int tab_remote=0x7f060026;
-        public static final int tab_transfer=0x7f060027;
-        public static final int title_activity_edit_server=0x7f060028;
-        public static final int title_activity_main=0x7f060029;
-        public static final int trf_icon=0x7f06002a;
-        public static final int trf_status=0x7f06002b;
+        public static final int action_settings=0x7f060000;
+        public static final int app_name=0x7f060001;
+        public static final int btn_connect=0x7f060002;
+        public static final int btn_delete=0x7f060003;
+        public static final int btn_edit=0x7f060004;
+        public static final int btn_new=0x7f060005;
+        public static final int edit_screen_anonym=0x7f060006;
+        public static final int edit_screen_btn_save=0x7f060007;
+        public static final int edit_screen_default_port=0x7f060008;
+        public static final int edit_screen_host=0x7f060009;
+        public static final int edit_screen_local_dir=0x7f06000a;
+        public static final int edit_screen_local_text=0x7f06000b;
+        public static final int edit_screen_name=0x7f06000c;
+        public static final int edit_screen_password=0x7f06000d;
+        public static final int edit_screen_port=0x7f06000e;
+        public static final int edit_screen_remote_dir=0x7f06000f;
+        public static final int edit_screen_remote_hint=0x7f060010;
+        public static final int edit_screen_username=0x7f060011;
+        public static final int file_folder=0x7f060012;
+        public static final int file_icon=0x7f060013;
+        public static final int file_unknown=0x7f060014;
+        public static final int frag_all=0x7f060015;
+        public static final int frag_clear=0x7f060016;
+        public static final int frag_delete=0x7f060017;
+        public static final int frag_download=0x7f060018;
+        public static final int frag_new_folder=0x7f060019;
+        public static final int frag_rename=0x7f06001a;
+        public static final int frag_sort=0x7f06001b;
+        public static final int frag_stop=0x7f06001c;
+        public static final int frag_upload=0x7f06001d;
+        public static final int ftp_image=0x7f06001e;
+        public static final int hello_world=0x7f06001f;
+        public static final int manager_gohome_image=0x7f060020;
+        public static final int manager_goparent_image=0x7f060021;
+        public static final int manager_working_direktory=0x7f060022;
+        public static final int menu_settings=0x7f060023;
+        public static final int ok=0x7f060024;
+        public static final int status_done=0x7f060025;
+        public static final int status_waiting=0x7f060026;
+        public static final int tab_local=0x7f060027;
+        public static final int tab_remote=0x7f060028;
+        public static final int tab_transfer=0x7f060029;
+        public static final int title_activity_edit_server=0x7f06002a;
+        public static final int title_activity_example=0x7f06002b;
+        public static final int title_activity_main=0x7f06002c;
+        public static final int trf_icon=0x7f06002d;
+        public static final int trf_status=0x7f06002e;
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;

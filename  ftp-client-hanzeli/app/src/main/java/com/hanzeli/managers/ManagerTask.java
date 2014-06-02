@@ -80,6 +80,9 @@ public class ManagerTask {
 		if (addLoadList) {
 			addStartEvents(EventTypes.FILES_LOAD);
 			addEndEvents(EventTypes.FILES_LOADED);
+            if (task == Task.CONNECT){
+                addEndEvents(EventTypes.CONNECTED);
+            }
 		}
 	}
 	

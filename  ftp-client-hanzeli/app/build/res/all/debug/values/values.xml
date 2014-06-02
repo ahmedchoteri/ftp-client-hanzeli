@@ -7,6 +7,11 @@
     <color name="background_black">#000000</color>
     <color name="manager_line_blue">#0000cd</color>
     <color name="manager_text_white">#ffffff</color>
+    <!-- From: file:/C:/Users/Mike/AndroidStudioProjects/KarlFTP/app/src/main/res/values/dimens.xml -->
+    <eat-comment />
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
     <!-- From: file:/C:/Users/Mike/AndroidStudioProjects/KarlFTP/app/src/main/res/values/styles.xml -->
     <eat-comment />
 
@@ -14,6 +19,7 @@
     <!-- From: file:/C:/Users/Mike/AndroidStudioProjects/KarlFTP/app/src/main/res/values/strings.xml -->
     <eat-comment />
 
+    <string name="action_settings">Settings</string>
     <string name="app_name">KarlFTP</string>
     <string name="btn_connect">Connect</string>
     <string name="btn_delete">Delete</string>
@@ -44,6 +50,7 @@
     <string name="frag_stop">Stop</string>
     <string name="frag_upload">Upload</string>
     <string name="ftp_image">ftp_image</string>
+    <string name="hello_world">Hello world!</string>
     <string name="manager_gohome_image">Home button</string>
     <string name="manager_goparent_image">Goparent_button</string>
     <string name="manager_working_direktory">Working directory</string>
@@ -55,6 +62,7 @@
     <string name="tab_remote">Remote</string>
     <string name="tab_transfer">Transfer</string>
     <string name="title_activity_edit_server">EditServerActivity</string>
+    <string name="title_activity_example">Example</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="trf_icon">icon</string>
     <string name="trf_status">Status</string>

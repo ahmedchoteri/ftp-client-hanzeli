@@ -18,8 +18,12 @@
         </activity>
         <activity android:label="@string/app_name" android:name="com.hanzeli.karlftp.EditServerActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar">
         </activity>
-        <service android:enabled="true" android:exported="false" android:name="com.hanzeli.transfer.TransferService">
+
+        <service android:enabled="true" android:exported="false" android:name="com.hanzeli.managers.TransferService">
         </service>
+
+        <activity android:label="@string/title_activity_example" android:name="com.hanzeli.karlftp.Example">
+        </activity>
     </application>
 
 </manifest>
