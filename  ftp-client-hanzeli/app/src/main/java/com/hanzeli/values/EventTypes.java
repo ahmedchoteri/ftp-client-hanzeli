@@ -8,6 +8,7 @@ public enum EventTypes {
 	CONNECTION_ERROR,
 	CONNECTION_LOGIN_ERR,
 	CONNECTION_LOST,
+    DISCONNECTION_ERROR,
 		
 	// changes in list of files
 	FILES_LIST_CHANGE,

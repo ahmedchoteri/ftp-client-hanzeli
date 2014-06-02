@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">KarlFTP</string>
@@ -19,7 +20,6 @@
     <string name="edit_screen_local_dir">Local dir.</string>
     <string name="edit_screen_remote_dir">Remote dir.</string>
     <string name="edit_screen_btn_save">Save</string>
-    
     <string name="edit_screen_local_text">/sdcard</string>
     <string name="edit_screen_remote_hint">/folder</string>
     <string name="file_icon">File icon</string>
@@ -45,5 +45,8 @@
     <string name="trf_icon">icon</string>
     <string name="status_waiting">Waiting</string>
     <string name="status_done">Done</string>
+    <string name="title_activity_example">Example</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

@@ -3,7 +3,7 @@ package com.hanzeli.karlftp;
 import com.hanzeli.managers.LocalManager;
 import com.hanzeli.managers.Manager;
 import com.hanzeli.managers.RemoteManager;
-import com.hanzeli.transfer.TransferManager;
+import com.hanzeli.managers.TransferManager;
 import com.hanzeli.values.Values;
 
 import android.app.Application;
@@ -45,35 +45,40 @@ public class MainApplication extends Application{
 	}
 	
 	/**
-	 * 
-	 * @return this application
+	 * Metoda pre ziskanie instancie Main Application
+	 * @return MainApplication
 	 */
 	public static MainApplication getInstance() {
 		return thisApp;
 	}
 
 	/**
-	 * @return the localManager
+     * Metoda pre ziskanie instancie Local Manager
+	 * @return LocalManager
 	 */
 	public Manager getLocalManager() {
 		return localMan;
 	}
 
 	/**
-	 * @return the remoteManager
+     * Metoda pre ziskanie instancie Remote Manager
+	 * @return RemoteManager
 	 */
 	public Manager getRemoteManager() {
 		return remoteMan;
 	}
-	
-	
+
+    /**
+     * Metoda pre ziskanie instancie Transfer Manager
+     * @return TransferManager
+     */
 	public TransferManager getTransferManager(){
 		return transferMan;
 	}
 	/**
-	 * initialization of managers
-	 * @param context
-	 * @param bundle with information about server
+	 * Inicializacia managerov
+	 * @param context main activity
+	 * @param bundle information about server
 	 */
 	public void initManagers(MainActivity context, Bundle bundle) {
 		// Load preferences
@@ -87,15 +92,16 @@ public class MainApplication extends Application{
 		remoteMan = new RemoteManager();
 		remoteMan.attachErrorListener(context);
 		remoteMan.init(bundle);	
-		
-		transferMan = new TransferManager();
+
+        // Transfer manager
+		transferMan = new TransferManager(bundle);
         transferMan.attachErrorListener(context);
 		
 	}
 
 	/**
-	 * 
-	 * @param bundle
+	 * Nacitanie preferencii podla Bundle alebo cez Defaultne hodnoty
+	 * @param bundle preference bundle
 	 */
 	private void loadPreferences(Bundle bundle) {
 
@@ -133,47 +139,39 @@ public class MainApplication extends Application{
 	}
 
 	/**
-	 * connection of managers
+	 * Pripojenie vsetkych managerov
 	 * 
 	 */
 	public void connect() {
 		localMan.connect();
 		remoteMan.connect();
-		transferMan.setClient(remoteMan.getClient());
+		transferMan.connect();
 	}
 	
 	/**
-	 * disconnection of remote manager
+	 * Odpojenie managerov
 	 */
 	public void disconnect(){
 		remoteMan.disconnect();
+        transferMan.disconnect();
 	}
 
 	/**
-	 * 
-	 * @return
-	 */
-	public boolean isAllConnected() {
-		return localMan.isConnected() ;
-		//&& remoteMan.isConnected()
-	}
-
-	/**
-	 * 
-	 * @return
+	 * Do zdielanych preferencii prida aktualny server
+	 * @param lastServerID ID aktualneho serveru ktory uzivatel pouziva
 	 */
 	public void saveLastSelectedServer(long lastServerID) {
 		SharedPreferences.Editor editor = preferences.edit();
-		editor.putLong("lastServer", lastServerID);
+		editor.putLong("LAST_SERVER", lastServerID);
 		editor.commit();
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Vybranie posledneho pouziteho serveru
+	 * @return posledny pouzity server
 	 */
 	public long getLastSelectedServer() {
-		return preferences.getLong("lastSelectedServer", -1);
+		return preferences.getLong("LAST_SERVER", -1);
 	}
 
 }

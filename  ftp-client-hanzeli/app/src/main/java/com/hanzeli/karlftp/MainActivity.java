@@ -3,15 +3,18 @@ package com.hanzeli.karlftp;
 import com.hanzeli.fragments.LocalFragment;
 import com.hanzeli.fragments.RemoteFragment;
 import com.hanzeli.fragments.TransferFragment;
+import com.hanzeli.managers.Manager;
 import com.hanzeli.managers.ManagerEvent;
 import com.hanzeli.managers.ManagerListener;
+import com.hanzeli.values.EventTypes;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
-import android.app.Activity;
 import android.app.ActionBar;
 //import android.app.AlertDialog;
 import android.app.ActionBar.Tab;
@@ -22,35 +25,64 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
-public class MainActivity extends Activity implements ActionBar.TabListener, ManagerListener{
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ManagerListener{
 	
-	private TabId tabSelected;
+	//private TabId tabSelected;
+    private ViewPager viewPager;
+    private TabPagerAdapter pagerAdaper;
 	private BroadcastReceiver broadcastReceiver;
+
+    private int[] tabs = {R.string.tab_local,R.string.tab_remote,R.string.tab_transfer};
 
 	protected MenuItem settings;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    	//use main view
+    	//nastavenie layoutu
     	setContentView(R.layout.activity_main);
-    	//setup actionbar
-    	ActionBar actionBar = getActionBar();
+
+        //intializacia swipe pager
+        viewPager = (ViewPager) findViewById(R.id.pager);
+       	final ActionBar actionBar = getActionBar();
+        pagerAdaper = new TabPagerAdapter(getSupportFragmentManager());
+
+        viewPager.setAdapter(pagerAdaper);
+        actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		actionBar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 		
-		// Create local tab
+		// vytvorenie tabov
+        for (int tab: tabs){
+            actionBar.addTab(actionBar.newTab().setText(getString(tab)).setTabListener(this));
+        }
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
+            }
+
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        /*
 		for (TabId tabId : TabId.values()) {
 			ActionBar.Tab tab = actionBar.newTab();
 			tab.setText(getString(tabId.textId));
 			tab.setTag(new TabTag(tabId));
-			tab.setTabListener(this);   //this class responds tp focus on tab
+			tab.setTabListener(this);   //this class responds to focus on tab
 			actionBar.addTab(tab);
-		}
+		}*/
         //selected tab after creation
-        tabSelected = TabId.LOCAL_MANAGER;
+        //tabSelected = TabId.LOCAL_MANAGER;
 		// Set selected tab
-		actionBar.setSelectedNavigationItem(tabSelected.ordinal());
+
+		actionBar.setSelectedNavigationItem(0);
     	
     	Bundle intentExtras = getIntent().getExtras();
 		// Create map properties
@@ -60,7 +92,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 		bundle.putBoolean("server_anonym", intentExtras.getBoolean("anonym"));
 		bundle.putString("local_dir", intentExtras.getString("local"));
 		bundle.putString("remote_dir", intentExtras.getString("remote"));
-		bundle.putInt("server_timeout", 20 * 1000);
+		bundle.putInt("server_timeout", 20000);
 		if (!intentExtras.getBoolean("anonym")) {
 			bundle.putString("username", intentExtras.getString("uname"));
 			bundle.putString("password", intentExtras.getString("pass"));
@@ -82,33 +114,65 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 
     }
 
+
+
 	public void managerEvent(ManagerEvent type) {
-		switch (type.getEvent()){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning");
+        switch (type.getEvent()){
 		case CONNECTION_ERROR:
+            builder.setMessage("Client connection error!");
+            break;
 		case CONNECTION_LOGIN_ERR:
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Connection error!");
-			builder.setTitle("Warning");
-			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-	           public void onClick(DialogInterface dialog, int id) {
-	        	   dialog.cancel(); 			           }
-	       });
-			AlertDialog warning = builder.create();
-			warning.show();
+			builder.setMessage("Login error!");
 			break;
-		default: break;
+        case CONNECTED:
+
+            if(type.getManager().equals("TransferManager")) {
+                builder.setTitle("Info");
+                builder.setMessage("Transfer manager client connected.");
+            }
+            else if (type.getManager().equals("RemoteManager")){
+                builder.setTitle("Info");
+                builder.setMessage("Remote manager client connected.");
+            }
+            else return;
+            break;
+        case DISCONNECTION_ERROR:
+            builder.setMessage("Logout error");
+            break;
+		default: return;
 	    }
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel(); 			           }
+        });
+        AlertDialog warning = builder.create();
+        warning.show();
+
 	}
 
 
 	
 	@Override
 	public void onStop(){
-		//MainApplication.getInstance().disconnect();
+		MainApplication.getInstance().disconnect();
 		super.onStop();
 	}
-	
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+
+
+
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    }
+
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        // show respected fragment view
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    }
+	/*public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		TabTag tag = (TabTag) tab.getTag();
 		Fragment fragment = getFragmentManager().findFragmentByTag(tag.key);
 		if (fragment == null) {
@@ -120,24 +184,21 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 
 		// Set selected tab
 		tabSelected = tag.tabId;
-	}
+	}*/
 
 	
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+	/*public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		TabTag tag = (TabTag) tab.getTag();
 		Fragment fragment = getFragmentManager().findFragmentByTag(tag.key);
 		if (fragment != null) {
 			ft.hide(fragment);
 		}
-	}
-
-	
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-	}
+	}*/
 
 	/**
 	 * Tab tag
 	 */
+    /*
 	private class TabTag {
 		TabId tabId;
 		String key;
@@ -149,9 +210,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 			this.className = tabId.fragm.getName();
 		}
 	}
+    */
 
-	
-	enum TabId {
+	/*enum TabId {
 		LOCAL_MANAGER(LocalFragment.class, R.string.tab_local),
 		SERVER_MANAGER(RemoteFragment.class, R.string.tab_remote),
 		TRANSFER_MANAGER(TransferFragment.class, R.string.tab_transfer);
@@ -165,10 +226,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Man
 		 * @param fragm
 		 * @param textId
 		 */
-		private TabId(Class<? extends Fragment> fragm, int textId) {
+		/*private TabId(Class<? extends Fragment> fragm, int textId) {
 			this.fragm = fragm;
 			this.textId = textId;
 		}
 	}
-	
+	*/
 }

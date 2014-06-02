@@ -15,6 +15,7 @@ import com.hanzeli.values.Order;
 
 public abstract class BasicFileManager implements Manager{
 
+    protected String TAG;
 	/** current directory */
 	protected String currentDir;	
 	/** root directory */
@@ -146,8 +147,9 @@ public abstract class BasicFileManager implements Manager{
 	 */
 	protected void notifyListener(ManagerEvent event) {
 		if (resultListener !=null) {
-			event.setManager(this);
+			event.setManager(this.TAG);
 			resultListener.managerEvent(event);
+            errorListener.managerEvent(event);
 		}
 	}
 
@@ -318,6 +320,7 @@ public abstract class BasicFileManager implements Manager{
 						break;	
 					case DISCONNECT:
 						execDisconnect();
+                        break;
 					case CHNG_DIR:
 						execChngWorkDir(params[0]);
 						break;			

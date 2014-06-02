@@ -39,11 +39,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+
         <service
-            android:name="com.hanzeli.transfer.TransferService"
+            android:name="com.hanzeli.managers.TransferService"
             android:enabled="true"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name="com.hanzeli.karlftp.Example"
+            android:label="@string/title_activity_example" >
+        </activity>
     </application>
 
 </manifest>

@@ -6,12 +6,12 @@ import com.hanzeli.managers.FileInfo;
 import com.hanzeli.managers.Manager;
 import com.hanzeli.managers.ManagerEvent;
 import com.hanzeli.managers.ManagerListener;
-import com.hanzeli.transfer.TransferManager;
+import com.hanzeli.managers.TransferManager;
 import com.hanzeli.values.Order;
 
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -105,7 +105,8 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 				renameFile();
 				break;
             case R.id.chk_file:
-                fileManager.selectFile((Integer) view.getTag());
+                int i = (Integer) view.getTag();
+                fileManager.selectFile(i);
                 break;
 			
 		}
@@ -125,7 +126,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 
 	
 	public void managerEvent(ManagerEvent event) {
-		Manager sourceManager = event.getManager();
+		String sourceManager = event.getManager();
 		AlertDialog warning;
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Warning");
@@ -139,8 +140,8 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 				fileAdapter.update(null);
 				break;
 			case FILES_LOADED:
-				currentDirTextView.setText(sourceManager.getCurrDir());
-				fileAdapter.update(sourceManager.getFiles());
+				currentDirTextView.setText(fileManager.getCurrDir());
+				fileAdapter.update(fileManager.getFiles());
 				goParentImgButton.setEnabled(fileManager.existParent());
 				break;
 			case NEW_FOLDER_ERR:
@@ -170,7 +171,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	}
 
 	/**
-	 * 
+	 * Vytvorenie noveho priecinku
 	 *
 	 */
 	public void createNewFolder() {
@@ -200,16 +201,19 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	}
 
 	/**
-	 * 
-	 *
+	 * Zmena poradia suborov z zozname
 	 */
 	protected void changeOrder() {
 		fileManager.chngOrderingAscDesc(orderAscDesc);
 	}
-	
+
+    /**
+     * Metoda ktora je prepisana v Local a Remote managery
+     */
 	protected abstract void doTransfer();
-	/**
-	 * 
+
+    /**
+	 * Zmazanie vyznacenych suborov
 	 */
 	protected void deleteFiles() {
 

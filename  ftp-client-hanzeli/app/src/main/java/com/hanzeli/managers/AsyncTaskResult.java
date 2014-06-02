@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class AsyncTaskResult {
 	
-	private boolean result;
+	private boolean result = false;
 	private ArrayList<ManagerEvent> mEvents = new ArrayList<ManagerEvent>();    //events from Manager
     private ArrayList<String> sEvent = new ArrayList<String>(); //events from Service
 

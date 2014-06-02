@@ -27,9 +27,10 @@ public class FileAdapter extends ArrayAdapter<FileInfo>{
 	
 	List<FileInfo> files = new ArrayList<FileInfo>();
 	protected LayoutInflater inflater;	
-	static OnClickListener checkBoxListener;
+	private OnClickListener checkBoxListener;
+    private String whoAmI = "";
 	
-	static class FileHolder {
+	class FileHolder {
 		private TextView name = null;
 		private TextView size = null;
 		private TextView lastModified = null;
@@ -70,14 +71,19 @@ public class FileAdapter extends ArrayAdapter<FileInfo>{
         }
 	}
 	
-	FileAdapter(Context context, OnClickListener listener, ArrayList<FileInfo> files){
+	FileAdapter(Context context, String s, ArrayList<FileInfo> files){
         super(context,R.layout.list_view_file,files);
         this.files=files;
         //ziskanie systemoveho inflatera z contextu kedze som mimo activity
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		checkBoxListener = listener;
+		whoAmI = s;
+		//checkBoxListener = listener;
         notifyDataSetChanged();
 	}
+
+    public void setCheckBoxListener(OnClickListener listener){
+        checkBoxListener = listener;
+    }
 	
 	public int getCount() {
 		if (files != null && !files.isEmpty()) return files.size();

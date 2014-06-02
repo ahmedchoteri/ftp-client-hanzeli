@@ -32,7 +32,7 @@ public class LocalManager extends BasicFileManager{
 		} else {
 			currentDir = rootDir;
 		}
-		
+        TAG = "LocalManager";
 	}
 	
 	private void loadFilesInfo() {
@@ -55,6 +55,7 @@ public class LocalManager extends BasicFileManager{
 				fi.setAbsPath(file.getAbsolutePath());
 				fi.setParentPath(currentDir);	
 				fi.setType(FileTypes.getType(file));
+                fi.setChecked(false);
 				fileList.add(fi);
 			}
 			//sorting of fileList

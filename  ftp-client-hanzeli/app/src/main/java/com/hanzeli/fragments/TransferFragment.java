@@ -1,18 +1,16 @@
 package com.hanzeli.fragments;
 
-import com.hanzeli.karlftp.MainActivity;
 import com.hanzeli.karlftp.MainApplication;
 import com.hanzeli.karlftp.R;
-import com.hanzeli.managers.BasicFileManager;
 import com.hanzeli.managers.ManagerEvent;
 import com.hanzeli.managers.ManagerListener;
-import com.hanzeli.transfer.Transfer;
-import com.hanzeli.transfer.TransferManager;
-import com.hanzeli.transfer.TransferService;
+import com.hanzeli.managers.Transfer;
+import com.hanzeli.managers.TransferManager;
+import com.hanzeli.managers.TransferService;
 import com.hanzeli.values.Values;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -56,7 +54,7 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);     //TODO problem ked nekliknem na tento tab tak nemam vytvorene komponenty
         trfManager = MainApplication.getInstance().getTransferManager();
-        trfManager.attachResultListener(this);  //TODO tu je problem
+        trfManager.attachResultListener(this);
         broadcastManager = MainApplication.broadcastManager;
         filter = new IntentFilter(Values.TRANSFER_PROGRESS);
         filter.addAction(Values.TRANSFER_WAITING);
@@ -64,6 +62,11 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
         broadcastManager.registerReceiver(broadcastReceiver,filter);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        trfAdapter.notifyDataSetChanged();
+    }
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//inflation of browser to parent ViewGroup
@@ -87,7 +90,7 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
 		clearButton = (Button) view.findViewById(R.id.TRFButtonClear);
 		clearButton.setOnClickListener(this);
 		trfListView = (ListView) view.findViewById(R.id.listViewTransfer);
-		trfAdapter = new TransferAdapter(getActivity(), R.layout.list_view_transfer, this, null);
+		trfAdapter = new TransferAdapter(getActivity(), R.layout.list_view_transfer, this, trfManager.getTransfers());
 		trfListView.setAdapter(trfAdapter);
 	}
 
@@ -118,6 +121,8 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
                         t.setWaiting(false);
                     } else if (action.equals(Values.TRANSFER_DONE)) {
                         t.setDone(true);
+                        trfManager.setBusy(false);
+                        trfManager.processTransfers();
                     } else if (action.equals(Values.TRANSFER_PROGRESS)) {
                         t.setProgress(intent.getIntExtra(Values.TRANSFER_PROGRESS, 0));
                     }
@@ -139,9 +144,6 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
             return transfer;
         }
     };
-	public void onProcessUpdate() {
-		trfAdapter.update(trfManager.getTransfers());
-	}
 
 	public void managerEvent(ManagerEvent event) {
 		switch(event.getEvent()){

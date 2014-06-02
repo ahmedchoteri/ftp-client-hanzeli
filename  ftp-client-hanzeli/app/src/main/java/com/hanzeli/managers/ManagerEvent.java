@@ -11,7 +11,7 @@ import com.hanzeli.values.EventTypes;
 public class ManagerEvent {
 	
 	private EventTypes event;		//event type
-	private Manager manager;	//manager which caused event
+	private String manager;	//manager which caused event
 	//private String massage;
 
 	public ManagerEvent(EventTypes event){
@@ -20,7 +20,7 @@ public class ManagerEvent {
 	}
 	
 	
-	public ManagerEvent(EventTypes event, Manager manager) {
+	public ManagerEvent(EventTypes event, String manager) {
 		this.event=event;
 		this.manager=manager;
 	}
@@ -28,14 +28,14 @@ public class ManagerEvent {
 	/**
 	 * @return manager
 	 */
-	public Manager getManager() {
+	public String getManager() {
 		return manager;
 	}
 
 	/**
 	 * @param manager manager ktory vykonal event
 	 */
-	public void setManager(Manager manager) {
+	public void setManager(String manager) {
 		this.manager = manager;
 	}
 
