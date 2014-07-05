@@ -17,6 +17,7 @@ public enum EventTypes {
 	
 	// changes in list of transfers
 	TRANSFER_LIST_CHANGE,
+    START_TRANSFER,
 		
 	//manager status massages
 	NEW_FOLDER_OK, 
@@ -33,6 +34,7 @@ public enum EventTypes {
 	RENAME_ERR,
 	FILE_EXISTS_ERR,
 	FOLDER_EXISTS_ERR,
+    EMPTY_LIST,
 	
 	DOWNLOAD_ERR,
 	UPLOAD_ERR;

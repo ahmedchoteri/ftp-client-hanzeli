@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-	android:background="@color/background_black" 
+	android:background="@color/background_white"
     tools:context=".ServerScreenActivity" >
 
     <ImageView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ftp"
+        android:src="@drawable/logo_male_ftp"
         android:contentDescription="@string/ftp_image" />
 
     <Spinner
@@ -24,7 +24,7 @@
     <Button
         android:id="@+id/btnConnect"
         android:layout_width="150dp"
-        android:textColor="@color/manager_text_white"
+        android:textColor="@color/basic_text_grey"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
@@ -35,7 +35,7 @@
         android:id="@+id/btnNew"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/manager_text_white"
+        android:textColor="@color/basic_text_grey"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:gravity="center"
@@ -46,7 +46,7 @@
         android:id="@+id/btnEdit"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/manager_text_white"
+        android:textColor="@color/basic_text_grey"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:gravity="center"
@@ -57,7 +57,7 @@
         android:id="@+id/btnDelete"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/manager_text_white"
+        android:textColor="@color/basic_text_grey"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:gravity="center"

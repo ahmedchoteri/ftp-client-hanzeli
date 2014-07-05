@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         
         android:gravity="center_vertical"
-        android:textColor="@color/manager_text_white"
+        android:textColor="@color/basic_text_grey"
         android:paddingLeft="10dip" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_width="50dip"
         android:layout_height="match_parent"
         
-        android:textColor="@color/manager_text_white"
+        android:textColor="@color/basic_text_grey"
         android:gravity="center_vertical" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_width="50dip"
         
         android:layout_height="match_parent"
-        android:textColor="@color/manager_text_white"
+        android:textColor="@color/basic_text_grey"
         android:gravity="center_vertical" />
 
     <LinearLayout
@@ -55,7 +55,7 @@
 	        android:layout_height="match_parent"
 	        android:layout_weight="1"
 	        android:text="@string/trf_status"
-	        android:textColor="@color/manager_text_white"
+	        android:textColor="@color/basic_text_grey"
 	        android:gravity="center_vertical" />
     
         <ProgressBar

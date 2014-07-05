@@ -52,7 +52,7 @@ public interface Manager {
 	 */
 	public ArrayList<FileInfo> getFiles();
 
-    public ArrayList<FileInfo> getSelectedFiles();
+    public FileInfo[] getSelectedFiles();
 	
 	/**
 	 * deleting selected files from list
@@ -128,14 +128,15 @@ public interface Manager {
 	 * assigning manager listener for sending massages
 	 * @param listener
 	 */
-	public void attachResultListener(ManagerListener listener);
+	public void attachFragment(EventListener listener);
 
     /**
      * remove manager listener
      */
-    public void detachResultListener();
+    public void detachFragment();
 
-    public void attachErrorListener(MainActivity listener);
+    public void attachActivity(MainActivity listener);
 
-    public void detachErrorListener();
+    public void detachActivity();
+
 }

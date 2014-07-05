@@ -7,8 +7,9 @@ import com.hanzeli.values.Task;
 
 public class ManagerTask {
 	
-	//predefined manager tasks
-	public static ManagerTask CONNECT;
+	// preddefinovane operacie
+	public static ManagerTask CONNECT_LR;
+    public static ManagerTask CONNECT_T;
 	public static ManagerTask DISCONNECT;
 	public static ManagerTask DELETE;
 	public static ManagerTask NEW_FOLDER;
@@ -20,108 +21,148 @@ public class ManagerTask {
 	public static ManagerTask REFRESH;
 	public static ManagerTask START_TRANSFER;
 	public static ManagerTask STOP_TRANSFER;
-	public static ManagerTask TRANSF_LIST_CHANGE;
+    public static ManagerTask COUNT_FILES;
+    public static ManagerTask COPY_FILES;
 
-	//lists of starting and ending events
-	private ArrayList<ManagerEvent> startEvents = new ArrayList<ManagerEvent>();
-	private ArrayList<ManagerEvent> endEvents = new ArrayList<ManagerEvent>();
+	// zoznam startovacich a ukoncovacich eventov
+	private ArrayList<ManagerEvent> startEventsFragment = new ArrayList<ManagerEvent>();
+	private ArrayList<ManagerEvent> endEventsFragment = new ArrayList<ManagerEvent>();
+    private ArrayList<ManagerEvent> startEventsActivity = new ArrayList<ManagerEvent>();
+    private ArrayList<ManagerEvent> endEventsActivity = new ArrayList<ManagerEvent>();
 	
 	private Task task;
 
 	static {
-		//connect operation
-		CONNECT = new ManagerTask(Task.CONNECT, true);
-		//CONNECT.addStartEvents(EventTypes.CONNECTION_START);
-		//CONNECT.addEndEvents(EventTypes.FILES_LIST_CHANGE);
-		//CONNECT.addEndEvents(EventTypes.CONNECTED);
-		
-		//disconnection operation
-		DISCONNECT = new ManagerTask(Task.DISCONNECT, false);
-		
-		//delete files
-		DELETE = new ManagerTask(Task.DELETE, true);
-		
-		//create new folder
-		NEW_FOLDER = new ManagerTask(Task.NEW_FOLDER, true);
-		
-		//rename file
-		RENAME = new ManagerTask(Task.RENAME, true);
-		
-		//change working directory
-		CHNG_DIR = new ManagerTask(Task.CHNG_DIR, true);
-		
-		//go to parent directory
-		GO_PARENT = new ManagerTask(Task.GO_PARENT, true);
-		
-		//go to root folder
-		GO_ROOT = new ManagerTask(Task.GO_ROOT, true);
-		
-		//change ordering
-		CHNG_ORDER = new ManagerTask(Task.CHNG_ORDER, true);
-		
-		//refresh manager
-		REFRESH = new ManagerTask(Task.REFRESH, true);
-		
-		//start transfers
-		START_TRANSFER = new ManagerTask(Task.START, false);
-		
-		//stop transfers
-		STOP_TRANSFER = new ManagerTask(Task.STOP, false);
+		// pripojenie local alebo remote managera
+		CONNECT_LR = new ManagerTask(Task.CONNECT_LR);
 
+        // pripojenie transfer managera
+		CONNECT_T = new ManagerTask(Task.CONNECT_T);
+		
+		// odpojenie klienta
+		DISCONNECT = new ManagerTask(Task.DISCONNECT);
+		
+		// zmazanie suboru
+		DELETE = new ManagerTask(Task.DELETE);
+		
+		// vytvorenie noveho priecinku
+		NEW_FOLDER = new ManagerTask(Task.NEW_FOLDER);
+		
+		// premenovanie suboru
+		RENAME = new ManagerTask(Task.RENAME);
+		
+		// zmena priecinku
+		CHNG_DIR = new ManagerTask(Task.CHNG_DIR);
+		
+		// prechod do rodicovskeho priecinku
+		GO_PARENT = new ManagerTask(Task.GO_PARENT);
+		
+		// prechod do root priecinku
+		GO_ROOT = new ManagerTask(Task.GO_ROOT);
+		
+		// zmena usporiadania
+		CHNG_ORDER = new ManagerTask(Task.CHNG_ORDER);
+		
+		// refresh managera
+		REFRESH = new ManagerTask(Task.REFRESH);
+		
+		// spustenie prenosu
+		START_TRANSFER = new ManagerTask(Task.START);
+		
+		// zastavenie prenosu
+		STOP_TRANSFER = new ManagerTask(Task.STOP);
+
+        // spocitanie velkosti suborov pre prenos
+        COUNT_FILES = new ManagerTask(Task.COUNT);
+
+        // KOPIROVANIE SUBOROV
+        COPY_FILES = new ManagerTask(Task.COPY);
 	}
 
 	/**
-	 * constructor for ManagerTask
-	 * @param task 
-	 * @param addLoadList
+	 * @param task hlavna operacia ktora sa ma vykonat
 	 */
-	private ManagerTask(Task task, boolean addLoadList) {
+	private ManagerTask(Task task) {
 		this.task=task;
-		if (addLoadList) {
-			addStartEvents(EventTypes.FILES_LOAD);
-			addEndEvents(EventTypes.FILES_LOADED);
-            if (task == Task.CONNECT){
-                addEndEvents(EventTypes.CONNECTED);
-            }
-		}
+        switch(task){
+            case CONNECT_LR:
+                addStartEventsFragment(EventTypes.FILES_LOAD);
+                addEndEventsFragment(EventTypes.FILES_LOADED);
+                addEndEventsActivity(EventTypes.CONNECTED);
+                break;
+            case CONNECT_T:
+                addEndEventsActivity(EventTypes.CONNECTED);
+                break;
+            case COUNT:
+                addEndEventsFragment(EventTypes.TRANSFER_LIST_CHANGE);
+                addEndEventsFragment(EventTypes.START_TRANSFER);
+                break;
+            case DELETE:
+            case NEW_FOLDER:
+            case RENAME:
+            case CHNG_DIR:
+            case CHNG_ORDER:
+            case GO_PARENT:
+            case GO_ROOT:
+            case REFRESH:
+                addStartEventsFragment(EventTypes.FILES_LOAD);
+                addEndEventsFragment(EventTypes.FILES_LOADED);
+                break;
+            default:
+                break;
+        }
 	}
 	
 	
 	/**
-	 * @return startEvents
+	 * @return ArrayList<ManagerEvent> zoznam startovacich eventov
 	 */
-	public ArrayList<ManagerEvent> getStartEvents() {
-		return startEvents;
+	public ArrayList<ManagerEvent> getStartEventsFragment() {
+		return startEventsFragment;
 	}
 
+    public ArrayList<ManagerEvent> getStartEventsActivity(){
+        return startEventsActivity;
+    }
+
 	/**
-	 * @return endEvents
+	 * @return ArrayList<ManagerEvent> zoznam ukoncovacich eventov
 	 */
-	public ArrayList<ManagerEvent> getEndEvents() {
-		return endEvents;
+	public ArrayList<ManagerEvent> getEndEventsFragment() {
+		return endEventsFragment;
 	}
-	
+
+    public ArrayList<ManagerEvent> getEndEventsActivity(){
+        return endEventsActivity;
+    }
 	/**
-	 * @return task
+	 * @return TASK hlavnu operaciu
 	 */
 	public Task getTask() {
 		return task;
 	}
 	
 	/**
-	 * events before given manager operation
-	 * @param 
+	 * eventy ktore sa maju vykonat pred vykonanim hlavnej operacie
+	 * @param event typ eventu
 	 */
-	private void addStartEvents(EventTypes event) {
-		startEvents.add(new ManagerEvent(event));
+	private void addStartEventsFragment(EventTypes event) {
+		startEventsFragment.add(new ManagerEvent(event));
 	}
+
+    private void addStartEventsActivity(EventTypes event){
+        startEventsActivity.add(new ManagerEvent(event));
+    }
 
 	/**
-	 * events that should be done after given manager operation
-	 * @param 
+	 * eventy ktore sa maju vykonat po vykonani hlavnej operacie
+	 * @param event typ eventu
 	 */
-	private void addEndEvents(EventTypes event) {
-		endEvents.add(new ManagerEvent(event));
+	private void addEndEventsFragment(EventTypes event) {
+		endEventsFragment.add(new ManagerEvent(event));
 	}
 
+    private void addEndEventsActivity(EventTypes event){
+        endEventsActivity.add(new ManagerEvent(event));
+    }
 }

@@ -2,8 +2,8 @@ package com.hanzeli.fragments;
 
 import com.hanzeli.karlftp.MainApplication;
 import com.hanzeli.karlftp.R;
+import com.hanzeli.managers.EventListener;
 import com.hanzeli.managers.ManagerEvent;
-import com.hanzeli.managers.ManagerListener;
 import com.hanzeli.managers.Transfer;
 import com.hanzeli.managers.TransferManager;
 import com.hanzeli.managers.TransferService;
@@ -30,7 +30,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-public class TransferFragment extends Fragment implements  OnClickListener, ManagerListener {
+public class TransferFragment extends Fragment implements  OnClickListener, EventListener {
 	
 	private final String TAG = "TransferFragment";
 
@@ -40,10 +40,10 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
 
     private TransferAdapter trfAdapter;
     private TransferManager trfManager;
-    private TransferService trfService;
 
-    private IntentFilter filter;
-    private LocalBroadcastManager broadcastManager;
+
+
+
 
 
 	public void onAttach(Activity a){
@@ -54,12 +54,9 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);     //TODO problem ked nekliknem na tento tab tak nemam vytvorene komponenty
         trfManager = MainApplication.getInstance().getTransferManager();
-        trfManager.attachResultListener(this);
-        broadcastManager = MainApplication.broadcastManager;
-        filter = new IntentFilter(Values.TRANSFER_PROGRESS);
-        filter.addAction(Values.TRANSFER_WAITING);
-        filter.addAction(Values.TRANSFER_DONE);
-        broadcastManager.registerReceiver(broadcastReceiver,filter);
+        trfManager.attachFragment(this);
+
+
     }
 
     @Override
@@ -77,12 +74,13 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
 		return view;
 	}
 
+    public TransferAdapter getAdapter(){
+        return trfAdapter;
+    }
+
     @Override
     public void onDestroy(){
-        if (broadcastReceiver != null) {
-            broadcastManager.unregisterReceiver(broadcastReceiver);
-            broadcastReceiver = null;
-        }
+        //tu bol unregister broadcast listener
         super.onDestroy();
     }
 	private void initTRFBrowser(View view){
@@ -107,66 +105,22 @@ public class TransferFragment extends Fragment implements  OnClickListener, Mana
 		
 	}
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG,"Broadcast received");
-            String action = intent.getAction();
-            ArrayList<Transfer> transferList = trfManager.getTransfers();
-            int id = intent.getIntExtra(Values.TRANSFER_ID,0);
-            Transfer t = findTransfer(transferList, id);
-            if (t != null) {
-                if (action != null) {
-                    if (action.equals(Values.TRANSFER_WAITING)) {
-                        t.setWaiting(false);
-                    } else if (action.equals(Values.TRANSFER_DONE)) {
-                        t.setDone(true);
-                        trfManager.setBusy(false);
-                        trfManager.processTransfers();
-                    } else if (action.equals(Values.TRANSFER_PROGRESS)) {
-                        t.setProgress(intent.getIntExtra(Values.TRANSFER_PROGRESS, 0));
-                    }
-                    trfAdapter.setTransferList(trfManager.getTransfers());
-                } else {
-                    Log.d(TAG, "Received broadcast with null action");
-                }
-            }
-            else {
-                Log.d(TAG,"No transfer found during onReceive");
-            }
-        }
 
-        private Transfer findTransfer(ArrayList<Transfer> list, int id){
-            Transfer transfer = null;
-               for (Transfer t : list){
-                   if (t.getId() == id) transfer = t;
-               }
-            return transfer;
-        }
-    };
 
-	public void managerEvent(ManagerEvent event) {
+	public void onEvent(ManagerEvent event) {
 		switch(event.getEvent()){
 			case TRANSFER_LIST_CHANGE:
 				trfAdapter.setTransferList(trfManager.getTransfers());
 				break;
+            case START_TRANSFER:
+                trfManager.processTransfers();
+                break;
 			default:
 				break;
 		}
 		
 	}
 
-    public ServiceConnection connection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            TransferService.TransferBinder b = (TransferService.TransferBinder) iBinder;
-            trfService = b.getService();
-            Log.d(TAG,"Service connected");
-        }
-
-        public void onServiceDisconnected(ComponentName componentName) {
-            trfService = null;
-        }
-    };
 
 
 }

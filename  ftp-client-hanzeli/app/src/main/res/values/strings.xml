@@ -14,7 +14,7 @@
     <string name="edit_screen_host">Host</string>
     <string name="edit_screen_username">Username</string>
     <string name="edit_screen_password">Password</string>
-    <string name="edit_screen_port">Port number</string>
+    <string name="edit_screen_port">Port num.</string>
     <string name="edit_screen_anonym">Anonymous</string>
     <string name="edit_screen_default_port">default is 21</string>
     <string name="edit_screen_local_dir">Local dir.</string>
@@ -45,8 +45,25 @@
     <string name="trf_icon">icon</string>
     <string name="status_waiting">Waiting</string>
     <string name="status_done">Done</string>
+    <string name="status_counting">Counting</string>
     <string name="title_activity_example">Example</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <!-- polozky v detaile -->
+    <string name="detail_file">File details</string>
+    <string name="detail_location">Location:</string>
+    <string name="detail_size">Size:</string>
+    <string name="detail_timestamp">Last modified:</string>
+    <string name="detail_image">Image</string>
+    <!-- polozky v menu -->
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_copy">Copy</string>
+    <string name="menu_cut">Cut</string>
+    <string name="menu_paste">Paste</string>
+    <string name="menu_reconnect">Reconnect</string>
+    <string name="menu_expr_select">Expr. select</string>
+    <string name="menu_synchronize">Synchronize</string>
+    <string name="menu_sync_browsing">SyncBrowse</string>
+    <string name="menu_options">Options</string>
+    <string name="menu_about">About</string>
 </resources>
