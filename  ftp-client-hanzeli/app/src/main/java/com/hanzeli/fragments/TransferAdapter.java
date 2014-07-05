@@ -123,17 +123,32 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
 				holder.size.setText(size + " Kb");
 			}
 		}
-		holder.status.setText(R.string.status_waiting);
-		// nastavenie progress baru pocas progresu ... ocekovat este ten status
-		if (!transfer.getDone()) {
-			holder.status.setVisibility(View.GONE);
-			holder.progress.setVisibility(View.VISIBLE);
-			holder.progress.setProgress(transfer.getProgress());
-		} else {
-            holder.status.setText(R.string.status_done);
-			holder.status.setVisibility(View.VISIBLE);
-			holder.progress.setVisibility(View.GONE);
-		}
+		holder.status.setText(R.string.status_counting);
+		// nastavenie progress baru/status textu
+        if (transfer.isWaiting()){
+            if (transfer.isDone()){
+                holder.status.setVisibility(View.GONE);
+                holder.progress.setVisibility(View.VISIBLE);
+                holder.progress.setProgress(transfer.getProgress());
+            }
+            else {
+                holder.status.setText(R.string.status_waiting);
+                holder.status.setVisibility(View.VISIBLE);
+                holder.progress.setVisibility(View.GONE);
+            }
+        }
+
+        else {
+            holder.status.setVisibility(View.VISIBLE);
+            holder.progress.setVisibility(View.GONE);
+            if (transfer.isDone()){
+                holder.status.setText(R.string.status_done);
+            }
+            else {
+                holder.status.setText(R.string.status_counting);
+            }
+        }
+
 
 		return convertView;
 	}

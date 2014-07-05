@@ -28,6 +28,7 @@ public class Values {
     public static final String TRANSFER_WAITING = "transfer_waiting";
     public static final String TRANSFER_DONE = "transfer_done";
     public static final String TRANSFER_PROGRESS = "transfer_progress";
+    public static final String COPY_ERROR = "copy_error";
 
 	
 }

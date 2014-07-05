@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@color/background_black" >
+    android:background="@color/background_white" >
 
     <LinearLayout
         android:id="@+id/gridBottom"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/background_black"
+        android:background="@color/background_white"
         android:orientation="horizontal">
 
         <Button
@@ -19,8 +19,9 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/stop"
             android:textSize="16sp"
-            android:layout_weight="0.5"
-            android:text="@string/frag_stop" />
+            android:layout_weight="1"
+            android:text="@string/frag_stop"
+            android:textColor="@color/basic_text_grey"/>
 
         <Button
             android:id="@+id/TRFButtonClear"
@@ -28,8 +29,9 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/clear"
             android:textSize="16sp"
-            android:layout_weight="0.5"
-            android:text="@string/frag_clear" />
+            android:layout_weight="1"
+            android:text="@string/frag_clear"
+            android:textColor="@color/basic_text_grey"/>
 
         
     </LinearLayout>
@@ -38,19 +40,19 @@
 	    android:layout_height="wrap_content"
 	    android:layout_above="@+id/gridBottom"
 	    android:layout_alignParentTop="true"
-	    android:background="@color/background_black"
+	    android:background="@color/background_white"
 	    android:orientation="vertical" >
 
     	<View
         	android:layout_width="fill_parent"
         	android:layout_height="3dp"
-        	android:background="@color/manager_line_blue" />
+        	android:background="@color/line" />
 
     	<ListView
         	android:id="@+id/listViewTransfer"
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content"
-        	android:background="@color/background_black" >
+        	android:background="@color/background_white" >
     	</ListView>
 	</LinearLayout>
 </RelativeLayout>

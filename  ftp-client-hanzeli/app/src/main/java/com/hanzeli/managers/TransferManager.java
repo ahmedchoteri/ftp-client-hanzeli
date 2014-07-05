@@ -1,62 +1,129 @@
 package com.hanzeli.managers;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPFileFilter;
 
 import com.hanzeli.fragments.TransferFragment;
 import com.hanzeli.karlftp.MainActivity;
 import com.hanzeli.karlftp.MainApplication;
 import com.hanzeli.values.EventTypes;
+import com.hanzeli.values.Values;
 
 public class TransferManager {
 
 	private final String TAG = "TransferManager";
 
-    private TransferFragment resultListener;    //listener ktory reaguje na vysledok
-    private MainActivity errorListener;         //listener ktory reaguje na chybu
+    private TransferFragment fragment;    //listener ktory reaguje na vysledok
+    private MainActivity activity;         //listener ktory reaguje na chybu
     public int transferNum;
     private ArrayList<Transfer> allTransfers;
     private FTPClient client = null;
     private boolean busy;
     private Bundle bundle;
+    private FileInfo[] filesToCopy;
+    private boolean cut;
+    private boolean remote;
+    private String copyFrom;
+    private TransferService trfService;
+    private LocalBroadcastManager broadcastManager;
+    private IntentFilter filter;
+
 
 
 	public TransferManager(Bundle bundle){
 		this.bundle = bundle;
-        allTransfers = new ArrayList<Transfer>();   //TODO ConcurrentLinkedQueue
+        allTransfers = new ArrayList<Transfer>();
 		transferNum=0;
+        broadcastManager = MainApplication.broadcastManager;
+        filter = new IntentFilter(Values.TRANSFER_PROGRESS);
+        filter.addAction(Values.TRANSFER_WAITING);
+        filter.addAction(Values.TRANSFER_DONE);
+        broadcastManager.registerReceiver(broadcastReceiver,filter);
 
 	}
 
-	public void attachResultListener(TransferFragment listener){
-		resultListener=listener;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG,"Broadcast received");
+            String action = intent.getAction();
+            int id = intent.getIntExtra(Values.TRANSFER_ID,0);
+            Transfer t = findTransfer(allTransfers, id);
+            if (t != null) {
+                if (action != null) {
+                    if (action.equals(Values.TRANSFER_WAITING)) {
+                        t.setDone(true);    // transfer sa zacal vykonavat a je v stave working
+                    } else if (action.equals(Values.TRANSFER_DONE)) {
+                        t.setWaiting(false);    // transfer je dokonceny a je v stave done
+                        setBusy(false);
+                        processTransfers();
+                    } else if (action.equals(Values.TRANSFER_PROGRESS)) {
+                        t.setProgress(intent.getIntExtra(Values.TRANSFER_PROGRESS, 0));
+                    }
+                    if (fragment!=null) {
+                        fragment.getAdapter().setTransferList(allTransfers);
+                    }
+                } else {
+                    Log.d(TAG, "Received broadcast with null action");
+                }
+            }
+            else {
+                Log.d(TAG,"No transfer found during onReceive");
+            }
+        }
+
+        private Transfer findTransfer(ArrayList<Transfer> list, int id){
+            Transfer transfer = null;
+            for (Transfer t : list){
+                if (t.getId() == id) transfer = t;
+            }
+            return transfer;
+        }
+    };
+
+	public void attachFragment(TransferFragment listener){
+		fragment =listener;
 	}
 
-    public void detachReslutListener(){ resultListener = null; }
+    public void detachFragment(){ fragment = null; }
 
-    public void attachErrorListener(MainActivity listener){
-		errorListener = listener;
+    public void attachActivity(MainActivity listener){
+		activity = listener;
 	}
 
-    public void detachErrorListener() { errorListener = null; }
+    public void detachActivity() { activity = null; }
 
     public FTPClient getClient(){
+        if(!client.isConnected()){
+            connect();
+        }
         return client;
     }
 
 	public void connect(){
-        new ConnectionHandler(ManagerTask.CONNECT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new JobHandler(ManagerTask.CONNECT_T).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void disconnect(){
-        new ConnectionHandler(ManagerTask.DISCONNECT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new JobHandler(ManagerTask.DISCONNECT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void setBusy(boolean b){
@@ -67,7 +134,85 @@ public class TransferManager {
 		return allTransfers;
 	}
 
-	public void addNewTransfer(FileInfo file, int direction) {
+    public Transfer getTransfer(int ID){
+        if (allTransfers != null && !allTransfers.isEmpty()) {
+            for (Transfer t : allTransfers) {
+                if (t.getId() == ID) {
+                    return t;
+                }
+            }
+        }
+        Log.d(TAG, "Transfer ID not found");
+        return null;
+    }
+
+    public void addNewTransfer(FileInfo[] files, int direction){
+        Log.d(TAG,"Adding new transfer");
+        Transfer tr = new Transfer();
+        tr.setId(transferNum);
+        transferNum++;
+        String pathLM = MainApplication.getInstance().getLocalManager().getCurrDir();
+        String pathRM = MainApplication.getInstance().getRemoteManager().getCurrDir();
+        tr.setDirection(direction);
+        if (direction == 1){    //posielanie na server
+            tr.setToPath(pathRM);
+            tr.setFromPath(pathLM);
+        }
+        else {  // stahovanie zo serveru
+            tr.setToPath(pathLM);
+            tr.setFromPath(pathRM);
+        }
+        tr.setDone(false);
+        tr.setWaiting(false);
+        tr.transferFiles = files;
+        // spocitanie velkosti suborov pre prenos
+        Log.d(TAG,"Running counting files size operation");
+        new JobHandler(ManagerTask.COUNT_FILES).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,tr);
+        allTransfers.add(tr);
+        if (fragment != null) {
+            fragment.onEvent(new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE));
+        }
+    }
+
+    /**
+     * Pridanie suborov na kopirovanie
+     * @param files subory ktore sa maju prekopirovat
+     * @param cut priznak ci sa maju subory vystrihnut alebo nie
+     * @param path cesta odkial sa bude kopirovat
+     * @param remote priznak ci sa bude kopirovat na lokale alebo remote
+     */
+    public void addFilesToCopy(FileInfo[] files, boolean cut, String path, boolean remote){
+        Log.d(TAG,"Getting file for copy/cut");
+        filesToCopy=files;
+        this.cut = cut;
+        this.remote = remote;
+        copyFrom=path;
+    }
+
+    public void addCopyTransfer(String path){
+        Log.d(TAG,"Adding new transfer for copy/cut");
+        Transfer tr = new Transfer();
+        tr.setId(transferNum);
+        transferNum++;
+        tr.setFromPath(copyFrom);
+        tr.setToPath(path);
+        tr.cut = cut;
+        int direction = (remote) ? 0 : 1;
+        tr.setDirection(direction);
+        tr.setDone(false);
+        tr.setWaiting(false);
+        tr.copyOp = true;
+        tr.transferFiles = filesToCopy;
+        // spocitanie velkosti suborov pre prenos
+        Log.d(TAG,"Running counting files size operation");
+        new JobHandler(ManagerTask.COUNT_FILES).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,tr);
+        allTransfers.add(tr);
+        if (fragment != null) {
+            fragment.onEvent(new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE));
+        }
+    }
+
+	/*public void addNewTransfer(FileInfo file, int direction) {
 		//setting parameters for new transfer
         Log.d(TAG,"Adding new transfer");
 		Transfer tr = new Transfer();
@@ -87,24 +232,25 @@ public class TransferManager {
 			tr.setToPath(MainApplication.getInstance().getLocalManager().getCurrDir());
 		}
 		allTransfers.add(tr);
-        if (resultListener != null) {
-            resultListener.managerEvent(new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE));
+        if (fragment != null) {
+            fragment.onEvent(new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE));
         }
-	}
+	}*/
 
 	public void processTransfers() {
 
 		if (allTransfers != null && !allTransfers.isEmpty() && !busy) {
 
             for (Transfer t: allTransfers) {
-                if (t.isWaiting()) {
+                if (t.isWaiting() && !t.isDone()) { //transfer je v stave waiting
                     Log.d(TAG,"Starting processTransfer");
                     //error listener je context cize mainactivity
-                    Intent intent = new Intent(errorListener, TransferService.class);
-                    intent.putExtra(TransferService.TRANSFER, t); //pridanie transfera s ktorym sa ma spravit prenos
+                    Intent intent = new Intent(activity, TransferService.class);
+                    //intent.putExtra(TransferService.TRANSFER, t); //pridanie transfera s ktorym sa ma spravit prenos
+                    intent.putExtra(TransferService.TRANSFER, t.getId());
                     //zahajenie prenosu
-                    errorListener.startService(intent); //spustenie service od MainActivity
-                    errorListener.getApplicationContext().bindService(intent, resultListener.connection, Context.BIND_AUTO_CREATE);
+                    activity.startService(intent); //spustenie service od MainActivity
+                    activity.getApplicationContext().bindService(intent, this.connection, Context.BIND_AUTO_CREATE);
                     busy = true;
                     break;
                 }
@@ -115,11 +261,24 @@ public class TransferManager {
 		}
 	}
 
-    private class ConnectionHandler extends AsyncTask<Void, Void, AsyncTaskResult>{
+    public ServiceConnection connection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            TransferService.TransferBinder b = (TransferService.TransferBinder) iBinder;
+            trfService = b.getService();
+            Log.d(TAG,"Service connected");
+        }
+
+        public void onServiceDisconnected(ComponentName componentName) {
+            trfService = null;
+        }
+    };
+
+
+    private class JobHandler extends AsyncTask<Transfer, Void, AsyncTaskResult>{
 
         private ManagerTask handlerTask;
 
-        public ConnectionHandler(ManagerTask task){
+        public JobHandler(ManagerTask task){
             handlerTask = task;
         }
 
@@ -128,23 +287,29 @@ public class TransferManager {
         }
 
         @Override
-        protected AsyncTaskResult doInBackground(Void... voids) {
+        protected AsyncTaskResult doInBackground(Transfer... transfers) {
             AsyncTaskResult result = new AsyncTaskResult();
             try {
                 switch (handlerTask.getTask()) {
-                    case CONNECT:
+                    case CONNECT_T:
                         execConnect();
                         break;
                     case DISCONNECT:
                         execDisconnect();
                         break;
+                    case COUNT:
+                        execCountFiles(transfers[0]);
+                        transfers[0].setWaiting(true);
+                        break;
                     default:
                         break;
                 }
+
                 result.setResult(true);
             }catch (ManagerException e){
                 result.setResult(false);
                 result.addmEvent(new ManagerEvent(e.getEvent()));
+                busy=false;
             }
             return result;
         }
@@ -152,12 +317,22 @@ public class TransferManager {
         protected void onPostExecute(AsyncTaskResult result){
             super.onPostExecute(result);
             for(ManagerEvent event: result.getmEvents()) {
-                errorListener.managerEvent(event);
+                activity.onEvent(event);
             }
-            if(!handlerTask.getEndEvents().isEmpty()){
-                for (ManagerEvent e: handlerTask.getEndEvents()){
-                    e.setManager(TAG);
-                    errorListener.managerEvent(e);
+            if(result.getResult()) {
+                for (ManagerEvent event : handlerTask.getEndEventsActivity()) {
+                    event.setManager(TAG);
+                    activity.onEvent(event);
+                }
+
+                for (ManagerEvent event : handlerTask.getEndEventsFragment()) {
+                    if (event.getEvent()==EventTypes.START_TRANSFER) {
+                        processTransfers();
+                    }else{
+                        if (fragment != null) {
+                            fragment.onEvent(event);
+                        }
+                    }
                 }
             }
         }
@@ -172,6 +347,86 @@ public class TransferManager {
     private void execDisconnect() throws ManagerException{
         Log.d(TAG,"Disconnecting client");
         Utils.disconnectClient(client);
+    }
+
+    private void execCountFiles(Transfer t) throws ManagerException{
+        if (t.transferFiles != null && t.transferFiles.length > 0){
+            if (t.getDirection() == 1){
+                long count = countLocal(t.transferFiles);
+                t.setSize(count);
+            }
+            else {
+                try {
+                    long count =countRemote(t.transferFiles);
+                    t.setSize(count);
+                } catch (IOException e){
+                    Log.d(TAG,"Error during counting remote files size");
+                    throw new ManagerException(EventTypes.CONNECTION_ERROR);
+                }
+            }
+        }
+        Log.d(TAG,"Transfer size is: " + t.getSize());
+    }
+
+    private long countLocal(FileInfo[] infos){
+        long size = 0;
+        for (FileInfo info : infos){
+            //File file = new File(info.getAbsPath()+"/"+info.getName());
+            if (info.isFolder()){
+                File[] list = (new File(info.getAbsPath())).listFiles(new FileFilter() {
+
+                    public boolean accept(File file) {
+                        return !file.isHidden() && (file.isDirectory() || file.isFile());
+                    }
+                });
+                FileInfo[] files = new FileInfo[list.length];
+                int i = 0;
+                for (File f : list){
+                    FileInfo fi = new FileInfo(f.getName());
+                    fi.setAbsPath(f.getAbsolutePath());
+                    fi.setSize(f.length());
+                    fi.setType(FileTypes.getType(f));
+                    files[i]=fi;
+                    i++;
+                }
+                size += countLocal(files);
+            }
+            else{
+                size += info.getSize();
+            }
+
+        }
+        return size;
+    }
+
+    private long countRemote(FileInfo[] infos) throws IOException{
+        long size = 0;
+        for (FileInfo info : infos){
+            //FTPFile file = new FTPFile(info.getAbsPath()+"/"+info.getName());
+            if (info.isFolder()){
+                FTPFile[] list = client.listFiles(info.getAbsPath(), new FTPFileFilter() {
+                    public boolean accept(FTPFile file) {
+                        return !file.getName().startsWith(".") && !file.isSymbolicLink() && (file.isDirectory() || file.isFile());
+                    }
+                });
+                FileInfo[] files = new FileInfo[list.length];
+                int i = 0;
+                for (FTPFile f : list){
+                    FileInfo fi = new FileInfo(f.getName());
+                    fi.setAbsPath(info.getAbsPath() + File.separatorChar + f.getName());
+                    fi.setSize(f.getSize());
+                    fi.setType(FileTypes.getType(f));
+                    files[i]=fi;
+                    i++;
+                }
+                size += countRemote(files);
+            }
+            else{
+                size += info.getSize();
+            }
+
+        }
+        return size;
     }
 
 
@@ -189,7 +444,7 @@ public class TransferManager {
 //			super.onPreExecute();
 //            transfer.setWaiting(false);
 //			ManagerEvent event = new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE);
-//			resultListener.managerEvent(event);
+//			resultListener.onEvent(event);
 //		}
 //
 //		@Override
@@ -230,11 +485,11 @@ public class TransferManager {
 //            if(result.getResult()){
 //                transfer.setDone(true);
 //                ManagerEvent event = new ManagerEvent(EventTypes.TRANSFER_LIST_CHANGE);
-//                resultListener.managerEvent(event);
+//                resultListener.onEvent(event);
 //            }else{
 //                //nastala chyba a error listener musi reagovat
 //                for (ManagerEvent event : result.getmEvents()) {
-//                    errorListener.managerEvent(event);
+//                    errorListener.onEvent(event);
 //                }
 //            }
 //		}

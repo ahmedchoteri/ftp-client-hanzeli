@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
     android:layout_centerHorizontal="true"
-    android:textColor="@color/manager_text_white" 
+    android:textColor="@color/basic_text_grey"
     android:textSize="20sp" 
     xmlns:android="http://schemas.android.com/apk/res/android" />
     

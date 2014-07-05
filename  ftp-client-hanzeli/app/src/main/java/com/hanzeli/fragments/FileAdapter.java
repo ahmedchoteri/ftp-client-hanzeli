@@ -32,17 +32,19 @@ public class FileAdapter extends ArrayAdapter<FileInfo>{
 	
 	class FileHolder {
 		private TextView name = null;
-		private TextView size = null;
-		private TextView lastModified = null;
+		//private TextView size = null;
+		//private TextView lastModified = null;
 		private CheckBox checkbox = null;
 		private ImageView icon = null;
+        private ImageView detail = null;
 
         FileHolder(View row){
             name = (TextView)row.findViewById(R.id.file_name);
-            size = (TextView)row.findViewById(R.id.file_size);
-            lastModified = (TextView)row.findViewById(R.id.file_lastModif);
+            //size = (TextView)row.findViewById(R.id.file_size);
+            //lastModified = (TextView)row.findViewById(R.id.file_lastModif);
             checkbox = (CheckBox)row.findViewById(R.id.chk_file);
             icon = (ImageView)row.findViewById(R.id.file_icon);
+            detail = (ImageView) row.findViewById(R.id.detail_image);
         }
 
         void populateFrom(FileInfo fi, int position){
@@ -51,7 +53,9 @@ public class FileAdapter extends ArrayAdapter<FileInfo>{
             checkbox.setOnClickListener(checkBoxListener);
             icon.setImageDrawable(fi.getType().getIcon());
             checkbox.setTag(position);
-            lastModified.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm", Locale.US).format(fi.getLastModif()));
+            detail.setTag(position);
+            detail.setOnClickListener(checkBoxListener);
+            /*lastModified.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm", Locale.US).format(fi.getLastModif()));
             if (fi.isFolder()){
                 size.setText("");
             }
@@ -67,7 +71,7 @@ public class FileAdapter extends ArrayAdapter<FileInfo>{
                         size.setText(fileSize + " Kb");
                     }
                 }
-            }
+            }*/
         }
 	}
 	
@@ -101,7 +105,7 @@ public class FileAdapter extends ArrayAdapter<FileInfo>{
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
-        FileHolder holder=null;
+        FileHolder holder;
 		if (row == null) {
 			//construkcia noveho holdera pre fileInfo
 			row = inflater.inflate(R.layout.list_view_file, parent, false);

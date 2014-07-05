@@ -11,12 +11,16 @@ public class Transfer implements Parcelable{
 	private String fromPath;
 	private String toPath;
 	private long size;
+    private long tmpSize;
+    private int tmpProgress;
 	private int direction;	//1= upload, 0=download
 	private boolean waiting;
 	private boolean done;
 	private int progress;
 	private boolean checked;
-    public File file;
+    public FileInfo[] transferFiles;
+    public boolean cut;
+    public boolean copyOp;
 	
 	public int getId() {
 		return id;
@@ -24,14 +28,6 @@ public class Transfer implements Parcelable{
 	
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	public String getFileName() {
-		return fileName;
-	}
-	
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
 	}
 	
 	public String getFromPath() {
@@ -57,7 +53,23 @@ public class Transfer implements Parcelable{
 	public void setSize(long size) {
 		this.size = size;
 	}
-	
+
+    public long getTmpSize(){
+        return tmpSize;
+    }
+
+    public void setTmpSize(long tmpSize){
+        this.tmpSize=tmpSize;
+    }
+
+    public int getTmpProgress(){
+        return tmpProgress;
+    }
+
+    public void setTmpProgress(int tmpProgress){
+        this.tmpProgress=tmpProgress;
+    }
+
 	public int getDirection() {
 		return direction;
 	}
@@ -74,7 +86,7 @@ public class Transfer implements Parcelable{
 		this.waiting = waiting;
 	}
 
-	public boolean getDone() {
+	public boolean isDone() {
 		return done;
 	}
 	
@@ -96,30 +108,6 @@ public class Transfer implements Parcelable{
 	
 	public void setChecked(boolean checked) {
 		this.checked = checked;
-	}
-	
-	/**
-	 * building complete from path for transfer
-	 * @return complete from path
-	 */
-	public String getCmplFromPath(){
-		String path = fromPath;
-		if (!fromPath.endsWith(File.separator)){
-			path+=File.separator;
-		}
-		return path+fileName;
-	}
-	
-	/**
-	 * building complete to path for transfer
-	 * @return complete to path
-	 */
-	public String getCmplToPath(){
-		String path = toPath;
-		if (!toPath.endsWith(File.separator)){
-			path+=File.separator;
-		}
-		return path+fileName;
 	}
 
     public int describeContents(){

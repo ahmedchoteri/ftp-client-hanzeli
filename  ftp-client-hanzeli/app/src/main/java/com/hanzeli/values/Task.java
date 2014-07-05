@@ -1,7 +1,8 @@
 package com.hanzeli.values;
 
 public enum Task {
-	CONNECT,
+    CONNECT_LR,
+    CONNECT_T,
 	DISCONNECT,
 	DELETE,
 	NEW_FOLDER,
@@ -12,5 +13,7 @@ public enum Task {
 	CHNG_ORDER,
 	REFRESH,
 	START,
-	STOP;
+	STOP,
+    COUNT,
+    COPY;
 }

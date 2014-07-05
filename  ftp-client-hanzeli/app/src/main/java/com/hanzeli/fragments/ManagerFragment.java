@@ -2,18 +2,20 @@ package com.hanzeli.fragments;
 
 import com.hanzeli.karlftp.R;
 
+import com.hanzeli.managers.EventListener;
 import com.hanzeli.managers.FileInfo;
 import com.hanzeli.managers.Manager;
 import com.hanzeli.managers.ManagerEvent;
-import com.hanzeli.managers.ManagerListener;
 import com.hanzeli.managers.TransferManager;
 import com.hanzeli.values.Order;
 
 
 import android.app.AlertDialog;
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -21,31 +23,45 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public abstract class ManagerFragment extends Fragment implements OnClickListener, OnItemClickListener, ManagerListener{
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
+public abstract class ManagerFragment extends Fragment implements OnClickListener, OnItemClickListener, EventListener {
+
+    protected String TAG;
     /** manager & adapter */
 	protected Manager fileManager;
 	protected FileAdapter fileAdapter;
 	protected TransferManager transfManager;
 	
-	/** id of this fragment */
+	/** id fragmentu */
 	protected int fragmentId;
 	
 	protected boolean multSelect;
 	protected boolean checkedAll;
 	protected Order orderAscDesc;
 
-	/** fragment parts */
+	/** casti fragmentu */
 	protected ImageButton goParentImgButton;
 	protected ImageButton goHomeImgButton;
 	protected TextView currentDirTextView;
-	protected ListView filesListView;
-	
 
-	/** buttons */
+    /** lava cast fragmentu */
+    protected ListView filesListView;
+
+    /** prava cast fragmentu */
+    protected TextView detailNameTextView;
+    protected TextView detailLocationTextView;
+    protected TextView detailSizeTextView;
+    protected TextView detailTimestampTextView;
+    protected ImageView detailIconImageView;
+
+
+	/** tlacidla */
 	protected Button uploadButton;
 	protected Button downloadButton;
 	protected Button allButton;
@@ -61,6 +77,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(false);
+
 	}
 
 
@@ -84,7 +101,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 				fileAdapter.update(fileManager.getFiles());
 				break;
 			case R.id.LOCButtonUpload:	
-			case R.id.REMButtonDonload:
+			case R.id.REMButtonDownload:
 				doTransfer();
 				break;
 			case R.id.LOCButtonNew:
@@ -108,7 +125,11 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
                 int i = (Integer) view.getTag();
                 fileManager.selectFile(i);
                 break;
-			
+            case R.id.detail_image:
+                int j = (Integer) view.getTag();
+                onDetail(j);
+                break;
+
 		}
 	}
 
@@ -117,15 +138,47 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	 *      android.view.View, int, long)
 	 */
 	public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-		FileInfo file = (FileInfo) fileAdapter.getItem(position);
+		FileInfo file = fileAdapter.getItem(position);
 		if (file.isFolder()) {
 			fileManager.chngWorkDir(file.getName());
 		}
         //else spravit open file moznost
 	}
 
-	
-	public void managerEvent(ManagerEvent event) {
+    private void onDetail(int position){
+        if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE){
+            Log.d(TAG,"Detail image clicked, orientation is LANDSCAPE");
+            FileInfo file = fileAdapter.getItem(position);
+            detailNameTextView.setText(file.getName());
+            detailLocationTextView.setText(file.getAbsPath());
+            if (file.isFolder()){
+                detailSizeTextView.setText("");
+            }
+            else{
+                long fileSize = file.getSize();
+                if (fileSize < 1000) {
+                    detailSizeTextView.setText(fileSize + " b");
+                } else {
+                    fileSize /= 1000;
+                    if (fileSize > 1000) {
+                        detailSizeTextView.setText((fileSize / 1000) + " Mb");
+                    } else {
+                        detailSizeTextView.setText(fileSize + " Kb");
+                    }
+                }
+            }
+            detailTimestampTextView.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm", Locale.US).format(file.getLastModif()));
+            detailIconImageView.setImageDrawable(file.getType().getIcon());
+        }
+        else {
+            Log.d(TAG,"Detail image clicked, orientation is PORTRAIT");
+        }
+    }
+    /**
+     * reakcia na event ktory vyvolal manager
+     * @param event
+     */
+	public void onEvent(ManagerEvent event) {
 		String sourceManager = event.getManager();
 		AlertDialog warning;
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -217,7 +270,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	 */
 	protected void deleteFiles() {
 
-        int count = fileManager.getSelectedFiles().size();
+        int count = fileManager.getSelectedFiles().length;
 		//final ArrayList<FileInfo> selectedFiles = fileAdapter.getSelected();
 		//int count = selectedFiles.size();
 		//alert dialog with Yes/No answer
@@ -248,7 +301,8 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	 * 
 	 */
 	protected void renameFile() {
-        FileInfo fi = fileManager.getSelectedFiles().get(0);
+        //zobrat iba jedno
+        FileInfo fi = fileManager.getSelectedFiles()[0];
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 		alert.setTitle("Rename file");

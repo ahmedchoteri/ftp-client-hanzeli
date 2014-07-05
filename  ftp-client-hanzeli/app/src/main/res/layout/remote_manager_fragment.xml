@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@color/background_black" >
+    android:background="@color/background_white" >
 	
 	
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_black" >
+        android:background="@color/background_white" >
 
         <ImageButton
             android:id="@+id/REMimageButtonGoParent"
@@ -38,7 +38,7 @@
             android:layout_marginLeft="10dip"
             android:gravity="center_vertical"
             android:text="@string/manager_working_direktory"
-            android:textColor="@color/manager_text_white" />
+            android:textColor="@color/basic_text_grey" />
     </LinearLayout>
 	
 	
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/background_black"
+        android:background="@color/background_white"
         android:columnCount="3"
         android:rowCount="3" >
         
@@ -56,10 +56,10 @@
         	android:layout_width="fill_parent"
         	android:layout_columnSpan="3"
         	android:layout_height="3dp"
-        	android:background="@color/manager_line_blue" />
+        	android:background="@color/line" />
 
         <Button
-            android:id="@+id/REMButtonDonload"
+            android:id="@+id/REMButtonDownload"
             android:layout_width="105dip"
             android:layout_height="fill_parent"
             android:drawableLeft="@drawable/download"
@@ -117,19 +117,19 @@
 	    android:layout_height="wrap_content"
 	    android:layout_above="@+id/gridBottom"
 	    android:layout_below="@+id/topBar"
-	    android:background="@color/background_black"
+	    android:background="@color/background_white"
 	    android:orientation="vertical" >
 
     	<View
         	android:layout_width="fill_parent"
         	android:layout_height="3dp"
-        	android:background="@color/manager_line_blue" />
+        	android:background="@color/line" />
 
     	<ListView
         	android:id="@+id/listViewRemote"
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content"
-        	android:background="@color/background_black" >
+        	android:background="@color/background_white" >
     	</ListView>
 	</LinearLayout>
 </RelativeLayout>

@@ -207,5 +207,6 @@ public class RemoteManager extends BasicFileManager{
 			throw new ManagerException(EventTypes.CONNECTION_ERROR);
 		}
 	}
-	
+
+
 }

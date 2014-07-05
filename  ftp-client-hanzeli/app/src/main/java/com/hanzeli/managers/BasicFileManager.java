@@ -25,9 +25,9 @@ public abstract class BasicFileManager implements Manager{
 	/** list with information about files */
 	protected ArrayList<FileInfo> fileList;
 	/** File manager listeners */
-	protected ManagerListener resultListener;
+	protected EventListener fragment;
     /** Error listener */
-    protected MainActivity errorListener;
+    protected MainActivity activity;
 	/** Order */
 	protected Ordering orderingCompare;
 	//protected Ordering orderingAscDesc;
@@ -38,7 +38,7 @@ public abstract class BasicFileManager implements Manager{
 		rootDir = null;
 		connection = false;
 		fileList = null;
-		resultListener = null;
+		fragment = null;
 		orderingCompare = new Ordering(Order.NAME,Order.ASC);
 		
 		
@@ -64,24 +64,32 @@ public abstract class BasicFileManager implements Manager{
 		return fileList;
 	}
 
-    public ArrayList<FileInfo> getSelectedFiles() {
+    public FileInfo[] getSelectedFiles() {
         ArrayList<FileInfo> filesOut = new ArrayList<FileInfo>();
-        for(FileInfo fi : fileList){
-            if (fi.getChecked()){
-                filesOut.add(fi);
+        if (fileList!=null) {
+            for (FileInfo fi : fileList) {
+                if (fi.getChecked()) {
+                    filesOut.add(fi);
+                }
             }
         }
-        return filesOut;
+        FileInfo[] returnFiles = new FileInfo[filesOut.size()];
+        filesOut.toArray(returnFiles);
+        return returnFiles;
     }
 
     public void selectFile(int position) {
-        boolean b = fileList.get(position).getChecked();
-        fileList.get(position).setChecked(!b);
+        if(fileList!=null) {
+            boolean b = fileList.get(position).getChecked();
+            fileList.get(position).setChecked(!b);
+        }
     }
 
     public void selectAllFiles(boolean checked){
-        for(FileInfo file : fileList){
-            file.setChecked(checked);
+        if(fileList!=null) {
+            for (FileInfo file : fileList) {
+                file.setChecked(checked);
+            }
         }
     }
 
@@ -89,11 +97,9 @@ public abstract class BasicFileManager implements Manager{
      * zmazanie oznacenych suborov
      */
     public void delFiles() {
-        ArrayList<FileInfo> filesToDelete = getSelectedFiles();
-        FileInfo[] aFiles = new FileInfo[filesToDelete.size()];
-        filesToDelete.toArray(aFiles);
+        FileInfo[] filesToDelete = getSelectedFiles();
         //paralelne spustenie AsyncTask
-        new ManagerTaskHandler(ManagerTask.DELETE).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, aFiles);
+        new ManagerTaskHandler(ManagerTask.DELETE).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, filesToDelete);
     }
 
     public void setClient(FTPClient client){
@@ -106,7 +112,7 @@ public abstract class BasicFileManager implements Manager{
 	
 	public void connect() {
         //paralelne spustenie AsyncTask
-        new ManagerTaskHandler(ManagerTask.CONNECT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new ManagerTaskHandler(ManagerTask.CONNECT_LR).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 	
 	public void disconnect() {
@@ -118,38 +124,38 @@ public abstract class BasicFileManager implements Manager{
 	 * registering a new listener
 	 * @param listener for this manager
 	 */
-	public void attachResultListener(ManagerListener listener) {
-		this.resultListener =listener;
+	public void attachFragment(EventListener listener) {
+		this.fragment =listener;
 			//ManagerEvent newManagerEvent = new ManagerEvent(EventTypes.FILES_LIST_CHANGE);
 			//newManagerEvent.setManager(this);
-			//listener.managerEvent(newManagerEvent);
+			//listener.onEvent(newManagerEvent);
 	}
 
     /**
      * removing listener
      */
-    public void detachResultListener(){
-        this.resultListener =null;
+    public void detachFragment(){
+        this.fragment =null;
     }
 
 
-    public void attachErrorListener(MainActivity listener){
-        this.errorListener = listener;
+    public void attachActivity(MainActivity listener){
+        this.activity = listener;
     }
 
 
-    public void detachErrorListener(){
-        this.errorListener = null;
+    public void detachActivity(){
+        this.activity = null;
     }
 	/**
 	 * notifying listeners of this manager that event happened
-	 * @param event
+	 * @param event event ktory sa ma vykonat
 	 */
 	protected void notifyListener(ManagerEvent event) {
-		if (resultListener !=null) {
+		if (fragment !=null) {
 			event.setManager(this.TAG);
-			resultListener.managerEvent(event);
-            errorListener.managerEvent(event);
+			fragment.onEvent(event);
+            activity.onEvent(event);
 		}
 	}
 
@@ -302,7 +308,7 @@ public abstract class BasicFileManager implements Manager{
 		protected void onPreExecute() {
 			super.onPreExecute();
 			//notifying listeners about events of this task
-			notifyListener(handlerTask.getStartEvents());
+			notifyListener(handlerTask.getStartEventsFragment());
 		}
 
 		/**
@@ -311,11 +317,10 @@ public abstract class BasicFileManager implements Manager{
 		@Override
 		protected AsyncTaskResult doInBackground(FileInfo... params) {
 			AsyncTaskResult result = new AsyncTaskResult();
-
 			try {
 				switch (handlerTask.getTask()) {
 
-					case CONNECT:
+					case CONNECT_LR:
 						execConnect();
 						break;	
 					case DISCONNECT:
@@ -364,18 +369,28 @@ public abstract class BasicFileManager implements Manager{
 		@Override
 		protected void onPostExecute(AsyncTaskResult result) {
 			super.onPostExecute(result);
-
-			//sending ending events after successful task
-			if (result.getResult()) {
-				notifyListener(handlerTask.getEndEvents());
-			}
-			
-			
-			// additional events if error will occur
+			// chybove eventy
 			if (!result.getmEvents().isEmpty()) {
-				notifyListener(result.getmEvents());
+                for(ManagerEvent event: result.getmEvents()) {
+                    activity.onEvent(event);
+                }
 			}
-			
+            // ak sa operacia podarila tak vykonat ukoncovacie eventy
+            /*if (result.getResult()) {
+                notifyListener(handlerTask.getEndEventsFragment());
+            }*/
+            if(result.getResult()) {
+                for (ManagerEvent event : handlerTask.getEndEventsActivity()) {
+                    event.setManager(TAG);
+                    activity.onEvent(event);
+                }
+
+                for (ManagerEvent event : handlerTask.getEndEventsFragment()) {
+                    if(fragment!=null) {
+                        fragment.onEvent(event);
+                    }
+                }
+            }
 		}
 	}
 
@@ -418,17 +433,16 @@ public abstract class BasicFileManager implements Manager{
 	protected abstract void execRename(FileInfo file, FileInfo newFile) throws ManagerException;
 	
 	/**
-	 * method for deleting file
-	 * @param files - list with files to delete
+	 * zmazanie suborov v zozname
+	 * @param files - zoznam suborov, ktore sa maju zmazat
 	 */
 	protected abstract void execDelete(FileInfo[] files) throws ManagerException;
 
 	/**
-	 * method for creating new folder
-	 * @param dir - new folder
+	 * vytvorenie noveho adresara
+	 * @param dir - novy adresar
 	 */
 	protected abstract void execNewFolder(FileInfo dir) throws ManagerException;
 
-	
 
 }

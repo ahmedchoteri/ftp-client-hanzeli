@@ -1,19 +1,20 @@
 package com.hanzeli.fragments;
 
-import java.util.ArrayList;
-
 import com.hanzeli.karlftp.MainApplication;
 import com.hanzeli.karlftp.R;
 import com.hanzeli.managers.FileInfo;
 import com.hanzeli.values.Order;
 
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class RemoteFragment extends ManagerFragment{
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        TAG = "Remote Fragment";
+        Log.d(TAG, "Creating fragment");
 		//get instance of local and transfer manager
 		fileManager = MainApplication.getInstance().getRemoteManager();
 		transfManager = MainApplication.getInstance().getTransferManager();
@@ -36,7 +39,7 @@ public class RemoteFragment extends ManagerFragment{
 		View view = inflater.inflate(fragmentId, container, false);
 		//initialize user interface
 		initBrowser(view);
-		fileManager.attachResultListener(this);
+		fileManager.attachFragment(this);
 		checkedAll=false;
 		orderAscDesc=Order.ASC;
 		//return created view
@@ -76,17 +79,25 @@ public class RemoteFragment extends ManagerFragment{
 		deleteButton.setOnClickListener(this);
 		renameButton = (Button)  view.findViewById(R.id.REMButtonRename);
 		renameButton.setOnClickListener(this);
-		downloadButton = (Button) view.findViewById(R.id.REMButtonDonload);
+		downloadButton = (Button) view.findViewById(R.id.REMButtonDownload);
 		downloadButton.setOnClickListener(this);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            detailIconImageView = (ImageView) view.findViewById(R.id.REMDetail_icon);
+            detailNameTextView = (TextView) view.findViewById(R.id.REMDetail_name);
+            detailSizeTextView = (TextView) view.findViewById(R.id.REMDetail_size);
+            detailTimestampTextView = (TextView) view.findViewById(R.id.REMDetail_timestamp);
+            detailLocationTextView = (TextView) view.findViewById(R.id.REMDetail_location);
+        }
 	}
 	
 	@Override
 	protected void doTransfer(){
-		ArrayList<FileInfo> transferFiles = fileManager.getSelectedFiles();
-		for (FileInfo infoTransf : transferFiles){
-			transfManager.addNewTransfer(infoTransf, 0); //0 is download
+		FileInfo[] transferFiles = fileManager.getSelectedFiles();
+        transfManager.addNewTransfer(transferFiles,0); //0 is download
+		/*for (FileInfo infoTransf : transferFiles){
+			transfManager.addNewTransfer(infoTransf, 0);
 		}
-		transfManager.processTransfers();
+		transfManager.processTransfers();*/
 	}
 
 }

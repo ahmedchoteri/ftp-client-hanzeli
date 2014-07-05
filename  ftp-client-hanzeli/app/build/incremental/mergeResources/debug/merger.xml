@@ -180,9 +180,9 @@
                 </string>
                 <string name="action_settings" >Settings
                 </string>
-                <string name="title_activity_main" >MainActivity
-                </string>
                 <string name="title_activity_example" >Example
+                </string>
+                <string name="title_activity_main" >MainActivity
                 </string>
                 <string name="tab_remote" >Remote
                 </string>
@@ -196,9 +196,9 @@
                 </string>
                 <string name="frag_download" >Downl
                 </string>
-                <string name="edit_screen_local_text" >/sdcard
-                </string>
                 <string name="ok" >OK
+                </string>
+                <string name="edit_screen_local_text" >/sdcard
                 </string>
                 <string name="trf_status" >Status
                 </string>
@@ -222,9 +222,9 @@
                 </string>
                 <string name="file_folder" >Folder
                 </string>
-                <string name="menu_settings" >Settings
-                </string>
                 <string name="frag_stop" >Stop
+                </string>
+                <string name="menu_settings" >Settings
                 </string>
                 <string name="file_unknown" >Unknown
                 </string>
@@ -238,11 +238,13 @@
                 </string>
                 <string name="status_waiting" >Waiting
                 </string>
+                <string name="status_counting" >Counting
+                </string>
                 <string name="tab_transfer" >Transfer
                 </string>
-                <string name="status_done" >Done
-                </string>
                 <string name="frag_new_folder" >New
+                </string>
+                <string name="status_done" >Done
                 </string>
                 <string name="edit_screen_remote_dir" >Remote dir.
                 </string>
@@ -252,23 +254,23 @@
                 </string>
                 <string name="frag_clear" >Clear
                 </string>
-                <string name="app_name" >KarlFTP
-                </string>
                 <string name="ftp_image" >ftp_image
+                </string>
+                <string name="app_name" >KarlFTP
                 </string>
                 <string name="edit_screen_btn_save" >Save
                 </string>
                 <string name="manager_goparent_image" >Goparent_button
                 </string>
-                <string name="frag_all" >All
-                </string>
                 <string name="trf_icon" >icon
+                </string>
+                <string name="frag_all" >All
                 </string>
                 <string name="manager_gohome_image" >Home button
                 </string>
-                <string name="edit_screen_anonym" >Anonymous
-                </string>
                 <string name="btn_connect" >Connect
+                </string>
+                <string name="edit_screen_anonym" >Anonymous
                 </string>
             </file>
             <file

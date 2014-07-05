@@ -32,6 +32,11 @@ public class MainApplication extends Application{
 
     public static LocalBroadcastManager broadcastManager;
 
+    public boolean first;
+    public boolean copyLocal;
+    public boolean copyRemote;
+
+
     /**
 	 * @see android.app.Application#onCreate()
 	 */
@@ -42,6 +47,9 @@ public class MainApplication extends Application{
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		thisApp=this;
         broadcastManager = LocalBroadcastManager.getInstance(this);
+        first = true;
+        copyLocal = false;
+        copyRemote = false;
 	}
 	
 	/**
@@ -81,22 +89,24 @@ public class MainApplication extends Application{
 	 * @param bundle information about server
 	 */
 	public void initManagers(MainActivity context, Bundle bundle) {
-		// Load preferences
-		loadPreferences(bundle);
-		// Local manager
-		localMan = new LocalManager();
-		localMan.attachErrorListener(context);
-		localMan.init(bundle);
+		if(first) {
+            // Load preferences
+            loadPreferences(bundle);
+            // Local manager
+            localMan = new LocalManager();
+            localMan.init(bundle);
 
-		// Server manager
-		remoteMan = new RemoteManager();
-		remoteMan.attachErrorListener(context);
-		remoteMan.init(bundle);	
+            // Server manager
+            remoteMan = new RemoteManager();
+            remoteMan.init(bundle);
 
-        // Transfer manager
-		transferMan = new TransferManager(bundle);
-        transferMan.attachErrorListener(context);
-		
+            // Transfer manager
+            transferMan = new TransferManager(bundle);
+
+        }
+        localMan.attachActivity(context);
+        remoteMan.attachActivity(context);
+        transferMan.attachActivity(context);
 	}
 
 	/**
@@ -143,10 +153,20 @@ public class MainApplication extends Application{
 	 * 
 	 */
 	public void connect() {
-		localMan.connect();
-		remoteMan.connect();
-		transferMan.connect();
+		if(first) {
+            localMan.connect();
+            remoteMan.connect();
+            transferMan.connect();
+            first = false;
+        }
 	}
+
+
+
+    public void reconnect(){
+        remoteMan.connect();
+        transferMan.connect();
+    }
 	
 	/**
 	 * Odpojenie managerov

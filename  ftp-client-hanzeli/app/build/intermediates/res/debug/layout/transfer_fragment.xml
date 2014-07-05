@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/background_white" >
+
+    <LinearLayout
+        android:id="@+id/gridBottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/background_white"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/TRFButtonStop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/stop"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            android:text="@string/frag_stop"
+            android:textColor="@color/basic_text_grey"/>
+
+        <Button
+            android:id="@+id/TRFButtonClear"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/clear"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            android:text="@string/frag_clear"
+            android:textColor="@color/basic_text_grey"/>
+
+        
+    </LinearLayout>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/gridBottom"
+	    android:layout_alignParentTop="true"
+	    android:background="@color/background_white"
+	    android:orientation="vertical" >
+
+    	<View
+        	android:layout_width="fill_parent"
+        	android:layout_height="3dp"
+        	android:background="@color/line" />
+
+    	<ListView
+        	android:id="@+id/listViewTransfer"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:background="@color/background_white" >
+    	</ListView>
+	</LinearLayout>
+</RelativeLayout><!-- From: file:/C:/Users/Mike/AndroidStudioProjects/KarlFTP/app/src/main/res/layout/transfer_fragment.xml -->

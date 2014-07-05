@@ -1,38 +1,42 @@
 package com.hanzeli.karlftp;
 
-import com.hanzeli.fragments.LocalFragment;
-import com.hanzeli.fragments.RemoteFragment;
-import com.hanzeli.fragments.TransferFragment;
+import com.hanzeli.managers.EventListener;
+import com.hanzeli.managers.FileInfo;
 import com.hanzeli.managers.Manager;
 import com.hanzeli.managers.ManagerEvent;
-import com.hanzeli.managers.ManagerListener;
+import com.hanzeli.managers.TransferManager;
 import com.hanzeli.values.EventTypes;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.test.mock.MockApplication;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.app.ActionBar;
 //import android.app.AlertDialog;
 import android.app.ActionBar.Tab;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ManagerListener{
-	
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener, EventListener {
+
+    private String TAG = "MainActivity";
 	//private TabId tabSelected;
     private ViewPager viewPager;
     private TabPagerAdapter pagerAdaper;
 	private BroadcastReceiver broadcastReceiver;
 
     private int[] tabs = {R.string.tab_local,R.string.tab_remote,R.string.tab_transfer};
+    private Manager localManager;
+    private Manager remoteManager;
+    private TransferManager transferManager;
+    private FileInfo[] copyFiles;
+    private Menu activityMenu;
 
 	protected MenuItem settings;
 	
@@ -45,10 +49,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         //intializacia swipe pager
         viewPager = (ViewPager) findViewById(R.id.pager);
        	final ActionBar actionBar = getActionBar();
+        actionBar.setHomeButtonEnabled(true);
         pagerAdaper = new TabPagerAdapter(getSupportFragmentManager());
-
         viewPager.setAdapter(pagerAdaper);
-        actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 		// vytvorenie tabov
@@ -63,24 +66,25 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+                switch (position){
+                    case 0:
+                        if(MainApplication.getInstance().copyLocal){
+                            activityMenu.findItem(R.id.menu_paste).setEnabled(true);
+                        }
+                        break;
+                    case 1:
+                        if(MainApplication.getInstance().copyRemote){
+                            activityMenu.findItem(R.id.menu_paste).setEnabled(true);
+                        }
+                    default:
+                        activityMenu.findItem(R.id.menu_paste).setEnabled(false);
+                }
             }
 
             public void onPageScrollStateChanged(int state) {
 
             }
         });
-
-        /*
-		for (TabId tabId : TabId.values()) {
-			ActionBar.Tab tab = actionBar.newTab();
-			tab.setText(getString(tabId.textId));
-			tab.setTag(new TabTag(tabId));
-			tab.setTabListener(this);   //this class responds to focus on tab
-			actionBar.addTab(tab);
-		}*/
-        //selected tab after creation
-        //tabSelected = TabId.LOCAL_MANAGER;
-		// Set selected tab
 
 		actionBar.setSelectedNavigationItem(0);
     	
@@ -98,13 +102,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			bundle.putString("password", intentExtras.getString("pass"));
 		}
 
-		
         //inicializacia manazerov a
 		MainApplication.getInstance().initManagers(this, bundle);
 
 		//connect both file managers
 		MainApplication.getInstance().connect();
-
+        localManager = MainApplication.getInstance().getLocalManager();
+        remoteManager = MainApplication.getInstance().getRemoteManager();
+        transferManager = MainApplication.getInstance().getTransferManager();
         /*broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -114,9 +119,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     }
 
+    public void onResume(){
+        super.onResume();
+    }
 
 
-	public void managerEvent(ManagerEvent type) {
+
+	public void onEvent(ManagerEvent type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Warning");
         switch (type.getEvent()){
@@ -127,7 +136,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			builder.setMessage("Login error!");
 			break;
         case CONNECTED:
-
             if(type.getManager().equals("TransferManager")) {
                 builder.setTitle("Info");
                 builder.setMessage("Transfer manager client connected.");
@@ -141,6 +149,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         case DISCONNECTION_ERROR:
             builder.setMessage("Logout error");
             break;
+        case EMPTY_LIST:
+            builder.setMessage("Nothing selected");
 		default: return;
 	    }
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -152,15 +162,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	}
 
-
-	
 	@Override
-	public void onStop(){
-		MainApplication.getInstance().disconnect();
-		super.onStop();
+	public void onDestroy(){
+
+		super.onDestroy();
 	}
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MainApplication.getInstance().disconnect();
+        MainApplication.getInstance().first = true;
+        MainApplication.getInstance().copyRemote = false;
+        MainApplication.getInstance().copyLocal = false;
+        this.finish();
+    }
 
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
     }
@@ -170,66 +186,138 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         viewPager.setCurrentItem(tab.getPosition());
     }
 
+
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
     }
-	/*public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		TabTag tag = (TabTag) tab.getTag();
-		Fragment fragment = getFragmentManager().findFragmentByTag(tag.key);
-		if (fragment == null) {
-			fragment = Fragment.instantiate(this, tag.className);
-			ft.add(android.R.id.content, fragment, tag.key);
-		} else {
-			ft.show(fragment);
-		}
 
-		// Set selected tab
-		tabSelected = tag.tabId;
-	}*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.activity_main,menu);
+        activityMenu = menu;
+        return true;
+    }
 
-	
-	/*public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		TabTag tag = (TabTag) tab.getTag();
-		Fragment fragment = getFragmentManager().findFragmentByTag(tag.key);
-		if (fragment != null) {
-			ft.hide(fragment);
-		}
-	}*/
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int i = viewPager.getCurrentItem();
+        switch (item.getItemId()){
+            case android.R.id.home:
+                Intent intent = new Intent(this,ServerScreenActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+            case R.id.menu_refresh:
+                Log.d(TAG,"make refresh on tab number " + i);
+                switch (i){
+                    case 0:
+                        localManager.refresh();
+                        break;
+                    case 1:
+                        remoteManager.refresh();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case R.id.menu_copy:
+                Log.d(TAG,"starting COPY on tab number " + i);
+                copyFiles = getCopyFiles(i);
+                if(copyFiles==null || copyFiles.length==0){
+                    onEvent(new ManagerEvent(EventTypes.EMPTY_LIST));
+                } else {
+                    String path = "";
+                    boolean remote = false;
+                    switch (i) {
+                        case 0:
+                            path = localManager.getCurrDir();
+                            MainApplication.getInstance().copyLocal = true;
+                            MainApplication.getInstance().copyRemote = false;
+                            break;
+                        case 1:
+                            path = remoteManager.getCurrDir();
+                            remote = true;
+                            MainApplication.getInstance().copyLocal = false;
+                            MainApplication.getInstance().copyRemote = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    transferManager.addFilesToCopy(copyFiles, false, path, remote);
+                }
+                if(activityMenu!=null) {
+                    activityMenu.findItem(R.id.menu_paste).setEnabled(true);
+                }
+                break;
+            case R.id.menu_cut:
+                Log.d(TAG,"starting CUT on tab number " + i);
+                copyFiles = getCopyFiles(i);
+                if(copyFiles==null || copyFiles.length==0){
+                    onEvent(new ManagerEvent(EventTypes.EMPTY_LIST));
+                } else {
+                    String path = "";
+                    boolean remote = false;
+                    switch (i) {
+                        case 0:
+                            path = localManager.getCurrDir();
+                            MainApplication.getInstance().copyLocal = true;
+                            MainApplication.getInstance().copyRemote = false;
+                            break;
+                        case 1:
+                            path = remoteManager.getCurrDir();
+                            remote = true;
+                            MainApplication.getInstance().copyLocal = false;
+                            MainApplication.getInstance().copyRemote = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    transferManager.addFilesToCopy(copyFiles, true, path, remote);
+                }
+                if(activityMenu!=null) {
+                    activityMenu.findItem(R.id.menu_paste).setEnabled(true);
+                }
+                break;
+            case R.id.menu_paste:
+                Log.d(TAG,"starting PASTE on tab number " + i);
+                String path = "";
+                switch (i){
+                    case 0:
+                        path = localManager.getCurrDir();
+                        break;
+                    case 1:
+                        path = remoteManager.getCurrDir();
+                        break;
+                }
+                transferManager.addCopyTransfer(path);
+                break;
+            case R.id.menu_reconnect:
+                break;
+            case R.id.menu_select:
+                break;
+            case R.id.menu_synchronize:
+                break;
+            case R.id.menu_browsing:
+                break;
+            case R.id.menu_option:
+                break;
+            case R.id.menu_about:
+                break;
+        }
+        return true;
+    }
 
-	/**
-	 * Tab tag
-	 */
-    /*
-	private class TabTag {
-		TabId tabId;
-		String key;
-		String className;
-
-		TabTag(TabId tabId) {
-			this.tabId = tabId;
-			this.key = "tab_index_" + tabId.ordinal();
-			this.className = tabId.fragm.getName();
-		}
-	}
-    */
-
-	/*enum TabId {
-		LOCAL_MANAGER(LocalFragment.class, R.string.tab_local),
-		SERVER_MANAGER(RemoteFragment.class, R.string.tab_remote),
-		TRANSFER_MANAGER(TransferFragment.class, R.string.tab_transfer);
-		//fragment assigned to tab
-		final Class<? extends Fragment> fragm;
-		//id of tab
-		final int textId;
-
-		/**
-		 * 
-		 * @param fragm
-		 * @param textId
-		 */
-		/*private TabId(Class<? extends Fragment> fragm, int textId) {
-			this.fragm = fragm;
-			this.textId = textId;
-		}
-	}
-	*/
+    private FileInfo[] getCopyFiles(int i){
+        FileInfo[] files = null;
+        switch (i){
+            case 0:
+                files = localManager.getSelectedFiles();
+                break;
+            case 1:
+                files = remoteManager.getSelectedFiles();
+                break;
+            default:
+                break;
+        }
+        return files;
+    }
 }

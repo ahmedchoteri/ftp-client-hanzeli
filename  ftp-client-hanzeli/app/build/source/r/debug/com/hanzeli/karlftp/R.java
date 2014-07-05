@@ -162,16 +162,17 @@ public final class R {
         public static final int manager_working_direktory=0x7f060022;
         public static final int menu_settings=0x7f060023;
         public static final int ok=0x7f060024;
-        public static final int status_done=0x7f060025;
-        public static final int status_waiting=0x7f060026;
-        public static final int tab_local=0x7f060027;
-        public static final int tab_remote=0x7f060028;
-        public static final int tab_transfer=0x7f060029;
-        public static final int title_activity_edit_server=0x7f06002a;
-        public static final int title_activity_example=0x7f06002b;
-        public static final int title_activity_main=0x7f06002c;
-        public static final int trf_icon=0x7f06002d;
-        public static final int trf_status=0x7f06002e;
+        public static final int status_counting=0x7f060025;
+        public static final int status_done=0x7f060026;
+        public static final int status_waiting=0x7f060027;
+        public static final int tab_local=0x7f060028;
+        public static final int tab_remote=0x7f060029;
+        public static final int tab_transfer=0x7f06002a;
+        public static final int title_activity_edit_server=0x7f06002b;
+        public static final int title_activity_example=0x7f06002c;
+        public static final int title_activity_main=0x7f06002d;
+        public static final int trf_icon=0x7f06002e;
+        public static final int trf_status=0x7f06002f;
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;
