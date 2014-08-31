@@ -10,10 +10,13 @@ import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
-import org.apache.commons.net.ftp.FTPReply;
 
-import com.hanzeli.values.EventTypes;
-import com.hanzeli.values.Order;
+import com.hanzeli.karlftp.MainApplication;
+import com.hanzeli.resources.EventTypes;
+import com.hanzeli.resources.FileInfo;
+import com.hanzeli.resources.FileTypes;
+import com.hanzeli.resources.ManagerException;
+import com.hanzeli.resources.Order;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +32,7 @@ public class RemoteManager extends BasicFileManager{
 		//ordering initialization
 		this.bundle = bundle;
         if (bundle.containsKey("remote_order")) {
-			orderingCompare = new Ordering((Order) bundle.get("remote.orderBy"),Order.ASC);
+			ordering = new Ordering((Order) bundle.get("remote.orderBy"),Order.ASC);
 		}
 		currentDir = bundle.getString("remote_dir");
 		rootDir="";
@@ -65,22 +68,32 @@ public class RemoteManager extends BasicFileManager{
                 fileList.add(fi);
             }
             //sorting of fileList
-            Collections.sort(fileList, orderingCompare);
+            Collections.sort(fileList, ordering);
         }
 
     }
 	
 	@Override
 	protected void execConnect() throws ManagerException {
-		client = new FTPClient();
-        Utils.connectClient(client,bundle);
+
+		if (client!=null && client.isConnected()){
+            Log.d(TAG,"Reconnecting client");
+            Utils.disconnectClient(client);
+            Utils.connectClient(client,bundle);
+        } else {
+            Log.d(TAG,"Connecting client");
+            client = new FTPClient();
+            Utils.connectClient(client, bundle);
+        }
         client.addProtocolCommandListener(new ProtocolCommandListener() {
             public void protocolCommandSent(ProtocolCommandEvent event) {
                 Log.d("RM Command sent",event.getMessage());
+                MainApplication.getInstance().addToLog("RM Command sent: " + event.getMessage() + '\n');
             }
 
             public void protocolReplyReceived(ProtocolCommandEvent event) {
                 Log.d("RM Command received",event.getMessage());
+                MainApplication.getInstance().addToLog("RM Command received: " + event.getMessage() + '\n');
             }
         });
         try {
@@ -99,16 +112,15 @@ public class RemoteManager extends BasicFileManager{
 	}
 	
 	@Override
-	protected void execChngWorkDir(FileInfo file)
+	protected void execChangeWorkDir(FileInfo file)
 			throws ManagerException {
 		try{
-			if(client.changeWorkingDirectory(file.getAbsPath())){
-				currentDir=client.printWorkingDirectory();
-				loadFilesInfo();
-			}
-			else{
-				throw new ManagerException(EventTypes.CONNECTION_ERROR);
-			}
+            if (client.changeWorkingDirectory(file.getAbsPath())) {
+                currentDir = client.printWorkingDirectory();
+                loadFilesInfo();
+            } else {
+                throw new ManagerException(EventTypes.CONNECTION_ERROR);
+            }
 		}catch(IOException  e){
 			Log.d(TAG,"change working directory error");
             e.printStackTrace();
@@ -118,7 +130,7 @@ public class RemoteManager extends BasicFileManager{
 	}
 
 	@Override
-	protected void execToParDir() throws ManagerException {
+	protected void execToParentDir() throws ManagerException {
 		try{
 			if(client.changeToParentDirectory()){
 				currentDir=client.printWorkingDirectory();

@@ -11,6 +11,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.app.Activity;
 import android.content.Intent;
+import android.widget.Toast;
+
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 
 
 public class EditServerActivity extends Activity implements OnClickListener{
@@ -62,16 +66,54 @@ public class EditServerActivity extends Activity implements OnClickListener{
 		Server server = new Server();
 		if (stat.equals("0")) server.setId(0);	//new server
 		else server.setId(intent.getLongExtra("id", 0));
-		server.setName(name.getText().toString());
-		server.setHost(host.getText().toString());
-		server.setUsername(user.getText().toString());
-		server.setPassword(pass.getText().toString());
-		server.setPort(Integer.parseInt(port.getText().toString()));
-		server.setAnonym(anonym.isChecked());
+        String nameS = name.getText().toString();
+        String hostS = host.getText().toString();
+        String userS = user.getText().toString();
+        String passS = pass.getText().toString();
+        String portS = port.getText().toString();
+        boolean anon = anonym.isChecked();
+        if(nameS.equals("")){
+            Toast.makeText(getApplicationContext(), "Name is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (hostS.equals("")){
+            Toast.makeText(getApplicationContext(), "Host is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (portS.equals("")){
+            Toast.makeText(getApplicationContext(), "Port is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(!anon && userS.equals("")){
+            Toast.makeText(getApplicationContext(), "Username is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(!anon && passS.equals("")){
+            Toast.makeText(getApplicationContext(), "Password is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(!isNumeric(portS)){
+            Toast.makeText(getApplicationContext(), "Port is not number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+		server.setName(nameS);
+		server.setHost(hostS);
+		server.setUsername(userS);
+		server.setPassword(passS);
+		server.setPort(Integer.parseInt(portS));
+		server.setAnonym(anon);
 		server.setLocalDir(local.getText().toString());
 		server.setRemoteDir(remote.getText().toString());
 		database.update(server);
 		database.close();
 		finish();
 	}
+
+    public static boolean isNumeric(String str)
+    {
+        NumberFormat formatter = NumberFormat.getInstance();
+        ParsePosition pos = new ParsePosition(0);
+        formatter.parse(str, pos);
+        return str.length() == pos.getIndex();
+    }
 }

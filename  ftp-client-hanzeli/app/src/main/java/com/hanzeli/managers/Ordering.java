@@ -2,7 +2,8 @@ package com.hanzeli.managers;
 
 import java.util.Comparator;
 
-import com.hanzeli.values.Order;
+import com.hanzeli.resources.FileInfo;
+import com.hanzeli.resources.Order;
 
 /**
  * Class for ordering mechanisms
@@ -54,14 +55,6 @@ public class Ordering implements Comparator<FileInfo>{
 		//ordering by name
 		if (type == Order.NAME){
 			return flip(lhs.getName().compareToIgnoreCase(rhs.getName()));
-		}
-		//ordering by type
-		if (type == Order.FILES) {
-			int lhsOrd1 = lhs.getType().getFormatId();
-			int rhsOrd2 = rhs.getType().getFormatId();
-			if (lhsOrd1 != rhsOrd2) {
-				return flip((lhsOrd1 < rhsOrd2) ? -1 : 1);
-			}
 		}
 
 		// Order by time

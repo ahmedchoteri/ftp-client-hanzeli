@@ -22,6 +22,15 @@
             android:layout_weight="1"
             android:text="@string/frag_stop"
             android:textColor="@color/basic_text_grey"/>
+        <Button
+            android:id="@+id/TRFButtonRun"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/run"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            android:text="@string/frag_run"
+            android:textColor="@color/basic_text_grey"/>
 
         <Button
             android:id="@+id/TRFButtonClear"
@@ -32,6 +41,7 @@
             android:layout_weight="1"
             android:text="@string/frag_clear"
             android:textColor="@color/basic_text_grey"/>
+
 
         
     </LinearLayout>

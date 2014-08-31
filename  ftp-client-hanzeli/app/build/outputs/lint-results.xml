@@ -1,0 +1,1258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 22.6.4">
+
+    <issue
+        id="DefaultLocale"
+        severity="Warning"
+        message="Implicitly using the default locale is a common source of bugs: Use toUpperCase(Locale) instead"
+        category="Correctness"
+        priority="6"
+        summary="Finds calls to locale-ambiguous `String` manipulation methods"
+        explanation="Calling `String#toLowerCase()` or `#toUpperCase()` *without specifying an explicit locale* is a common source of bugs. The reason for that is that those methods will use the current locale on the user&apos;s device, and even though the code appears to work correctly when you are developing the app, it will fail in some locales. For example, in the Turkish locale, the uppercase replacement for `i` is *not* `I`.
+
+If you want the methods to just perform ASCII replacement, for example to convert an enum name, call `String#toUpperCase(Locale.US)` instead. If you really want to use the current locale, call `String#toUpperCase(Locale.getDefault())` instead."
+        url="http://developer.android.com/reference/java/util/Locale.html#default_locale"
+        urls="http://developer.android.com/reference/java/util/Locale.html#default_locale"
+        errorLine1="        String ext = file.getName().substring(lastDot + 1).toUpperCase();"
+        errorLine2="                                                           ~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\com\hanzeli\resources\FileTypes.java"
+            line="71"
+            column="60"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        severity="Warning"
+        message="Implicitly using the default locale is a common source of bugs: Use toUpperCase(Locale) instead"
+        category="Correctness"
+        priority="6"
+        summary="Finds calls to locale-ambiguous `String` manipulation methods"
+        explanation="Calling `String#toLowerCase()` or `#toUpperCase()` *without specifying an explicit locale* is a common source of bugs. The reason for that is that those methods will use the current locale on the user&apos;s device, and even though the code appears to work correctly when you are developing the app, it will fail in some locales. For example, in the Turkish locale, the uppercase replacement for `i` is *not* `I`.
+
+If you want the methods to just perform ASCII replacement, for example to convert an enum name, call `String#toUpperCase(Locale.US)` instead. If you really want to use the current locale, call `String#toUpperCase(Locale.getDefault())` instead."
+        url="http://developer.android.com/reference/java/util/Locale.html#default_locale"
+        urls="http://developer.android.com/reference/java/util/Locale.html#default_locale"
+        errorLine1="        String ext = file.getName().substring(lastDot + 1).toUpperCase();"
+        errorLine2="                                                           ~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\com\hanzeli\resources\FileTypes.java"
+            line="87"
+            column="60"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;LOCDetail_icon&quot; in layout &quot;local_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                        android:id=&quot;@+id/LOCDetail_icon&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+            line="182"
+            column="25"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
+            line="182"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;LOCDetail_name&quot; in layout &quot;local_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                        android:id=&quot;@+id/LOCDetail_name&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+            line="189"
+            column="25"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
+            line="189"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;LOCDetail_location&quot; in layout &quot;local_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                            android:id=&quot;@+id/LOCDetail_location&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+            line="239"
+            column="29"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
+            line="239"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;LOCDetail_size&quot; in layout &quot;local_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                            android:id=&quot;@+id/LOCDetail_size&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+            line="248"
+            column="29"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
+            line="248"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;LOCDetail_timestamp&quot; in layout &quot;local_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                            android:id=&quot;@+id/LOCDetail_timestamp&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+            line="257"
+            column="29"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
+            line="257"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;REMDetail_icon&quot; in layout &quot;remote_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                        android:id=&quot;@+id/REMDetail_icon&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+            line="182"
+            column="25"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\remote_manager_fragment.xml"
+            line="182"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;REMDetail_name&quot; in layout &quot;remote_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                        android:id=&quot;@+id/REMDetail_name&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+            line="189"
+            column="25"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\remote_manager_fragment.xml"
+            line="189"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;REMDetail_location&quot; in layout &quot;remote_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                            android:id=&quot;@+id/REMDetail_location&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+            line="239"
+            column="29"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\remote_manager_fragment.xml"
+            line="239"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;REMDetail_size&quot; in layout &quot;remote_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                            android:id=&quot;@+id/REMDetail_size&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+            line="248"
+            column="29"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\remote_manager_fragment.xml"
+            line="248"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        severity="Warning"
+        message="The id &quot;REMDetail_timestamp&quot; in layout &quot;remote_manager_fragment&quot; is missing from the following layout configurations: layout, layout-large-port (present in layout-large-land, layout-normal-land)"
+        category="Correctness"
+        priority="6"
+        summary="Checks that layout variations are consistent"
+        explanation="This check ensures that a layout resource which is defined in multiple resource folders, specifies the same set of widgets.
+
+This finds cases where you have accidentally forgotten to add a widget to all variations of the layout, which could result in a runtime crash for some resource configurations when a `findViewById()` fails.
+
+There *are* cases where this is intentional. For example, you may have a dedicated large tablet layout which adds some extra widgets that are not present in the phone version of the layout. As long as the code accessing the layout resource is careful to handle this properly, it is valid. In that case, you can suppress this lint check for the given extra or missing views, or the whole layout"
+        errorLine1="                            android:id=&quot;@+id/REMDetail_timestamp&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+            line="257"
+            column="29"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\remote_manager_fragment.xml"
+            line="257"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        severity="Warning"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details."
+        category="Correctness"
+        priority="6"
+        summary="Checks that the manifest specifies a targetSdkVersion that is recent"
+        explanation="When your application runs on a version of Android that is more recent than your `targetSdkVersion` specifies that it has been tested with, various compatibility modes kick in. This ensures that your application continues to work, but it may look out of place. For example, if the `targetSdkVersion` is less than 14, your app may get an option button in the UI.
+
+To fix this issue, set the `targetSdkVersion` to the highest available value. Then test your app to make sure everything works correctly. You may want to consult the compatibility notes to see what changes apply to each version you are adding support for: http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        url="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        urls="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        errorLine1="    &lt;uses-sdk"
+        errorLine2="    ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\AndroidManifest.xml"
+            line="7"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        severity="Warning"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details."
+        category="Correctness"
+        priority="6"
+        summary="Checks that the manifest specifies a targetSdkVersion that is recent"
+        explanation="When your application runs on a version of Android that is more recent than your `targetSdkVersion` specifies that it has been tested with, various compatibility modes kick in. This ensures that your application continues to work, but it may look out of place. For example, if the `targetSdkVersion` is less than 14, your app may get an option button in the UI.
+
+To fix this issue, set the `targetSdkVersion` to the highest available value. Then test your app to make sure everything works correctly. You may want to consult the compatibility notes to see what changes apply to each version you are adding support for: http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        url="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        urls="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        errorLine1="        targetSdkVersion 15"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\build.gradle"
+            line="9"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        severity="Warning"
+        message="To get local formatting use getDateInstance(), getDateTimeInstance(), or getTimeInstance(), or use new SimpleDateFormat(String template, Locale locale) with for example Locale.US for ASCII dates."
+        category="Correctness"
+        priority="6"
+        summary="Using `SimpleDateFormat` directly without an explicit locale"
+        explanation="Almost all callers should use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()` to get a ready-made instance of SimpleDateFormat suitable for the user&apos;s locale. The main reason you&apos;d create an instance this class directly is because you need to format/parse a specific machine-readable format, in which case you almost certainly want to explicitly ask for US to ensure that you get ASCII digits (rather than, say, Arabic digits).
+
+Therefore, you should either use the form of the SimpleDateFormat constructor where you pass in an explicit locale, such as Locale.US, or use one of the get instance methods, or suppress this error if really know what you are doing."
+        url="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        urls="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        errorLine1="            SimpleDateFormat hackFormatter = new SimpleDateFormat(recentDateFormat.toPattern() + &quot; yyyy&quot;,"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\org\apache\commons\net\ftp\parser\FTPTimestampParserImpl.java"
+            line="118"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        severity="Warning"
+        message="To get local formatting use getDateInstance(), getDateTimeInstance(), or getTimeInstance(), or use new SimpleDateFormat(String template, Locale locale) with for example Locale.US for ASCII dates."
+        category="Correctness"
+        priority="6"
+        summary="Using `SimpleDateFormat` directly without an explicit locale"
+        explanation="Almost all callers should use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()` to get a ready-made instance of SimpleDateFormat suitable for the user&apos;s locale. The main reason you&apos;d create an instance this class directly is because you need to format/parse a specific machine-readable format, in which case you almost certainly want to explicitly ask for US to ensure that you get ASCII digits (rather than, say, Arabic digits).
+
+Therefore, you should either use the form of the SimpleDateFormat constructor where you pass in an explicit locale, such as Locale.US, or use one of the get instance methods, or suppress this error if really know what you are doing."
+        url="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        urls="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        errorLine1="            this.defaultDateFormat = new SimpleDateFormat(format);"
+        errorLine2="                                         ~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\org\apache\commons\net\ftp\parser\FTPTimestampParserImpl.java"
+            line="171"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        severity="Warning"
+        message="To get local formatting use getDateInstance(), getDateTimeInstance(), or getTimeInstance(), or use new SimpleDateFormat(String template, Locale locale) with for example Locale.US for ASCII dates."
+        category="Correctness"
+        priority="6"
+        summary="Using `SimpleDateFormat` directly without an explicit locale"
+        explanation="Almost all callers should use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()` to get a ready-made instance of SimpleDateFormat suitable for the user&apos;s locale. The main reason you&apos;d create an instance this class directly is because you need to format/parse a specific machine-readable format, in which case you almost certainly want to explicitly ask for US to ensure that you get ASCII digits (rather than, say, Arabic digits).
+
+Therefore, you should either use the form of the SimpleDateFormat constructor where you pass in an explicit locale, such as Locale.US, or use one of the get instance methods, or suppress this error if really know what you are doing."
+        url="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        urls="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        errorLine1="            this.recentDateFormat = new SimpleDateFormat(format);"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\org\apache\commons\net\ftp\parser\FTPTimestampParserImpl.java"
+            line="192"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        severity="Warning"
+        message="To get local formatting use getDateInstance(), getDateTimeInstance(), or getTimeInstance(), or use new SimpleDateFormat(String template, Locale locale) with for example Locale.US for ASCII dates."
+        category="Correctness"
+        priority="6"
+        summary="Using `SimpleDateFormat` directly without an explicit locale"
+        explanation="Almost all callers should use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()` to get a ready-made instance of SimpleDateFormat suitable for the user&apos;s locale. The main reason you&apos;d create an instance this class directly is because you need to format/parse a specific machine-readable format, in which case you almost certainly want to explicitly ask for US to ensure that you get ASCII digits (rather than, say, Arabic digits).
+
+Therefore, you should either use the form of the SimpleDateFormat constructor where you pass in an explicit locale, such as Locale.US, or use one of the get instance methods, or suppress this error if really know what you are doing."
+        url="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        urls="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        errorLine1="            this.recentDateFormat = new SimpleDateFormat(recentFormatString, dfs);"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\org\apache\commons\net\ftp\parser\FTPTimestampParserImpl.java"
+            line="270"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        severity="Warning"
+        message="To get local formatting use getDateInstance(), getDateTimeInstance(), or getTimeInstance(), or use new SimpleDateFormat(String template, Locale locale) with for example Locale.US for ASCII dates."
+        category="Correctness"
+        priority="6"
+        summary="Using `SimpleDateFormat` directly without an explicit locale"
+        explanation="Almost all callers should use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()` to get a ready-made instance of SimpleDateFormat suitable for the user&apos;s locale. The main reason you&apos;d create an instance this class directly is because you need to format/parse a specific machine-readable format, in which case you almost certainly want to explicitly ask for US to ensure that you get ASCII digits (rather than, say, Arabic digits).
+
+Therefore, you should either use the form of the SimpleDateFormat constructor where you pass in an explicit locale, such as Locale.US, or use one of the get instance methods, or suppress this error if really know what you are doing."
+        url="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        urls="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        errorLine1="        this.defaultDateFormat = new SimpleDateFormat(defaultFormatString, dfs);"
+        errorLine2="                                     ~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\org\apache\commons\net\ftp\parser\FTPTimestampParserImpl.java"
+            line="278"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        severity="Warning"
+        message="To get local formatting use getDateInstance(), getDateTimeInstance(), or getTimeInstance(), or use new SimpleDateFormat(String template, Locale locale) with for example Locale.US for ASCII dates."
+        category="Correctness"
+        priority="6"
+        summary="Using `SimpleDateFormat` directly without an explicit locale"
+        explanation="Almost all callers should use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()` to get a ready-made instance of SimpleDateFormat suitable for the user&apos;s locale. The main reason you&apos;d create an instance this class directly is because you need to format/parse a specific machine-readable format, in which case you almost certainly want to explicitly ask for US to ensure that you get ASCII digits (rather than, say, Arabic digits).
+
+Therefore, you should either use the form of the SimpleDateFormat constructor where you pass in an explicit locale, such as Locale.US, or use one of the get instance methods, or suppress this error if really know what you are doing."
+        url="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        urls="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        errorLine1="                    sdf = new SimpleDateFormat(&quot;yyyyMMddHHmmss.SSS&quot;);"
+        errorLine2="                              ~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\org\apache\commons\net\ftp\parser\MLSxEntryParser.java"
+            line="126"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        severity="Warning"
+        message="To get local formatting use getDateInstance(), getDateTimeInstance(), or getTimeInstance(), or use new SimpleDateFormat(String template, Locale locale) with for example Locale.US for ASCII dates."
+        category="Correctness"
+        priority="6"
+        summary="Using `SimpleDateFormat` directly without an explicit locale"
+        explanation="Almost all callers should use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()` to get a ready-made instance of SimpleDateFormat suitable for the user&apos;s locale. The main reason you&apos;d create an instance this class directly is because you need to format/parse a specific machine-readable format, in which case you almost certainly want to explicitly ask for US to ensure that you get ASCII digits (rather than, say, Arabic digits).
+
+Therefore, you should either use the form of the SimpleDateFormat constructor where you pass in an explicit locale, such as Locale.US, or use one of the get instance methods, or suppress this error if really know what you are doing."
+        url="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        urls="http://developer.android.com/reference/java/text/SimpleDateFormat.html"
+        errorLine1="                    sdf = new SimpleDateFormat(&quot;yyyyMMddHHmmss&quot;);"
+        errorLine2="                              ~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\org\apache\commons\net\ftp\parser\MLSxEntryParser.java"
+            line="128"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        severity="Warning"
+        message="Avoid passing null as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        category="Correctness"
+        priority="5"
+        summary="Ensures that a proper parent context is passed to a layout inflater"
+        explanation="When inflating a layout, avoid passing in null as the parent view, since otherwise any layout parameters on the root of the inflated layout will be ignored."
+        url="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        urls="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        errorLine1="        final View view = inflater.inflate(R.layout.dialog_sync, null);"
+        errorLine2="                                                                 ~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\com\hanzeli\karlftp\MainActivity.java"
+            line="460"
+            column="66"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        severity="Warning"
+        message="Avoid passing null as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        category="Correctness"
+        priority="5"
+        summary="Ensures that a proper parent context is passed to a layout inflater"
+        explanation="When inflating a layout, avoid passing in null as the parent view, since otherwise any layout parameters on the root of the inflated layout will be ignored."
+        url="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        urls="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        errorLine1="        final View view = inflater.inflate(R.layout.dialog_order, null);"
+        errorLine2="                                                                  ~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\com\hanzeli\karlftp\MainActivity.java"
+            line="552"
+            column="67"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        severity="Warning"
+        message="Avoid passing null as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        category="Correctness"
+        priority="5"
+        summary="Ensures that a proper parent context is passed to a layout inflater"
+        explanation="When inflating a layout, avoid passing in null as the parent view, since otherwise any layout parameters on the root of the inflated layout will be ignored."
+        url="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        urls="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        errorLine1="        final View view = inflater.inflate(R.layout.dialog_log, null);"
+        errorLine2="                                                                ~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\com\hanzeli\karlftp\MainActivity.java"
+            line="598"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        severity="Warning"
+        message="Avoid passing null as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        category="Correctness"
+        priority="5"
+        summary="Ensures that a proper parent context is passed to a layout inflater"
+        explanation="When inflating a layout, avoid passing in null as the parent view, since otherwise any layout parameters on the root of the inflated layout will be ignored."
+        url="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        urls="http://www.doubleencore.com/2013/05/layout-inflation-as-intended"
+        errorLine1="            final View view = inflater.inflate(R.layout.dialog_detail, null);"
+        errorLine2="                                                                       ~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\java\com\hanzeli\fragments\ManagerFragment.java"
+            line="177"
+            column="72"/>
+    </issue>
+
+    <issue
+        id="GradleOverrides"
+        severity="Warning"
+        message="This minSdkVersion value (14) is not used; it is always overridden by the value specified in the Gradle build script (14)"
+        category="Correctness"
+        priority="4"
+        summary="Looks for values specified in the manifest file which are overridden by values in Gradle"
+        explanation="The value of (for example) `minSdkVersion` is only used if it is not specified in the `build.gradle` build scripts. When specified in the Gradle build scripts, the manifest value is ignored and can be misleading, so should be removed to avoid ambiguity."
+        errorLine1="        android:minSdkVersion=&quot;14&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\AndroidManifest.xml"
+            line="8"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="GradleOverrides"
+        severity="Warning"
+        message="This targetSdkVersion value (15) is not used; it is always overridden by the value specified in the Gradle build script (15)"
+        category="Correctness"
+        priority="4"
+        summary="Looks for values specified in the manifest file which are overridden by values in Gradle"
+        explanation="The value of (for example) `minSdkVersion` is only used if it is not specified in the `build.gradle` build scripts. When specified in the Gradle build scripts, the manifest value is ignored and can be misleading, so should be removed to avoid ambiguity."
+        errorLine1="        android:targetSdkVersion=&quot;15&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\AndroidManifest.xml"
+            line="9"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseCompoundDrawables"
+        severity="Warning"
+        message="This tag and its children can be replaced by one &lt;TextView/> and a compound drawable"
+        category="Performance"
+        priority="6"
+        summary="Checks whether the current node can be replaced by a `TextView` using compound drawables."
+        explanation="A `LinearLayout` which contains an `ImageView` and a `TextView` can be more efficiently handled as a compound drawable (a single TextView, using the `drawableTop`, `drawableLeft`, `drawableRight` and/or `drawableBottom` attributes to draw one or more images adjacent to the text).
+
+If the two widgets are offset from each other with margins, this can be replaced with a `drawablePadding` attribute.
+
+There&apos;s a lint quickfix to perform this conversion in the Eclipse plugin."
+        errorLine1="        &lt;LinearLayout"
+        errorLine2="        ^"
+        quickfix="adt">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\dialog_detail.xml"
+            line="7"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseCompoundDrawables"
+        severity="Warning"
+        message="This tag and its children can be replaced by one &lt;TextView/> and a compound drawable"
+        category="Performance"
+        priority="6"
+        summary="Checks whether the current node can be replaced by a `TextView` using compound drawables."
+        explanation="A `LinearLayout` which contains an `ImageView` and a `TextView` can be more efficiently handled as a compound drawable (a single TextView, using the `drawableTop`, `drawableLeft`, `drawableRight` and/or `drawableBottom` attributes to draw one or more images adjacent to the text).
+
+If the two widgets are offset from each other with margins, this can be replaced with a `drawablePadding` attribute.
+
+There&apos;s a lint quickfix to perform this conversion in the Eclipse plugin."
+        errorLine1="                &lt;LinearLayout"
+        errorLine2="                ^"
+        quickfix="adt">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+            line="176"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompoundDrawables"
+        severity="Warning"
+        message="This tag and its children can be replaced by one &lt;TextView/> and a compound drawable"
+        category="Performance"
+        priority="6"
+        summary="Checks whether the current node can be replaced by a `TextView` using compound drawables."
+        explanation="A `LinearLayout` which contains an `ImageView` and a `TextView` can be more efficiently handled as a compound drawable (a single TextView, using the `drawableTop`, `drawableLeft`, `drawableRight` and/or `drawableBottom` attributes to draw one or more images adjacent to the text).
+
+If the two widgets are offset from each other with margins, this can be replaced with a `drawablePadding` attribute.
+
+There&apos;s a lint quickfix to perform this conversion in the Eclipse plugin."
+        errorLine1="                &lt;LinearLayout"
+        errorLine2="                ^"
+        quickfix="adt">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+            line="176"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        severity="Warning"
+        message="Possible overdraw: Root element paints background @color/background_white with a theme that also paints a background (inferred theme is @android:style/Theme.Holo.Light)"
+        category="Performance"
+        priority="3"
+        summary="Looks for overdraw issues (where a view is painted only to be fully painted over)"
+        explanation="If you set a background drawable on a root view, then you should use a custom theme where the theme background is null. Otherwise, the theme background will be painted first, only to have your custom background completely cover it; this is called &quot;overdraw&quot;.
+
+NOTE: This detector relies on figuring out which layouts are associated with which activities based on scanning the Java code, and it&apos;s currently doing that using an inexact pattern matching algorithm. Therefore, it can incorrectly conclude which activity the layout is associated with and then wrongly complain that a background-theme is hidden.
+
+If you want your custom background on multiple pages, then you should consider making a custom theme with your custom background and just using that theme instead of a root element background.
+
+Of course it&apos;s possible that your custom drawable is translucent and you want it to be mixed with the background. However, you will get better performance if you pre-mix the background with your drawable and use that resulting image or color as a custom theme background instead.
+"
+        errorLine1="                android:background=&quot;@color/background_white&quot; >"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-port\local_manager_fragment.xml"
+            line="6"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        severity="Warning"
+        message="Possible overdraw: Root element paints background @color/background_white with a theme that also paints a background (inferred theme is @android:style/Theme.Holo.Light)"
+        category="Performance"
+        priority="3"
+        summary="Looks for overdraw issues (where a view is painted only to be fully painted over)"
+        explanation="If you set a background drawable on a root view, then you should use a custom theme where the theme background is null. Otherwise, the theme background will be painted first, only to have your custom background completely cover it; this is called &quot;overdraw&quot;.
+
+NOTE: This detector relies on figuring out which layouts are associated with which activities based on scanning the Java code, and it&apos;s currently doing that using an inexact pattern matching algorithm. Therefore, it can incorrectly conclude which activity the layout is associated with and then wrongly complain that a background-theme is hidden.
+
+If you want your custom background on multiple pages, then you should consider making a custom theme with your custom background and just using that theme instead of a root element background.
+
+Of course it&apos;s possible that your custom drawable is translucent and you want it to be mixed with the background. However, you will get better performance if you pre-mix the background with your drawable and use that resulting image or color as a custom theme background instead.
+"
+        errorLine1="                android:background=&quot;@color/background_white&quot; >"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+            line="8"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        severity="Warning"
+        message="Possible overdraw: Root element paints background @color/background_white with a theme that also paints a background (inferred theme is @android:style/Theme.Holo.Light)"
+        category="Performance"
+        priority="3"
+        summary="Looks for overdraw issues (where a view is painted only to be fully painted over)"
+        explanation="If you set a background drawable on a root view, then you should use a custom theme where the theme background is null. Otherwise, the theme background will be painted first, only to have your custom background completely cover it; this is called &quot;overdraw&quot;.
+
+NOTE: This detector relies on figuring out which layouts are associated with which activities based on scanning the Java code, and it&apos;s currently doing that using an inexact pattern matching algorithm. Therefore, it can incorrectly conclude which activity the layout is associated with and then wrongly complain that a background-theme is hidden.
+
+If you want your custom background on multiple pages, then you should consider making a custom theme with your custom background and just using that theme instead of a root element background.
+
+Of course it&apos;s possible that your custom drawable is translucent and you want it to be mixed with the background. However, you will get better performance if you pre-mix the background with your drawable and use that resulting image or color as a custom theme background instead.
+"
+        errorLine1="                android:background=&quot;@color/background_white&quot; >"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-port\remote_manager_fragment.xml"
+            line="6"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        severity="Warning"
+        message="Possible overdraw: Root element paints background @color/background_white with a theme that also paints a background (inferred theme is @android:style/Theme.Holo.Light)"
+        category="Performance"
+        priority="3"
+        summary="Looks for overdraw issues (where a view is painted only to be fully painted over)"
+        explanation="If you set a background drawable on a root view, then you should use a custom theme where the theme background is null. Otherwise, the theme background will be painted first, only to have your custom background completely cover it; this is called &quot;overdraw&quot;.
+
+NOTE: This detector relies on figuring out which layouts are associated with which activities based on scanning the Java code, and it&apos;s currently doing that using an inexact pattern matching algorithm. Therefore, it can incorrectly conclude which activity the layout is associated with and then wrongly complain that a background-theme is hidden.
+
+If you want your custom background on multiple pages, then you should consider making a custom theme with your custom background and just using that theme instead of a root element background.
+
+Of course it&apos;s possible that your custom drawable is translucent and you want it to be mixed with the background. However, you will get better performance if you pre-mix the background with your drawable and use that resulting image or color as a custom theme background instead.
+"
+        errorLine1="                android:background=&quot;@color/background_white&quot; >"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+            line="8"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        severity="Warning"
+        message="Possible overdraw: Root element paints background @color/background_white with a theme that also paints a background (inferred theme is @android:style/Theme.Holo.Light)"
+        category="Performance"
+        priority="3"
+        summary="Looks for overdraw issues (where a view is painted only to be fully painted over)"
+        explanation="If you set a background drawable on a root view, then you should use a custom theme where the theme background is null. Otherwise, the theme background will be painted first, only to have your custom background completely cover it; this is called &quot;overdraw&quot;.
+
+NOTE: This detector relies on figuring out which layouts are associated with which activities based on scanning the Java code, and it&apos;s currently doing that using an inexact pattern matching algorithm. Therefore, it can incorrectly conclude which activity the layout is associated with and then wrongly complain that a background-theme is hidden.
+
+If you want your custom background on multiple pages, then you should consider making a custom theme with your custom background and just using that theme instead of a root element background.
+
+Of course it&apos;s possible that your custom drawable is translucent and you want it to be mixed with the background. However, you will get better performance if you pre-mix the background with your drawable and use that resulting image or color as a custom theme background instead.
+"
+        errorLine1="    android:background=&quot;@color/background_white&quot; >"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\transfer_fragment.xml"
+            line="6"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource R.menu.activity_edit_server appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Looks for unused resources"
+        explanation="Unused resources make applications larger and slow down builds.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\menu\activity_edit_server.xml"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource R.layout.activity_example appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Looks for unused resources"
+        explanation="Unused resources make applications larger and slow down builds.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\activity_example.xml"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource R.color.basic_text appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Looks for unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;color name=&quot;basic_text&quot;>#000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\values\colors.xml"
+            line="4"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource R.menu.example appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Looks for unused resources"
+        explanation="Unused resources make applications larger and slow down builds.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\menu\example.xml"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource R.drawable.sort_desc appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Looks for unused resources"
+        explanation="Unused resources make applications larger and slow down builds.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\sort_desc.png"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource R.string.file_folder appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Looks for unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;string name=&quot;file_folder&quot;>Folder&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\values\strings.xml"
+            line="24"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource R.string.file_unknown appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Looks for unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;string name=&quot;file_unknown&quot;>Unknown&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\values\strings.xml"
+            line="25"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        severity="Warning"
+        message="This RadioGroup layout or its LinearLayout parent is possibly useless"
+        category="Performance"
+        priority="2"
+        summary="Checks whether a parent layout can be removed."
+        explanation="A layout with children that has no siblings, is not a scrollview or a root layout, and does not have a background, can be removed and have its children moved directly into the parent for a flatter and more efficient layout hierarchy."
+        errorLine1="    &lt;RadioGroup"
+        errorLine2="    ^"
+        quickfix="adt">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\dialog_order.xml"
+            line="7"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="IconLauncherShape"
+        severity="Warning"
+        message="Launcher icons should not fill every pixel of their square region; see the design guide for details"
+        category="Usability:Icons"
+        priority="6"
+        summary="Checks that launcher icons follow the recommended visual style"
+        explanation="According to the Android Design Guide (http://developer.android.com/design/style/iconography.html) your launcher icons should &quot;use a distinct silhouette&quot;, a &quot;three-dimensional, front view, with a slight perspective as if viewed from above, so that users perceive some depth.&quot;
+
+The unique silhouette implies that your launcher icon should not be a filled square."
+        url="http://developer.android.com/design/style/iconography.html"
+        urls="http://developer.android.com/design/style/iconography.html">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_bar.jpg"/>
+    </issue>
+
+    <issue
+        id="IconDipSize"
+        severity="Warning"
+        message="The image logo_male_bar.jpg varies significantly in its density-independent (dip) size across the various density versions: drawable-ldpi\logo_male_bar.jpg: 96x88 dp (72x66 px), drawable-hdpi\logo_male_bar.jpg: 48x44 dp (72x66 px)"
+        category="Usability:Icons"
+        priority="5"
+        summary="Ensures that icons across densities provide roughly the same density-independent size"
+        explanation="Checks the all icons which are provided in multiple densities, all compute to roughly the same density-independent pixel (`dip`) size. This catches errors where images are either placed in the wrong folder, or icons are changed to new sizes but some folders are forgotten.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_bar.jpg"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-ldpi\logo_male_bar.jpg"/>
+    </issue>
+
+    <issue
+        id="IconDipSize"
+        severity="Warning"
+        message="The image logo_male_ftp.jpg varies significantly in its density-independent (dip) size across the various density versions: drawable-mdpi\logo_male_ftp.jpg: 150x139 dp (150x139 px), drawable-hdpi\logo_male_ftp.jpg: 100x93 dp (150x139 px), drawable-xhdpi\logo_male_ftp.jpg: 75x70 dp (150x139 px)"
+        category="Usability:Icons"
+        priority="5"
+        summary="Ensures that icons across densities provide roughly the same density-independent size"
+        explanation="Checks the all icons which are provided in multiple densities, all compute to roughly the same density-independent pixel (`dip`) size. This catches errors where images are either placed in the wrong folder, or icons are changed to new sizes but some folders are forgotten.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-xhdpi\logo_male_ftp.jpg"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_ftp.jpg"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-mdpi\logo_male_ftp.jpg"/>
+    </issue>
+
+    <issue
+        id="IconDuplicatesConfig"
+        severity="Warning"
+        message="The logo_male_bar.jpg icon has identical contents in the following configuration folders: drawable-hdpi, drawable-ldpi"
+        category="Usability:Icons"
+        priority="5"
+        summary="Finds icons that have identical bitmaps across various configuration parameters"
+        explanation="If an icon is provided under different configuration parameters such as `drawable-hdpi` or `-v11`, they should typically be different. This detector catches cases where the same icon is provided in different configuration folder which is usually not intentional.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-ldpi\logo_male_bar.jpg"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_bar.jpg"/>
+    </issue>
+
+    <issue
+        id="IconDuplicatesConfig"
+        severity="Warning"
+        message="The logo_male_ftp.jpg icon has identical contents in the following configuration folders: drawable-hdpi, drawable-mdpi, drawable-xhdpi"
+        category="Usability:Icons"
+        priority="5"
+        summary="Finds icons that have identical bitmaps across various configuration parameters"
+        explanation="If an icon is provided under different configuration parameters such as `drawable-hdpi` or `-v11`, they should typically be different. This detector catches cases where the same icon is provided in different configuration folder which is usually not intentional.">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-xhdpi\logo_male_ftp.jpg"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-mdpi\logo_male_ftp.jpg"/>
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_ftp.jpg"/>
+    </issue>
+
+    <issue
+        id="IconDensities"
+        severity="Warning"
+        message="Missing the following drawables in drawable-mdpi: checked.png, clear.png, copy.png, delete.png, detail.png... (24 more)"
+        category="Usability:Icons"
+        priority="4"
+        summary="Ensures that icons provide custom versions for all supported densities"
+        explanation="Icons will look best if a custom version is provided for each of the major screen density classes (low, medium, high, extra high). This lint check identifies icons which do not have complete coverage across the densities.
+
+Low density is not really used much anymore, so this check ignores the ldpi density. To force lint to include it, set the environment variable `ANDROID_LINT_INCLUDE_LDPI=true`. For more information on current density usage, see http://developer.android.com/resources/dashboard/screens.html"
+        url="http://developer.android.com/guide/practices/screens_support.html"
+        urls="http://developer.android.com/guide/practices/screens_support.html">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-mdpi"/>
+    </issue>
+
+    <issue
+        id="IconDensities"
+        severity="Warning"
+        message="Missing the following drawables in drawable-xhdpi: checked.png, clear.png, copy.png, delete.png, detail.png... (24 more)"
+        category="Usability:Icons"
+        priority="4"
+        summary="Ensures that icons provide custom versions for all supported densities"
+        explanation="Icons will look best if a custom version is provided for each of the major screen density classes (low, medium, high, extra high). This lint check identifies icons which do not have complete coverage across the densities.
+
+Low density is not really used much anymore, so this check ignores the ldpi density. To force lint to include it, set the environment variable `ANDROID_LINT_INCLUDE_LDPI=true`. For more information on current density usage, see http://developer.android.com/resources/dashboard/screens.html"
+        url="http://developer.android.com/guide/practices/screens_support.html"
+        urls="http://developer.android.com/guide/practices/screens_support.html">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-xhdpi"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\local_manager_fragment.xml"
+            line="66"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\local_manager_fragment.xml"
+            line="76"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\local_manager_fragment.xml"
+            line="86"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\local_manager_fragment.xml"
+            line="103"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\local_manager_fragment.xml"
+            line="113"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\local_manager_fragment.xml"
+            line="123"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\remote_manager_fragment.xml"
+            line="66"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\remote_manager_fragment.xml"
+            line="75"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\remote_manager_fragment.xml"
+            line="84"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\remote_manager_fragment.xml"
+            line="100"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\remote_manager_fragment.xml"
+            line="109"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\remote_manager_fragment.xml"
+            line="118"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\transfer_fragment.xml"
+            line="16"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\transfer_fragment.xml"
+            line="25"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        severity="Warning"
+        message="Buttons in button bars should be borderless; use style=&quot;?android:attr/buttonBarButtonStyle&quot; (and ?android:attr/buttonBarStyle on the parent)"
+        category="Usability"
+        priority="5"
+        summary="Ensures that buttons in button bars are borderless"
+        explanation="Button bars typically use a borderless style for the buttons. Set the `style=&quot;?android:attr/buttonBarButtonStyle&quot;` attribute on each of the buttons, and set `style=&quot;?android:attr/buttonBarStyle&quot;` on the parent layout"
+        url="http://developer.android.com/design/building-blocks/buttons.html"
+        urls="http://developer.android.com/design/building-blocks/buttons.html"
+        errorLine1="        &lt;Button"
+        errorLine2="        ^">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\transfer_fragment.xml"
+            line="35"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        severity="Warning"
+        message="[Accessibility] Missing contentDescription attribute on image"
+        category="Accessibility"
+        priority="3"
+        summary="Ensures that image widgets provide a contentDescription"
+        explanation="Non-textual widgets like ImageViews and ImageButtons should use the `contentDescription` attribute to specify a textual description of the widget such that screen readers and other accessibility tools can adequately describe the user interface.
+
+Note that elements in application screens that are purely decorative and do not provide any content or enable a user action should not have accessibility content descriptions. In this case, just suppress the lint warning with a tools:ignore=&quot;ContentDescription&quot; attribute.
+
+Note that for text fields, you should not set both the `hint` and the `contentDescription` attributes since the hint will never be shown. Just set the `hint`. See http://developer.android.com/guide/topics/ui/accessibility/checklist.html#special-cases."
+        errorLine1="                    &lt;ImageView"
+        errorLine2="                    ^"
+        quickfix="adt">
+        <location
+            file="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
+            line="181"
+            column="21"/>
+    </issue>
+
+</issues>

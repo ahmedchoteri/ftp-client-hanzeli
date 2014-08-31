@@ -29,7 +29,7 @@ import java.util.EventObject;
  * @see CopyStreamListener
  * @see CopyStreamAdapter
  * @see Util
- * @version $Id: CopyStreamEvent.java 1088720 2011-04-04 18:52:00Z dfs $
+ * @version $Id: CopyStreamEvent.java 1299238 2012-03-10 17:12:28Z sebb $
  */
 public class CopyStreamEvent extends EventObject
 {

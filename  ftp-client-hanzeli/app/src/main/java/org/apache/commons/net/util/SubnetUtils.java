@@ -99,11 +99,12 @@ public class SubnetUtils {
 
         private int low() {
             return (isInclusiveHostCount() ? network() :
-                broadcast() - network() > 1 ? network() + 1 : 0); 
+                broadcast() - network() > 1 ? network() + 1 : 0);
         }
-        private int high() { 
+
+        private int high() {
             return (isInclusiveHostCount() ? broadcast() :
-                broadcast() - network() > 1 ? broadcast() -1  : 0); 
+                broadcast() - network() > 1 ? broadcast() -1  : 0);
         }
 
         /**
@@ -113,45 +114,64 @@ public class SubnetUtils {
          * @param address A dot-delimited IPv4 address, e.g. "192.168.0.1"
          * @return True if in range, false otherwise
          */
-        public boolean isInRange(String address)    { return isInRange(toInteger(address)); }
-
-        private boolean isInRange(int address)      {
-            int diff = address-low();
-            return (diff >= 0 && (diff <= (high()-low())));
+        public boolean isInRange(String address) {
+            return isInRange(toInteger(address));
         }
 
-        public String getBroadcastAddress()         { return format(toArray(broadcast())); }
-        public String getNetworkAddress()           { return format(toArray(network())); }
-        public String getNetmask()                  { return format(toArray(netmask())); }
-        public String getAddress()                  { return format(toArray(address())); }
+        private boolean isInRange(int address) {
+            int diff = address - low();
+            return (diff >= 0 && (diff <= (high() - low())));
+        }
+
+        public String getBroadcastAddress() {
+            return format(toArray(broadcast()));
+        }
+
+        public String getNetworkAddress() {
+            return format(toArray(network()));
+        }
+
+        public String getNetmask() {
+            return format(toArray(netmask()));
+        }
+
+        public String getAddress() {
+            return format(toArray(address()));
+        }
 
         /**
          * Return the low address as a dotted IP address.
          * Will be zero for CIDR/31 and CIDR/32 if the inclusive flag is false.
-         * 
+         *
          * @return the IP address in dotted format, may be "0.0.0.0" if there is no valid address
          */
-        public String getLowAddress()               { return format(toArray(low())); }
+        public String getLowAddress() {
+            return format(toArray(low()));
+        }
 
         /**
          * Return the high address as a dotted IP address.
          * Will be zero for CIDR/31 and CIDR/32 if the inclusive flag is false.
-         * 
+         *
          * @return the IP address in dotted format, may be "0.0.0.0" if there is no valid address
          */
-        public String getHighAddress()              { return format(toArray(high())); }
-        
+        public String getHighAddress() {
+            return format(toArray(high()));
+        }
+
         /**
          * Get the count of available addresses.
          * Will be zero for CIDR/31 and CIDR/32 if the inclusive flag is false.
          * @return the count of addresses, may be zero.
          */
-        public int getAddressCount()                { 
+        public int getAddressCount()                {
             int count = broadcast() - network() + (isInclusiveHostCount() ? 1 : -1);
             return count < 0 ? 0 : count;
         }
 
-        public int asInteger(String address)        { return toInteger(address); }
+        public int asInteger(String address) {
+            return toInteger(address);
+        }
 
         public String getCidrSignature() {
             return toCidrNotation(

@@ -57,10 +57,17 @@
         	android:layout_columnSpan="3"
         	android:layout_height="3dp"
         	android:background="@color/line" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_column="0"
+            android:layout_row="0">
         <Button
             android:id="@+id/LOCButtonUpload"
-            android:layout_width="105dip"
-            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/upload"
             android:gravity="center_vertical"
             android:textSize="16sp"
@@ -68,8 +75,9 @@
 
         <Button
             android:id="@+id/LOCButtonAll"
-            android:layout_width="105dip"
-            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/checked"
             android:gravity="center_vertical"
             android:textSize="16sp"
@@ -77,17 +85,26 @@
 
         <Button
             android:id="@+id/LOCButtonNew"
-            android:layout_width="105dip"
-            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/new_folder"
             android:gravity="center_vertical"
             android:textSize="16sp"
             android:text="@string/frag_new_folder" />
-
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_row="1"
+            android:layout_column="0"
+            >
         <Button
             android:id="@+id/LOCButtonSort"
-            android:layout_width="105dip"
-            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/sort_asc"
             android:gravity="center_vertical"
             android:textSize="16sp"
@@ -95,8 +112,9 @@
 
         <Button
             android:id="@+id/LOCButtonDelete"
-            android:layout_width="105dip"
-            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/delete"
             android:gravity="center_vertical"
             android:textSize="16sp"
@@ -104,12 +122,14 @@
 
         <Button
             android:id="@+id/LOCButtonRename"
-            android:layout_width="105dip"
-            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/rename"
             android:gravity="center_vertical"
             android:textSize="16sp"
             android:text="@string/frag_rename" />
+        </LinearLayout>
     </GridLayout>
 	<LinearLayout
 	    android:layout_width="match_parent"

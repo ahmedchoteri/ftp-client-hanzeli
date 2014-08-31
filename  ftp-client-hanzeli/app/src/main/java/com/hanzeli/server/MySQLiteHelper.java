@@ -23,14 +23,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
   // Database creation sql statement
   private static final String DATABASE_CREATE = "create table "
-      + TABLE_SERVERS + "(" 
-      + ID + " integer primary key autoincrement, " 
-      + NAME + " text not null, " 
+      + TABLE_SERVERS + "("
+      + ID + " integer primary key autoincrement, "
+      + NAME + " text not null, "
       + HOST + " text not null, "
       + USERNAME + " text, "
       + PASSWORD + " text, "
       + PORT + " integer not null, "
-      + ANONYM + " integer not null, " 
+      + ANONYM + " integer not null, "
       + LOCAL_DIR + " text, "
       + REMOTE_DIR + " text);";
 

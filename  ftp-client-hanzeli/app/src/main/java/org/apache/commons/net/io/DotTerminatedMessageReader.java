@@ -35,7 +35,7 @@ import java.io.Reader;
  * Note: versions since 3.0 extend BufferedReader rather than Reader,
  * and no longer change the CRLF into the local EOL. Also only DOT CR LF
  * acts as EOF.
- * @version $Id: DotTerminatedMessageReader.java 1088720 2011-04-04 18:52:00Z dfs $
+ * @version $Id: DotTerminatedMessageReader.java 1301276 2012-03-15 23:51:31Z sebb $
  */
 public final class DotTerminatedMessageReader extends BufferedReader
 {
@@ -166,18 +166,19 @@ public final class DotTerminatedMessageReader extends BufferedReader
     @Override
     public int read(char[] buffer, int offset, int length) throws IOException
     {
-        int ch, off;
+        if (length < 1)
+        {
+            return 0;
+        }
+        int ch;
         synchronized (lock)
         {
-            if (length < 1)
-            {
-                return 0;
-            }
             if ((ch = read()) == -1)
             {
                 return -1;
             }
-            off = offset;
+
+            int off = offset;
 
             do
             {

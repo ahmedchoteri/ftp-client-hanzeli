@@ -8,10 +8,18 @@ import java.util.List;
 import org.apache.commons.net.ftp.FTPClient;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.hanzeli.fragments.FileAdapter;
 import com.hanzeli.karlftp.MainActivity;
-import com.hanzeli.values.EventTypes;
-import com.hanzeli.values.Order;
+import com.hanzeli.karlftp.MainApplication;
+import com.hanzeli.resources.AsyncTaskResult;
+import com.hanzeli.resources.EventTypes;
+import com.hanzeli.resources.FileInfo;
+import com.hanzeli.resources.ManagerEvent;
+import com.hanzeli.resources.ManagerException;
+import com.hanzeli.resources.ManagerTask;
+import com.hanzeli.resources.Order;
 
 public abstract class BasicFileManager implements Manager{
 
@@ -26,11 +34,14 @@ public abstract class BasicFileManager implements Manager{
 	protected ArrayList<FileInfo> fileList;
 	/** File manager listeners */
 	protected EventListener fragment;
+    /** File adapter */
+    protected FileAdapter adapter;
     /** Error listener */
     protected MainActivity activity;
 	/** Order */
-	protected Ordering orderingCompare;
+	protected Ordering ordering;
 	//protected Ordering orderingAscDesc;
+    protected boolean click;
 	
 
 	public BasicFileManager() {
@@ -39,9 +50,7 @@ public abstract class BasicFileManager implements Manager{
 		connection = false;
 		fileList = null;
 		fragment = null;
-		orderingCompare = new Ordering(Order.NAME,Order.ASC);
-		
-		
+		ordering = new Ordering(Order.NAME,Order.ASC);
 	}
 
 	public String getCurrDir() {
@@ -51,7 +60,14 @@ public abstract class BasicFileManager implements Manager{
 	public String getRootDir(){
 		return rootDir;
 	}
-	
+
+    public void setFileAdapter(FileAdapter a){
+        this.adapter = a;
+    }
+
+    public FileAdapter getFileAdapter(){
+        return adapter;
+    }
 	public boolean isConnected() {
 		return connection;
 	}
@@ -93,13 +109,14 @@ public abstract class BasicFileManager implements Manager{
         }
     }
 
-    /**
-     * zmazanie oznacenych suborov
-     */
-    public void delFiles() {
-        FileInfo[] filesToDelete = getSelectedFiles();
-        //paralelne spustenie AsyncTask
-        new ManagerTaskHandler(ManagerTask.DELETE).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, filesToDelete);
+    public void patternSelect(String pattern) {
+        if(fileList != null) {
+            for (FileInfo info:fileList){
+                if (info.getName().matches(pattern)){
+                    info.setChecked(true);
+                }
+            }
+        }
     }
 
     public void setClient(FTPClient client){
@@ -126,9 +143,7 @@ public abstract class BasicFileManager implements Manager{
 	 */
 	public void attachFragment(EventListener listener) {
 		this.fragment =listener;
-			//ManagerEvent newManagerEvent = new ManagerEvent(EventTypes.FILES_LIST_CHANGE);
-			//newManagerEvent.setManager(this);
-			//listener.onEvent(newManagerEvent);
+
 	}
 
     /**
@@ -170,7 +185,7 @@ public abstract class BasicFileManager implements Manager{
 	}
 	
 	
-	public void toParDir() {
+	public void toParrentDir() {
 		// Can we go to parent folder
 		if (!isRootFolder()) {
 			new ManagerTaskHandler(ManagerTask.GO_PARENT).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -188,24 +203,37 @@ public abstract class BasicFileManager implements Manager{
 	}
 	
 	
-	public void chngWorkDir(final String dirname) {
+	public void changeWorkingDir(final String dirName, boolean click) {
 		FileInfo dir = null;
 		for (FileInfo file : fileList) {
-			if (dirname.equals(file.getName())) {
+			if (file.isFolder() && dirName.equals(file.getName())) {
 				dir = file;
 				break;
 			}
 		}
+        if(dir!=null) {
+            new ManagerTaskHandler(ManagerTask.CHNG_DIR).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dir);
+            if (MainApplication.getInstance().syncBrowse && click){
+                if(TAG.equals("LocalManager")){
+                    Log.d(TAG,"I am " + this.getClass().getName());
+                    MainApplication.getInstance().getRemoteManager().changeWorkingDir(dirName,false);
+                }
+                else if (TAG.equals("RemoteManager")){
+                    Log.d(TAG,"I am remote manager");
+                    MainApplication.getInstance().getLocalManager().changeWorkingDir(dirName,false);
 
-		new ManagerTaskHandler(ManagerTask.CHNG_DIR).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dir);
+                }
+            }
+        }
+
 	}
 
 	/**
 	 * change type of ordering
 	 */
-	public void chngOrdering(final Order order) {
+	public void changeOrdering(final Order order) {
 		//setup for ordering
-		orderingCompare.setType(order);
+		ordering.setType(order);
 		//reorder list of files
 		if ((fileList != null) && !fileList.isEmpty()) {
 			new ManagerTaskHandler(ManagerTask.CHNG_ORDER).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -215,20 +243,29 @@ public abstract class BasicFileManager implements Manager{
 	/**
 	 * change order ASC/DESC
 	 */
-	public void chngOrderingAscDesc(final Order order){
-		orderingCompare.setOrder(order);
+	public void changeOrderingAscDesc(final Order order){
+		ordering.setOrder(order);
 		if ((fileList != null) && !fileList.isEmpty()) {
 			new ManagerTaskHandler(ManagerTask.CHNG_ORDER).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
-	/**
-	 * 
-	 */
+
+
+    /**
+     * zmazanie oznacenych suborov
+     */
+    public void delFiles() {
+        FileInfo[] filesToDelete = getSelectedFiles();
+        //paralelne spustenie AsyncTask
+        new ManagerTaskHandler(ManagerTask.DELETE).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, filesToDelete);
+    }
+    /**
+     * vytvorenie noveho priecinku
+     */
 	public void newFolder(final String dirname) {
 
 		//check if file already exist
 		if ((fileList != null) && !fileList.isEmpty()) {
-			//nemusi byt lowerCase !!!
 			for (FileInfo fileEntry : fileList) {
 				if (dirname.equals(fileEntry.getName())) {
 					notifyListener(new ManagerEvent(EventTypes.NEW_FOLDER_ERR));
@@ -248,7 +285,7 @@ public abstract class BasicFileManager implements Manager{
 	}
 
 	/**
-	 * 
+	 * premenovanie suboru/priecinku
 	 */
 	public void renameFile(final String fileName, final String newFileName) {
 
@@ -283,7 +320,7 @@ public abstract class BasicFileManager implements Manager{
 	}
 
 	/**
-	 *
+	 * refresh managera
 	 */
 	public void refresh() {
 		new ManagerTaskHandler(ManagerTask.REFRESH).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -327,10 +364,10 @@ public abstract class BasicFileManager implements Manager{
 						execDisconnect();
                         break;
 					case CHNG_DIR:
-						execChngWorkDir(params[0]);
+						execChangeWorkDir(params[0]);
 						break;			
 					case GO_PARENT:
-						execToParDir();
+						execToParentDir();
 						break;
 					case GO_ROOT:
 						execToHomeDir();
@@ -347,7 +384,7 @@ public abstract class BasicFileManager implements Manager{
 						execNewFolder(params[0]);
 						break;
 					case CHNG_ORDER:
-						Collections.sort(fileList, orderingCompare);
+						Collections.sort(fileList, ordering);
 						break;
 					default:
 						break;
@@ -376,9 +413,6 @@ public abstract class BasicFileManager implements Manager{
                 }
 			}
             // ak sa operacia podarila tak vykonat ukoncovacie eventy
-            /*if (result.getResult()) {
-                notifyListener(handlerTask.getEndEventsFragment());
-            }*/
             if(result.getResult()) {
                 for (ManagerEvent event : handlerTask.getEndEventsActivity()) {
                     event.setManager(TAG);
@@ -408,12 +442,12 @@ public abstract class BasicFileManager implements Manager{
 	 * method for change of directory operation
 	 * @param dir - target directory
 	 */
-	protected abstract void execChngWorkDir(FileInfo dir) throws ManagerException;
+	protected abstract void execChangeWorkDir(FileInfo dir) throws ManagerException;
 	
 	/**
 	 * method for jump to parent operation
 	 */
-	protected abstract void execToParDir() throws ManagerException;
+	protected abstract void execToParentDir() throws ManagerException;
 	
 	/**
 	 * method for jump to root directory
@@ -442,7 +476,7 @@ public abstract class BasicFileManager implements Manager{
 	 * vytvorenie noveho adresara
 	 * @param dir - novy adresar
 	 */
-	protected abstract void execNewFolder(FileInfo dir) throws ManagerException;
+     protected abstract void execNewFolder(FileInfo dir) throws ManagerException;
 
 
 }

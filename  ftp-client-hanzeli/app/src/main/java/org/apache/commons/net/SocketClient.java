@@ -23,8 +23,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.charset.Charset;
 
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
@@ -68,7 +70,7 @@ public abstract class SocketClient
 
     /**
      * A ProtocolCommandSupport object used to manage the registering of
-     * ProtocolCommandListeners and te firing of ProtocolCommandEvents.
+     * ProtocolCommandListeners and the firing of ProtocolCommandEvents.
      */
     private ProtocolCommandSupport __commandSupport;
 
@@ -103,10 +105,19 @@ public abstract class SocketClient
     /** Hint for SO_SNDBUF size */
     private int sendBufferSize = -1;
 
+    /** The proxy to use when connecting. */
+    private Proxy connProxy;
+
+    /**
+     * Charset to use for byte IO.
+     */
+    private Charset charset = Charset.defaultCharset();
+
     /**
      * Default constructor for SocketClient.  Initializes
      * _socket_ to null, _timeout_ to 0, _defaultPort to 0,
-     * _isConnected_ to false, and _socketFactory_ to a shared instance of
+     * _isConnected_ to false, charset to {@code Charset.defaultCharset()}
+     * and _socketFactory_ to a shared instance of
      * {@link org.apache.commons.net.DefaultSocketFactory}.
      */
     public SocketClient()
@@ -446,9 +457,12 @@ public abstract class SocketClient
      * Only call this method after a connection has been opened
      * by {@link #connect connect()}.
      * <p>
+     * To set the initial timeout, use {@link #setDefaultTimeout(int)} instead.
+     *
      * @param timeout  The timeout in milliseconds to use for the currently
      *                 open socket connection.
      * @exception SocketException If the operation fails.
+     * @throws NullPointerException if the socket is not currently open
      */
     public void setSoTimeout(int timeout) throws SocketException
     {
@@ -470,7 +484,7 @@ public abstract class SocketClient
     /**
      * Get the current sendBuffer size
      * @return the size, or -1 if not initialised
-     * @since 3.0 
+     * @since 3.0
      */
     protected int getSendBufferSize(){
         return sendBufferSize;
@@ -490,7 +504,7 @@ public abstract class SocketClient
     /**
      * Get the current receivedBuffer size
      * @return the size, or -1 if not initialised
-     * @since 3.0 
+     * @since 3.0
      */
     protected int getReceiveBufferSize(){
         return receiveBufferSize;
@@ -501,6 +515,7 @@ public abstract class SocketClient
      * <p>
      * @return The timeout in milliseconds of the currently opened socket.
      * @exception SocketException If the operation fails.
+     * @throws NullPointerException if the socket is not currently open
      */
     public int getSoTimeout() throws SocketException
     {
@@ -513,6 +528,7 @@ public abstract class SocketClient
      * <p>
      * @param on  True if Nagle's algorithm is to be enabled, false if not.
      * @exception SocketException If the operation fails.
+     * @throws NullPointerException if the socket is not currently open
      */
     public void setTcpNoDelay(boolean on) throws SocketException
     {
@@ -527,6 +543,7 @@ public abstract class SocketClient
      * @return True if Nagle's algorithm is enabled on the currently opened
      *        socket, false otherwise.
      * @exception SocketException If the operation fails.
+     * @throws NullPointerException if the socket is not currently open
      */
     public boolean getTcpNoDelay() throws SocketException
     {
@@ -542,6 +559,7 @@ public abstract class SocketClient
      * other systems.
      * @param  keepAlive If true, keepAlive is turned on
      * @throws SocketException
+     * @throws NullPointerException if the socket is not currently open
      * @since 2.2
      */
     public void setKeepAlive(boolean keepAlive) throws SocketException {
@@ -553,6 +571,7 @@ public abstract class SocketClient
      * Delegates to {@link Socket#getKeepAlive()}
      * @return True if SO_KEEPALIVE is enabled.
      * @throws SocketException
+     * @throws NullPointerException if the socket is not currently open
      * @since 2.2
      */
     public boolean getKeepAlive() throws SocketException {
@@ -565,6 +584,7 @@ public abstract class SocketClient
      * @param on  True if linger is to be enabled, false if not.
      * @param val The linger timeout (in hundredths of a second?)
      * @exception SocketException If the operation fails.
+     * @throws NullPointerException if the socket is not currently open
      */
     public void setSoLinger(boolean on, int val) throws SocketException
     {
@@ -578,6 +598,7 @@ public abstract class SocketClient
      * @return The current SO_LINGER timeout.  If SO_LINGER is disabled returns
      *         -1.
      * @exception SocketException If the operation fails.
+     * @throws NullPointerException if the socket is not currently open
      */
     public int getSoLinger() throws SocketException
     {
@@ -592,6 +613,7 @@ public abstract class SocketClient
      * <p>
      * @return The port number of the open socket on the local host used
      *         for the connection.
+     * @throws NullPointerException if the socket is not currently open
      */
     public int getLocalPort()
     {
@@ -604,6 +626,7 @@ public abstract class SocketClient
      * Delegates to {@link Socket#getLocalAddress()}
      * <p>
      * @return The local address to which the client's socket is bound.
+     * @throws NullPointerException if the socket is not currently open
      */
     public InetAddress getLocalAddress()
     {
@@ -617,6 +640,7 @@ public abstract class SocketClient
      * <p>
      * @return The port number of the remote host to which the client is
      *         connected.
+     * @throws NullPointerException if the socket is not currently open
      */
     public int getRemotePort()
     {
@@ -627,6 +651,7 @@ public abstract class SocketClient
     /**
      * @return The remote address to which the client is connected.
      * Delegates to {@link Socket#getInetAddress()}
+     * @throws NullPointerException if the socket is not currently open
      */
     public InetAddress getRemoteAddress()
     {
@@ -659,6 +684,7 @@ public abstract class SocketClient
      * connections.  If the factory value is null, then a default
      * factory is used (only do this to reset the factory after having
      * previously altered it).
+     * Any proxy setting is discarded.
      * <p>
      * @param factory  The new SocketFactory the SocketClient should use.
      */
@@ -669,6 +695,10 @@ public abstract class SocketClient
         } else {
             _socketFactory_ = factory;
         }
+        // re-setting the socket factory makes the proxy setting useless,
+        // so set the field to null so that getProxy() doesn't return a
+        // Proxy that we're actually not using.
+        connProxy = null;
     }
 
     /**
@@ -718,7 +748,7 @@ public abstract class SocketClient
 
 
     /**
-     * Adds a ProtocolCommandListener. 
+     * Adds a ProtocolCommandListener.
      *
      * @param listener  The ProtocolCommandListener to add.
      * @since 3.0
@@ -739,7 +769,7 @@ public abstract class SocketClient
 
     /**
      * If there are any listeners, send them the reply details.
-     * 
+     *
      * @param replyCode the code extracted from the reply
      * @param reply the full reply text
      * @since 3.0
@@ -752,7 +782,7 @@ public abstract class SocketClient
 
     /**
      * If there are any listeners, send them the command details.
-     * 
+     *
      * @param command the command name
      * @param message the complete message, including command name
      * @since 3.0
@@ -773,12 +803,64 @@ public abstract class SocketClient
     /**
      * Subclasses can override this if they need to provide their own
      * instance field for backwards compatibilty.
-     * 
+     *
      * @return the CommandSupport instance, may be {@code null}
      * @since 3.0
      */
     protected ProtocolCommandSupport getCommandSupport() {
         return __commandSupport;
+    }
+
+    /**
+     * Sets the proxy for use with all the connections.
+     * The proxy is used for connections established after the
+     * call to this method.
+     *
+     * @param proxy the new proxy for connections.
+     * @since 3.2
+     */
+    public void setProxy(Proxy proxy) {
+        setSocketFactory(new DefaultSocketFactory(proxy));
+        connProxy = proxy;
+    }
+
+    /**
+     * Gets the proxy for use with all the connections.
+     * @return the current proxy for connections.
+     */
+    public Proxy getProxy() {
+        return connProxy;
+    }
+
+    /**
+     * Gets the charset name.
+     *
+     * @return the charset.
+     * @since 3.3
+     * TODO Will be deprecated once the code requires Java 1.6 as a mininmum
+     */
+    public String getCharsetName() {
+        return charset.name();
+    }
+
+    /**
+     * Gets the charset.
+     *
+     * @return the charset.
+     * @since 3.3
+     */
+    public Charset getCharset() {
+        return charset;
+    }
+
+    /**
+     * Sets the charset.
+     *
+     * @param charset the charset.
+     * @since 3.3
+     */
+    public void setCharset(Charset charset) {
+        this.charset = charset;
     }
 
     /*

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hanzeli.karlftp.R;
-import com.hanzeli.managers.Transfer;
+import com.hanzeli.managers.Utils;
+import com.hanzeli.resources.Transfer;
+import com.hanzeli.resources.TransferType;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -29,6 +31,8 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
 	
 	private Drawable upIcon;
 	private Drawable downIcon;
+    private Drawable copyIcon;
+    private Drawable syncIcon;
 	
 	public class TransferHolder {
 		TextView source;
@@ -48,6 +52,8 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
 		allTransfers = objects;
 		upIcon=context.getResources().getDrawable(R.drawable.upload);
 		downIcon=context.getResources().getDrawable(R.drawable.download);
+        copyIcon = context.getResources().getDrawable(R.drawable.copy);
+        syncIcon = context.getResources().getDrawable(R.drawable.sync);
 	}
 
 
@@ -94,65 +100,76 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
 		holder.destination.setText(transfer.getToPath());
         holder.progress.setMax(100);
         holder.progress.setProgress(0);
-		holder.checkbox.setChecked(transfer.getChecked());
+		holder.checkbox.setChecked(transfer.isChecked());
 		holder.checkbox.setTag(position);
-
-        holder.checkbox.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View view) {
-                boolean b = transfer.getChecked();
-                transfer.setChecked(!b);
-            }
-        });
+        holder.checkbox.setOnClickListener(checkBoxListener);
 		
-		if (transfer.getDirection()==0) {
+		if (transfer.type==TransferType.DOWNLOAD) {
 			holder.direction.setImageDrawable(downIcon);
-		} else {
+		} else if (transfer.type == TransferType.UPLOAD){
 			holder.direction.setImageDrawable(upIcon);
-		}
+		} else if (transfer.type == TransferType.COPY){
+            holder.direction.setImageDrawable(copyIcon);
+        } else if (transfer.type == TransferType.SYNC) {
+            holder.direction.setImageDrawable(syncIcon);
+        }
 
 		// File size
 		long size = transfer.getSize();
-		if (size < 1024) {
-			holder.size.setText(size + " b");
-		} else {
-			size = (size / 1024) + 1;
-			if (size > 1024) {
-				holder.size.setText((size / 1024) + " Mb");
-			} else {
-				holder.size.setText(size + " Kb");
-			}
-		}
+        if(transfer.type== TransferType.SYNC){
+            holder.size.setText(size + "files");
+            holder.progress.setMax(Utils.safeLongToInt(size));
+        } else {
+            if (size < 1024) {
+                holder.size.setText(size + " b");
+            } else {
+                size = (size / 1024) + 1;
+                if (size > 1024) {
+                    holder.size.setText((size / 1024) + " Mb");
+                } else {
+                    holder.size.setText(size + " Kb");
+                }
+            }
+        }
 		holder.status.setText(R.string.status_counting);
 		// nastavenie progress baru/status textu
-        if (transfer.isWaiting()){
-            if (transfer.isDone()){
-                holder.status.setVisibility(View.GONE);
-                holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.setProgress(transfer.getProgress());
-            }
-            else {
-                holder.status.setText(R.string.status_waiting);
-                holder.status.setVisibility(View.VISIBLE);
-                holder.progress.setVisibility(View.GONE);
-            }
-        }
-
-        else {
+        if(transfer.fail){
+            holder.status.setText(R.string.status_fail);
             holder.status.setVisibility(View.VISIBLE);
             holder.progress.setVisibility(View.GONE);
-            if (transfer.isDone()){
-                holder.status.setText(R.string.status_done);
-            }
-            else {
-                holder.status.setText(R.string.status_counting);
-            }
         }
-
-
+        else if(transfer.stopped) {
+            holder.status.setText(R.string.status_stopped);
+            holder.status.setVisibility(View.VISIBLE);
+            holder.progress.setVisibility(View.GONE);
+        }
+        else if (transfer.isWorking()){
+            holder.status.setVisibility(View.GONE);
+            holder.progress.setVisibility(View.VISIBLE);
+            holder.progress.setProgress(transfer.getProgress());
+        }
+        else if (transfer.isWaiting()){
+            holder.status.setText(R.string.status_waiting);
+            holder.status.setVisibility(View.VISIBLE);
+            holder.progress.setVisibility(View.GONE);
+        }
+        else if (transfer.isCounting()){
+            holder.status.setVisibility(View.VISIBLE);
+            holder.progress.setVisibility(View.GONE);
+            holder.status.setText(R.string.status_counting);
+        }
+        else if (transfer.isDone()){
+            holder.status.setVisibility(View.VISIBLE);
+            holder.progress.setVisibility(View.GONE);
+            holder.status.setText(R.string.status_done);
+        }
 		return convertView;
 	}
-	
+
+    public void setCheckBoxListener(OnClickListener listener){
+        checkBoxListener = listener;
+    }
+
 	public void selectAll(boolean isChecked) {
 		if (allTransfers != null) {
 			for (Transfer transfer : allTransfers) {
@@ -180,7 +197,7 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
 			//search the transfers and return list of selected files
 			list = new ArrayList<Transfer>();
 			for (Transfer tr : allTransfers) {
-				if (tr.getChecked()) {
+				if (tr.isChecked()) {
 					list.add(tr);
 				}
 			}
@@ -190,44 +207,8 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
 	}
 	
 	/**
-	 * remove all selected items from adapter
+	 * update adapter
 	 */
-	public void clearSelected() {
-
-		List<Transfer> oldTransferList = allTransfers;
-		allTransfers = new ArrayList<Transfer>();
-
-		//make a copy of list with unchecked items
-		for (Transfer transfer : oldTransferList) {
-			if (!transfer.getChecked()) {
-				allTransfers.add(transfer);
-			}
-		}
-		if (allTransfers.isEmpty()) {
-			allTransfers = null;
-		}
-
-		//refresh
-		notifyDataSetChanged();
-	}
-
-	/**
-	 * 
-	 * @return number of selected items
-	 */
-	public int getSelectedCount() {
-		int count = 0;
-		if (allTransfers != null) {
-			for (Transfer transfer : allTransfers) {
-				if (transfer.getChecked()) {
-					count++;
-				}
-			}
-		}
-
-		return count;
-	}
-
     public void update(List<Transfer> list){
         if (list != null && !list.isEmpty()) {
             allTransfers = list;
@@ -235,15 +216,4 @@ public class TransferAdapter extends ArrayAdapter<Transfer>{
         else allTransfers = null;
         notifyDataSetChanged();
     }
-	public void updateProgress(int position, int value){
-		Transfer tr = allTransfers.get(position);
-		tr.setProgress(value);
-		allTransfers.remove(position);
-		allTransfers.add(position, tr);
-		notifyDataSetChanged();
-	}
-	
-
-	
-
 }

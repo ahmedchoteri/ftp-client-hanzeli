@@ -3,13 +3,11 @@
 
     <string name="app_name">KarlFTP</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="btn_connect">Connect</string>
     <string name="ftp_image">ftp_image</string>
     <string name="btn_edit">Edit</string>
     <string name="btn_new">New</string>
     <string name="btn_delete">Delete</string>
-    <string name="title_activity_edit_server">EditServerActivity</string>
     <string name="edit_screen_name">Name</string>
     <string name="edit_screen_host">Host</string>
     <string name="edit_screen_username">Username</string>
@@ -31,13 +29,18 @@
     <string name="tab_local">Local</string>
     <string name="tab_remote">Remote</string>
     <string name="tab_transfer">Transfer</string>
-    <string name="frag_download">Downl</string>
-    <string name="frag_upload">Upload</string>
+    <string name="frag_download">Dwnl</string>
+    <string name="frag_upload">Upld</string>
+    <string name="frag_downloadB">Download</string>
+    <string name="frag_uploadB">Upload</string>
     <string name="frag_all">All</string>
     <string name="frag_new_folder">New</string>
     <string name="frag_sort">Sort</string>
     <string name="frag_delete">Del</string>
-    <string name="frag_rename">Rename</string>
+    <string name="frag_deleteB">Delete</string>
+    <string name="frag_rename">Rnm</string>
+    <string name="frag_renameB">Rename</string>
+    <string name="frag_run">Run</string>
     <string name="ok">OK</string>
     <string name="frag_stop">Stop</string>
     <string name="frag_clear">Clear</string>
@@ -46,6 +49,8 @@
     <string name="status_waiting">Waiting</string>
     <string name="status_done">Done</string>
     <string name="status_counting">Counting</string>
+    <string name="status_fail">Failed</string>
+    <string name="status_stopped">Stopped</string>
     <string name="title_activity_example">Example</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -62,8 +67,28 @@
     <string name="menu_paste">Paste</string>
     <string name="menu_reconnect">Reconnect</string>
     <string name="menu_expr_select">Expr. select</string>
+    <string name="menu_sync_select">Set sync. folder</string>
     <string name="menu_synchronize">Synchronize</string>
     <string name="menu_sync_browsing">SyncBrowse</string>
-    <string name="menu_options">Options</string>
-    <string name="menu_about">About</string>
+    <string name="menu_ordering">Change ordering</string>
+    <string name="menu_log">Log</string>
+    <!-- polozky v sync dialogu -->
+    <string name="sync_fld11">Local:</string>
+    <string name="sync_fld22">Remote:</string>
+    <string name="sync_fld1">local</string>
+    <string name="sync_fld2">remote</string>
+    <string name="sync_source">Source:</string>
+    <string name="sync_option">Option:</string>
+    <string name="sync_update">update</string>
+    <string name="sync_overwrite">overwrite</string>
+    <string name="sync_synchronize">synchronize</string>
+    <string name="sync_start">Start sync.</string>
+    <string name="sync_cancel">Cancel</string>
+    <!-- polozky v order dialogu -->
+    <string name="order_name">name</string>
+    <string name="order_time">time</string>
+    <string name="order_size">size</string>
+    <!-- polozky v log dialogu -->
+    <string name="log_text">Log text</string>
+
 </resources>

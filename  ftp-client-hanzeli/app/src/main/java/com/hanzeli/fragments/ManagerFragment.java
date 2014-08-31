@@ -3,11 +3,11 @@ package com.hanzeli.fragments;
 import com.hanzeli.karlftp.R;
 
 import com.hanzeli.managers.EventListener;
-import com.hanzeli.managers.FileInfo;
+import com.hanzeli.resources.FileInfo;
 import com.hanzeli.managers.Manager;
-import com.hanzeli.managers.ManagerEvent;
+import com.hanzeli.resources.ManagerEvent;
 import com.hanzeli.managers.TransferManager;
-import com.hanzeli.values.Order;
+import com.hanzeli.resources.Order;
 
 
 import android.app.AlertDialog;
@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -36,12 +37,11 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
     /** manager & adapter */
 	protected Manager fileManager;
 	protected FileAdapter fileAdapter;
-	protected TransferManager transfManager;
+	protected TransferManager transferManager;
 	
 	/** id fragmentu */
 	protected int fragmentId;
-	
-	protected boolean multSelect;
+
 	protected boolean checkedAll;
 	protected Order orderAscDesc;
 
@@ -80,7 +80,6 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 
 	}
 
-
 	/**
 	 * spracovnanie udalosti po interakcii s GUI komponentami
 	 */
@@ -88,7 +87,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 		switch (view.getId()) {
 			case R.id.LOCimageButtonGoParent:
 			case R.id.REMimageButtonGoParent:
-				fileManager.toParDir();
+				fileManager.toParrentDir();
 				break;
 			case R.id.LOCimageButtonGoHome:
 			case R.id.REMimageButtonGoHome:
@@ -140,15 +139,15 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
 		FileInfo file = fileAdapter.getItem(position);
 		if (file.isFolder()) {
-			fileManager.chngWorkDir(file.getName());
+			fileManager.changeWorkingDir(file.getName(),true);
 		}
-        //else spravit open file moznost
+
 	}
 
     private void onDetail(int position){
+        FileInfo file = fileAdapter.getItem(position);
         if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE){
             Log.d(TAG,"Detail image clicked, orientation is LANDSCAPE");
-            FileInfo file = fileAdapter.getItem(position);
             detailNameTextView.setText(file.getName());
             detailLocationTextView.setText(file.getAbsPath());
             if (file.isFolder()){
@@ -172,6 +171,45 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
         }
         else {
             Log.d(TAG,"Detail image clicked, orientation is PORTRAIT");
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.detail_file));
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View view = inflater.inflate(R.layout.dialog_detail, null);
+            if (view != null) {
+                TextView text = (TextView) view.findViewById(R.id.DLGDetail_name);
+                text.setText(file.getName());
+                text = (TextView) view.findViewById(R.id.DLGDetail_location);
+                text.setText(file.getAbsPath());
+                text = (TextView) view.findViewById(R.id.DLGDetail_size);
+                if (file.isFolder()){
+                    text.setText("");
+                }
+                else{
+                    long fileSize = file.getSize();
+                    if (fileSize < 1000) {
+                        text.setText(fileSize + " b");
+                    } else {
+                        fileSize /= 1000;
+                        if (fileSize > 1000) {
+                            text.setText((fileSize / 1000) + " Mb");
+                        } else {
+                            text.setText(fileSize + " Kb");
+                        }
+                    }
+                }
+                text = (TextView) view.findViewById(R.id.DLGDetail_timestamp);
+                text.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm", Locale.US).format(file.getLastModif()));
+                ImageView image = (ImageView) view.findViewById(R.id.DLGDetail_icon);
+                image.setImageDrawable(file.getType().getIcon());
+            }
+            builder.setView(view)
+                    // pridanie buttonov
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            builder.show();
         }
     }
     /**
@@ -257,7 +295,7 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 	 * Zmena poradia suborov z zozname
 	 */
 	protected void changeOrder() {
-		fileManager.chngOrderingAscDesc(orderAscDesc);
+		fileManager.changeOrderingAscDesc(orderAscDesc);
 	}
 
     /**
@@ -306,7 +344,6 @@ public abstract class ManagerFragment extends Fragment implements OnClickListene
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 		alert.setTitle("Rename file");
-		// Set an EditText view to get user input
 		final String fileName = fi.getName();
 		final int lastIndexOf = fileName.lastIndexOf(".");
 		final String oldName = (lastIndexOf != -1) ? fileName.substring(0, lastIndexOf) : fileName;

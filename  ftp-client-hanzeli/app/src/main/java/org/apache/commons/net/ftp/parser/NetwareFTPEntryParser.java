@@ -30,7 +30,7 @@ import org.apache.commons.net.ftp.FTPFile;
  *
  * @author <a href="rwinston@apache.org">Rory Winston</a>
  * @see org.apache.commons.net.ftp.FTPFileEntryParser FTPFileEntryParser (for usage instructions)
- * @version $Id: NetwareFTPEntryParser.java 1081476 2011-03-14 17:09:59Z sebb $
+ * @version $Id: NetwareFTPEntryParser.java 1489361 2013-06-04 09:48:36Z sebb $
  * @since 1.5
  */
 public class NetwareFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
@@ -110,6 +110,7 @@ public class NetwareFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
      * @param entry A line of text from the file listing
      * @return An FTPFile instance corresponding to the supplied entry
      */
+//    @Override
     public FTPFile parseFTPEntry(String entry) {
 
         FTPFile f = new FTPFile();

@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.apache.commons.net.util.Charsets;
+
 
 /**
  * This class handles the entire process of parsing a listing of
@@ -71,7 +73,7 @@ import java.util.ListIterator;
  * <p>
  * For unpaged access, simply use FTPClient.listFiles().  That method
  * uses this class transparently.
- * @version $Id: FTPListParseEngine.java 1227877 2012-01-05 22:34:18Z sebb $
+ * @version $Id: FTPListParseEngine.java 1414510 2012-11-28 02:40:39Z ggregory $
  */
 public class FTPListParseEngine {
     private List<String> entries = new LinkedList<String>();
@@ -120,15 +122,8 @@ public class FTPListParseEngine {
      */
     private void readStream(InputStream stream, String encoding) throws IOException
     {
-        BufferedReader reader;
-        if (encoding == null)
-        {
-            reader = new BufferedReader(new InputStreamReader(stream));
-        }
-        else
-        {
-            reader = new BufferedReader(new InputStreamReader(stream, encoding));
-        }
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(stream, Charsets.toCharset(encoding)));
 
         String line = this.parser.readNextEntry(reader);
 
