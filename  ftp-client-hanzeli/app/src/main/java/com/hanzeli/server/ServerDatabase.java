@@ -10,7 +10,7 @@ import android.content.Context;
 
 public class ServerDatabase{
 	
-	private SQLiteDatabase database;
+	private SQLiteDatabase SqlDatabase;
 	private MySQLiteHelper dbHelper;
 	private String[] allColumns = { 
 			MySQLiteHelper.ID,
@@ -28,7 +28,7 @@ public class ServerDatabase{
 	}
 	
 	public void open() throws SQLException{
-		database = dbHelper.getWritableDatabase();
+		SqlDatabase = dbHelper.getWritableDatabase();
 	}
 	
 	public void close(){
@@ -57,12 +57,12 @@ public class ServerDatabase{
 		//If new insert else update
 		long id;
 		if (server.getId() == 0) {
-			id = database.insert(MySQLiteHelper.TABLE_SERVERS, null, values);
+			id = SqlDatabase.insert(MySQLiteHelper.TABLE_SERVERS, null, values);
 			server.setId(id);
 		} 
 		else {
 			values.put(MySQLiteHelper.ID, safeLongToInt(server.getId()));
-			id=database.update(MySQLiteHelper.TABLE_SERVERS, values, MySQLiteHelper.ID + " = " + server.getId(), null);	
+			id= SqlDatabase.update(MySQLiteHelper.TABLE_SERVERS, values, MySQLiteHelper.ID + " = " + server.getId(), null);
 		}
 		return id; //return result of database update, -1 or 0 means error in operation
 	}
@@ -73,14 +73,14 @@ public class ServerDatabase{
 	 * @return
 	 */
 	public boolean remove(long id) {
-		return database.delete(MySQLiteHelper.TABLE_SERVERS, MySQLiteHelper.ID + " = " + id, null) == 1;
+		return SqlDatabase.delete(MySQLiteHelper.TABLE_SERVERS, MySQLiteHelper.ID + " = " + id, null) == 1;
 	}
 
 	public List<Server> allServers() {
 		List<Server> all = new ArrayList<Server>();
 
 		//Open cursor
-		Cursor cursor = database.query(MySQLiteHelper.TABLE_SERVERS, allColumns, null, null, null, null, MySQLiteHelper.ID + " ASC");
+		Cursor cursor = SqlDatabase.query(MySQLiteHelper.TABLE_SERVERS, allColumns, null, null, null, null, MySQLiteHelper.ID + " ASC");
 		//Fetching all entries from database 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -91,7 +91,7 @@ public class ServerDatabase{
 			server.setUsername(cursor.getString(3));
 			server.setPassword(cursor.getString(4));
 			server.setPort(cursor.getInt(5));
-			server.setAnonym((cursor.getInt(6) == 1) ? true : false);
+			server.setAnonym((cursor.getInt(6) == 1));
 			server.setLocalDir(cursor.getString(7));
 			server.setRemoteDir(cursor.getString(8));
 			all.add(server);

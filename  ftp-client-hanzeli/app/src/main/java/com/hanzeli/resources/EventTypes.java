@@ -1,0 +1,49 @@
+package com.hanzeli.resources;
+
+public enum EventTypes {
+	// messages for connecting manager
+	CONNECTION_START,
+	CONNECTED,
+	CONNECTION_END,
+	CONNECTION_ERROR,
+	CONNECTION_LOGIN_ERR,
+	CONNECTION_LOST,
+    DISCONNECTION_ERROR,
+		
+	// changes in list of files
+	FILES_LIST_CHANGE,
+	FILES_LOAD,
+	FILES_LOADED,
+	
+	// changes in list of transfers
+	TRANSFER_LIST_CHANGE,
+    START_TRANSFER,
+		
+	//manager status massages
+	NEW_FOLDER_OK, 
+	DEL_FILE_OK, 
+	DEL_FOLERD_OK,
+	RENAME_FILE_OK,
+	RENAME_FOLDER_OK,
+
+	//manager status errors
+	ERROR,
+	NEW_FOLDER_ERR, 
+	DEL_FOLDER_ERR,
+	DEL_FILE_ERR,
+	RENAME_ERR,
+	FILE_EXISTS_ERR,
+	FOLDER_EXISTS_ERR,
+    EMPTY_LIST,
+    SELECT_ONE,
+    NOT_FOLDER,
+	
+	DOWNLOAD_ERR,
+	UPLOAD_ERR,
+    SYNC_ERR,
+    NOT_SYNC_REM,
+    NOT_SYNC_LOC,
+	
+	
+	
+}

@@ -9,14 +9,19 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.hanzeli.karlftp.MainApplication;
-import com.hanzeli.values.Values;
+import com.hanzeli.resources.AsyncTaskResult;
+import com.hanzeli.resources.EventTypes;
+import com.hanzeli.resources.FileInfo;
+import com.hanzeli.resources.ManagerException;
+import com.hanzeli.resources.ManagerTask;
+import com.hanzeli.resources.Transfer;
+import com.hanzeli.resources.TransferType;
+import com.hanzeli.resources.Values;
 
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.io.output.CountingOutputStream;
-import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
-import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
@@ -31,12 +36,11 @@ import java.io.OutputStream;
 
 public class TransferService extends Service {
     private final String TAG = "TransferService";
-
     public static final String TRANSFER = "transfer";
-
     private final IBinder binder = new TransferBinder();
     private LocalBroadcastManager localBroadcastManager = null;
     private FTPClient client = null;
+    private TransferHandler trTask;
 
 
     public TransferService() {
@@ -46,18 +50,16 @@ public class TransferService extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
-
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         Log.d(TAG,"Starting service");
-        //Transfer transfer = intent.getParcelableExtra(TRANSFER);
         int transferID = intent.getIntExtra(TRANSFER,0);
         Transfer transfer = MainApplication.getInstance().getTransferManager().getTransfer(transferID);
-        if(!transfer.copyOp){ connectClient(); }
-        TransferHandler trTask = new TransferHandler(transfer, ManagerTask.START_TRANSFER);
+        if(transfer.type != TransferType.COPY){ connectClient(); }
+        trTask = new TransferHandler(transfer, ManagerTask.START_TRANSFER);
         trTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         return START_REDELIVER_INTENT;
     }
@@ -69,14 +71,16 @@ public class TransferService extends Service {
 
     private void connectClient(){
         client = MainApplication.getInstance().getTransferManager().getClient();
-        client.setControlKeepAliveTimeout(15);
+        client.setControlKeepAliveTimeout(5);
         client.addProtocolCommandListener(new ProtocolCommandListener() {
             public void protocolCommandSent(ProtocolCommandEvent event) {
-                Log.d("TS Command sent",event.getMessage());
+                Log.d("TS Command sent: ",event.getMessage());
+                MainApplication.getInstance().addToLog("TS Command sent: " + event.getMessage() + '\n');
             }
 
             public void protocolReplyReceived(ProtocolCommandEvent event) {
                 Log.d("TS Command received",event.getMessage());
+                MainApplication.getInstance().addToLog("TS Command received: " + event.getMessage() + '\n');
             }
         });
     }
@@ -88,20 +92,26 @@ public class TransferService extends Service {
     }
 
     public void onDestroy(){
+        trTask.cancel(true);
         stopSelf();
         Log.d(TAG,"Stopping service");
         super.onDestroy();
     }
 
+    public void stop(){
+        trTask.cancel(true);
+        stopSelf();
+        Log.d(TAG, "Stopping service");
+    }
 
     private class TransferHandler extends AsyncTask<Void, Integer, AsyncTaskResult> {
 
-        private ManagerTask managTask;
+        private ManagerTask managerTask;
         private Transfer transfer;
         private Intent broadcastIntent;
         public TransferHandler(Transfer transfer, ManagerTask task){
             this.transfer = transfer;
-            managTask =  task;
+            managerTask =  task;
         }
 
         @Override
@@ -120,16 +130,23 @@ public class TransferService extends Service {
             AsyncTaskResult result = new AsyncTaskResult();
 
             try {
-                switch (managTask.getTask()) {
+                switch (managerTask.getTask()) {
                     case START:
-                        if(transfer.copyOp) {
-                            Log.d(TAG,"Starting copy");
+                        if(transfer.type == TransferType.COPY) {
+                            Log.d(TAG,"Starting background copy");
                             doCopy();
                         }
+                        else if(transfer.type == TransferType.DOWNLOAD){
+                            Log.d(TAG,"Starting background download");
+                            doDownload();
+                        }
+                        else if(transfer.type == TransferType.UPLOAD){
+                            Log.d(TAG,"Starting background upload");
+                            doUpload();
+                        }
                         else {
-                            if (transfer.getDirection() == 0) {
-                                doDownload();
-                            } else doUpload();
+                            Log.d(TAG,"Starting background synchronization");
+                            doSync();
                         }
                         break;
                     case STOP:
@@ -171,6 +188,7 @@ public class TransferService extends Service {
                 for (String event : result.getsEvents()) {
                     Log.d(TAG,"Sending broadcast transfer error");
                     broadcastIntent = new Intent(Values.SERVICE_ERROR);
+                    broadcastIntent.putExtra(Values.TRANSFER_ID,transfer.getId());
                     broadcastIntent.putExtra(Values.SERVICE_ERROR,event);
                     localBroadcastManager.sendBroadcast(broadcastIntent);
                 }
@@ -178,6 +196,11 @@ public class TransferService extends Service {
             //zastavenie service
             Log.d(TAG, "onPostExecute calling stopSelf");
             stopSelf();
+        }
+
+        @Override
+        protected void onCancelled(){
+
         }
         // ********************************
         // UPLOADING
@@ -202,7 +225,7 @@ public class TransferService extends Service {
                         uploadDirectory(transfer.getToPath(),transfer.getFromPath(),info.getName());
                     }
                     else {
-                        uploadFile(transfer.getToPath()+ info.getName(),info.getAbsPath(),info.getSize());
+                        uploadFile(transfer.getToPath() + File.separatorChar + info.getName(),info.getAbsPath(),info.getSize(),true);
                     }
                 }
 
@@ -231,7 +254,7 @@ public class TransferService extends Service {
                     if(f.isFile()){
                         String localFilePath = f.getAbsolutePath();
                         String remoteFilePath = remoteDirPath + File.separator + f.getName();
-                        uploadFile(remoteFilePath, localFilePath, f.length());
+                        uploadFile(remoteFilePath, localFilePath, f.length(),true);
                     }
                     else{
                         uploadDirectory(remoteDirPath,localDirPath,f.getName());
@@ -240,18 +263,21 @@ public class TransferService extends Service {
             }
         }
 
-        private void uploadFile(String remotePath, String localPath, long size) throws IOException{
+        private void uploadFile(String remotePath, String localPath, long size, final boolean publish) throws IOException{
             Log.d(TAG,"UPLOAD: transferring file: " + localPath + ", to: " + remotePath);
             FileInputStream fis = new FileInputStream(localPath);
             CountingInputStream cis = new CountingInputStream(fis) {
                 int progressOld = transfer.getProgress();
                 protected void afterRead(int n) {
                     super.afterRead(n);
-                    Log.d(TAG,"Uploaded " + getCount() + " bytes");
-                    int progressNew = Math.round(((getCount() + transfer.getTmpSize()) * 100) / transfer.getSize());
-                    if (progressNew > progressOld) {
-                        publishProgress(progressNew);
-                        progressOld = progressNew;
+                    //Log.d(TAG,"Uploaded " + getCount() + " bytes");
+                    if(publish) {
+                        int progressNew = Math.round(((getCount() + transfer.getTmpSize()) * 100) / transfer.getSize());
+                        if (progressNew > progressOld+5) {
+                            publishProgress(progressNew);
+                            Log.d(TAG,"UPLOAD percent: " + progressNew);
+                            progressOld = progressNew;
+                        }
                     }
                 }
             };
@@ -259,7 +285,15 @@ public class TransferService extends Service {
                 //client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.storeFile(remotePath, cis);
                 Log.d(TAG,"File uploaded");
-                transfer.setTmpSize(transfer.getTmpSize() + size);
+                if(publish) {
+                    transfer.setTmpSize(transfer.getTmpSize() + size);
+                }
+                else {
+                    long l = transfer.getTmpSize();
+                    l++;
+                    transfer.setTmpSize(l);
+                    publishProgress(Utils.safeLongToInt(l));
+                }
             }
             finally {
                 cis.close();
@@ -289,7 +323,7 @@ public class TransferService extends Service {
                         downloadDirectory(transfer.getFromPath(), transfer.getToPath(), info.getName());
                     }
                     else {
-                        downloadFile(info.getAbsPath(),transfer.getToPath() + info.getName(),info.getSize());
+                        downloadFile(info.getAbsPath(),transfer.getToPath() + File.separatorChar + info.getName(),info.getSize(),true);
                     }
                 }
 
@@ -322,7 +356,7 @@ public class TransferService extends Service {
                     if(f.isFile()){
                         String remoteFilePath = remoteDirPath + File.separator + f.getName();
                         String localFilePath = localDirPath + File.separator + f.getName();
-                        downloadFile(remoteFilePath, localFilePath,  f.getSize());
+                        downloadFile(remoteFilePath, localFilePath,  f.getSize(), true);
                     }
                     else{
                         downloadDirectory(remoteDirPath, localDirPath, f.getName());
@@ -331,18 +365,21 @@ public class TransferService extends Service {
             }
         }
 
-        private void downloadFile(String remotePath, String localPath, long size) throws IOException{
+        private void downloadFile(String remotePath, String localPath, long size, final boolean publish) throws IOException{
             Log.d(TAG,"DOWNLOAD: transferring file: " + remotePath + ", to: " + localPath);
             FileOutputStream fos = new FileOutputStream(localPath);
             CountingOutputStream cos = new CountingOutputStream(fos) {
                 int progressOld = 0;
                 protected void beforeWrite(int n) {
                     super.beforeWrite(n);
-                    Log.d(TAG,"Downloaded " + getCount() + " bytes");
-                    int progressNew = Math.round(((getCount() + transfer.getTmpSize()) * 100) / transfer.getSize());
-                    if (progressNew > progressOld) {
-                        publishProgress(progressNew);
-                        progressOld = progressNew;
+                    //Log.d(TAG,"Downloaded " + getCount() + " bytes");
+                    if (publish) {
+                        int progressNew = Math.round(((getCount() + transfer.getTmpSize()) * 100) / transfer.getSize());
+                        if (progressNew > progressOld + 5) {
+                            publishProgress(progressNew);
+                            Log.d(TAG,"DOWNLOAD percent: " + progressNew);
+                            progressOld = progressNew;
+                        }
                     }
                 }
             };
@@ -350,7 +387,15 @@ public class TransferService extends Service {
                 //client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.retrieveFile(remotePath, cos);
                 Log.d(TAG,"File downloaded");
-                transfer.setTmpSize(transfer.getTmpSize() + size);
+                if (publish) {
+                    transfer.setTmpSize(transfer.getTmpSize() + size);
+                }
+                else {
+                    long l = transfer.getTmpSize();
+                    l++;
+                    transfer.setTmpSize(l);
+                    publishProgress(Utils.safeLongToInt(l));
+                }
             }
             finally {
                 cos.close();
@@ -383,6 +428,7 @@ public class TransferService extends Service {
                 throw new ManagerException(Values.COPY_ERROR);
             }
         }
+
         private void copyDirectory(String src, String dst,String name) throws IOException{
             Log.d(TAG,"COPY: transfering transferring file: " + src + ", to: " + dst);
             File dstFile = new File(dst + File.separatorChar + name);
@@ -427,7 +473,7 @@ public class TransferService extends Service {
             int progressOld = 0;
             int length;
             int counter = 0;
-            //copy the file content in bytes
+            //kopirovanie suboru v bytoch
             while ((length = in.read(buffer)) > 0){
                 out.write(buffer, 0, length);
                 counter += length;
@@ -442,6 +488,114 @@ public class TransferService extends Service {
             out.close();
             Log.d(TAG,"COPY: file copied from " + src + " to " + dst);
         }
+
+        // ********************************
+        // SYNCHRONIZING
+        // ********************************
+
+        private void doSync() throws ManagerException{
+            Log.d(TAG,"Synchronization in progress");
+            try {
+                if(transfer.getDirection()==0){
+                    for (TransferManager.SyncItem item : transfer.syncItems) {
+                        String sourcePath = "";
+                        String targetPath = "";
+                        String targetOldPath = "";
+                        if (item.sourceExists) {
+                            sourcePath = item.getSourcePath(transfer.getFromPath()) + File.separatorChar + item.sourceName;
+                            targetPath = item.getNewTargetPath(transfer.getToPath()) + File.separatorChar + item.sourceName;
+                        }
+                        else
+                        if (item.targetExists) {
+                            targetOldPath = item.getOldTargetPath(transfer.getToPath()) + File.separatorChar + item.targetName;
+                        }
+                        switch (item.status) {
+                            case COPY:
+                                boolean deleted = client.deleteFile(targetOldPath);
+                                if (deleted) {
+                                    Log.d(TAG, "SYNC: deleted file " + targetPath);
+                                } else {
+                                    Log.d(TAG, "SYNC: deleting file " + targetPath + " FAILED");
+                                }
+                                uploadFile(targetPath,sourcePath,0,false);
+                                break;
+                            case ADD:
+                                if (item.sourceIsDirectory) {
+                                    boolean created = client.makeDirectory(targetPath);
+                                    if (created) {
+                                        Log.d(TAG, "SYNC: created directory " + targetPath);
+                                        long l = transfer.getTmpSize();
+                                        l++;
+                                        transfer.setTmpSize(l);
+                                        publishProgress(Utils.safeLongToInt(l));
+                                    } else {
+                                        Log.d(TAG, "SYNC: creating directory " + targetPath + " FAILED");
+                                    }
+                                } else {
+                                    uploadFile(targetPath,sourcePath,0,false);
+                                }
+                                break;
+                            case DELETE:
+                                client.deleteFile(targetOldPath);
+                                break;
+                        }
+                    }
+                }
+                else {
+                    for (TransferManager.SyncItem item : transfer.syncItems) {
+                        String sourcePath = "";
+                        String targetPath = "";
+                        String targetOldPath = "";
+                        if (item.sourceExists) {
+                            sourcePath = item.getSourcePath(transfer.getFromPath()) + File.separatorChar + item.sourceName;
+                            targetPath = item.getNewTargetPath(transfer.getToPath()) + File.separatorChar + item.sourceName;
+                        }
+                        if (item.targetExists) {
+                            targetOldPath = item.getOldTargetPath(transfer.getToPath()) + File.separatorChar + item.targetName;
+                        }
+                        switch (item.status) {
+                            case COPY:
+                                boolean deleted = new File(targetOldPath).delete();
+                                if (deleted) {
+                                    Log.d(TAG, "SYNC: deleted file " + targetPath);
+                                } else {
+                                    Log.d(TAG, "SYNC: deleting file " + targetPath + " FAILED");
+                                }
+                                downloadFile(sourcePath,targetPath,0,false);
+                                break;
+                            case ADD:
+                                if (item.sourceIsDirectory) {
+                                    File newDir = new File(targetPath);
+                                    boolean created = newDir.mkdir();
+                                    if (created) {
+                                        Log.d(TAG, "SYNC: created directory " + targetPath);
+                                    } else {
+                                        Log.d(TAG, "SYNC: creating directory " + targetPath + " FAILED");
+                                    }
+                                } else {
+                                    downloadFile(sourcePath, targetPath, 0, false);
+                                }
+                                break;
+                            case DELETE:
+                                deleted = new File(targetOldPath).delete();
+                                if (deleted) {
+                                    Log.d(TAG, "SYNC: deleted file/directory " + targetPath);
+                                    long l = transfer.getTmpSize();
+                                    l++;
+                                    transfer.setTmpSize(l);
+                                    publishProgress(Utils.safeLongToInt(l));
+                                } else {
+                                    Log.d(TAG, "SYNC: deleting file/directory " + targetPath + " FAILED");
+                                }
+                                break;
+                        }
+                    }
+                }
+            } catch (IOException e){
+                throw new ManagerException(EventTypes.CONNECTION_ERROR);
+            }
+        }
+
 
         private void doStop() throws ManagerException{
             //TODO dorobit odstavenie klienta

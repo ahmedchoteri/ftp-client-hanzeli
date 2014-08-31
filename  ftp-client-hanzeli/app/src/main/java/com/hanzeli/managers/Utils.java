@@ -3,24 +3,24 @@ package com.hanzeli.managers;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.hanzeli.values.EventTypes;
+import com.hanzeli.resources.EventTypes;
+import com.hanzeli.resources.ManagerException;
 
-import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class Utils {
 
     private static final String TAG = "Utils";
 
-    public static void connectClient (FTPClient client, Bundle bundle) throws ManagerException{
+    public static void connectClient (FTPClient client, Bundle bundle) throws ManagerException {
         String hostname = bundle.getString("server_host");
         int port= bundle.getInt("server_port");
         boolean anonymous = bundle.getBoolean("server_anonym");
-        int timeout = bundle.getInt("server_timeout");
         String user = "";
         String password = "";
         if (!anonymous){
@@ -57,6 +57,33 @@ public class Utils {
             Log.d(TAG,"Disconnecting error");
             throw new ManagerException(EventTypes.DISCONNECTION_ERROR);
         }
+    }
+
+    public static int countOccurrences(String haystack, char needle)
+    {
+        int count = 0;
+        for (int i=0; i < haystack.length(); i++)
+        {
+            if (haystack.charAt(i) == needle)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static <T> T[] concat(T[] first, T[] second) {
+        T[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
+    }
+
+    public static int safeLongToInt(long l) {
+        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException
+                    (l + " cannot be cast to int without changing its value.");
+        }
+        return (int) l;
     }
 
 }

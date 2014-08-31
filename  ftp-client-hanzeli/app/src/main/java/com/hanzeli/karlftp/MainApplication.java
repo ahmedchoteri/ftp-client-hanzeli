@@ -4,13 +4,16 @@ import com.hanzeli.managers.LocalManager;
 import com.hanzeli.managers.Manager;
 import com.hanzeli.managers.RemoteManager;
 import com.hanzeli.managers.TransferManager;
-import com.hanzeli.values.Values;
+import com.hanzeli.resources.Order;
+import com.hanzeli.resources.Values;
 
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+
+import java.util.ArrayList;
 
 
 /**
@@ -20,12 +23,12 @@ import android.support.v4.content.LocalBroadcastManager;
 public class MainApplication extends Application{
 	
 	/** instances of managers  */
-	private Manager localMan;
-	private Manager remoteMan;
-	private TransferManager transferMan;
+	private Manager localManager;
+	private Manager remoteManager;
+	private TransferManager transferManager;
 	
 	/** shared preferences for application options */
-	private SharedPreferences preferences;
+	public SharedPreferences preferences;
 	
 	/** instance of this class*/
 	private static MainApplication thisApp;	//because I need to get instance of application and return statement don't allow this value
@@ -35,6 +38,9 @@ public class MainApplication extends Application{
     public boolean first;
     public boolean copyLocal;
     public boolean copyRemote;
+    public boolean syncBrowse;
+    public Order order;
+    public ArrayList<String> log;
 
 
     /**
@@ -50,6 +56,8 @@ public class MainApplication extends Application{
         first = true;
         copyLocal = false;
         copyRemote = false;
+        log = new ArrayList<String>();
+        order = Order.NAME;
 	}
 	
 	/**
@@ -65,7 +73,7 @@ public class MainApplication extends Application{
 	 * @return LocalManager
 	 */
 	public Manager getLocalManager() {
-		return localMan;
+		return localManager;
 	}
 
 	/**
@@ -73,7 +81,7 @@ public class MainApplication extends Application{
 	 * @return RemoteManager
 	 */
 	public Manager getRemoteManager() {
-		return remoteMan;
+		return remoteManager;
 	}
 
     /**
@@ -81,7 +89,7 @@ public class MainApplication extends Application{
      * @return TransferManager
      */
 	public TransferManager getTransferManager(){
-		return transferMan;
+		return transferManager;
 	}
 	/**
 	 * Inicializacia managerov
@@ -93,20 +101,20 @@ public class MainApplication extends Application{
             // Load preferences
             loadPreferences(bundle);
             // Local manager
-            localMan = new LocalManager();
-            localMan.init(bundle);
+            localManager = new LocalManager();
+            localManager.init(bundle);
 
             // Server manager
-            remoteMan = new RemoteManager();
-            remoteMan.init(bundle);
+            remoteManager = new RemoteManager();
+            remoteManager.init(bundle);
 
             // Transfer manager
-            transferMan = new TransferManager(bundle);
+            transferManager = new TransferManager(bundle);
 
         }
-        localMan.attachActivity(context);
-        remoteMan.attachActivity(context);
-        transferMan.attachActivity(context);
+        localManager.attachActivity(context);
+        remoteManager.attachActivity(context);
+        transferManager.attachActivity(context);
 	}
 
 	/**
@@ -154,9 +162,9 @@ public class MainApplication extends Application{
 	 */
 	public void connect() {
 		if(first) {
-            localMan.connect();
-            remoteMan.connect();
-            transferMan.connect();
+            localManager.connect();
+            remoteManager.connect();
+            transferManager.connect();
             first = false;
         }
 	}
@@ -164,16 +172,16 @@ public class MainApplication extends Application{
 
 
     public void reconnect(){
-        remoteMan.connect();
-        transferMan.connect();
+        remoteManager.connect();
+        transferManager.connect();
     }
 	
 	/**
 	 * Odpojenie managerov
 	 */
 	public void disconnect(){
-		remoteMan.disconnect();
-        transferMan.disconnect();
+		remoteManager.disconnect();
+        transferManager.disconnect();
 	}
 
 	/**
@@ -186,12 +194,15 @@ public class MainApplication extends Application{
 		editor.commit();
 	}
 
-	/**
-	 * Vybranie posledneho pouziteho serveru
-	 * @return posledny pouzity server
-	 */
-	public long getLastSelectedServer() {
-		return preferences.getLong("LAST_SERVER", -1);
-	}
+    /**
+     * adding to my log
+     * @param msg message
+     */
+    public void addToLog(String msg){
+        if (log.size()>25){
+            log.remove(0);
+        }
+        log.add(msg);
+    }
 
 }

@@ -45,11 +45,14 @@ public class FTPHTTPClient extends FTPClient {
     private static final byte[] CRLF={'\r', '\n'};
     private final Base64 base64 = new Base64();
 
+    private String tunnelHost; // Save the host when setting up a tunnel (needed for EPSV)
+
     public FTPHTTPClient(String proxyHost, int proxyPort, String proxyUser, String proxyPass) {
         this.proxyHost = proxyHost;
         this.proxyPort = proxyPort;
         this.proxyUsername = proxyUser;
         this.proxyPassword = proxyPass;
+        this.tunnelHost = null;
     }
 
     public FTPHTTPClient(String proxyHost, int proxyPort) {
@@ -61,11 +64,13 @@ public class FTPHTTPClient extends FTPClient {
      * {@inheritDoc}
      *
      * @throws IllegalStateException if connection mode is not passive
+     * @deprecated (3.3) Use {@link #_openDataConnection_(FTPCmd, String)} instead
      */
     // Kept to maintain binary compatibility
     // Not strictly necessary, but Clirr complains even though there is a super-impl
     @Override
-    protected Socket _openDataConnection_(int command, String arg) 
+    @Deprecated
+    protected Socket _openDataConnection_(int command, String arg)
     throws IOException {
         return super._openDataConnection_(command, arg);
     }
@@ -74,9 +79,10 @@ public class FTPHTTPClient extends FTPClient {
      * {@inheritDoc}
      *
      * @throws IllegalStateException if connection mode is not passive
+     * @since 3.1
      */
     @Override
-    protected Socket _openDataConnection_(String command, String arg) 
+    protected Socket _openDataConnection_(String command, String arg)
     throws IOException {
         //Force local passive mode, active mode not supported by through proxy
         if (getDataConnectionMode() != PASSIVE_LOCAL_DATA_CONNECTION_MODE) {
@@ -84,10 +90,12 @@ public class FTPHTTPClient extends FTPClient {
         }
 
         final boolean isInet6Address = getRemoteAddress() instanceof Inet6Address;
-        
+        String passiveHost = null;
+
         boolean attemptEPSV = isUseEPSVwithIPv4() || isInet6Address;
         if (attemptEPSV && epsv() == FTPReply.ENTERING_EPSV_MODE) {
             _parseExtendedPassiveModeReply(_replyLines.get(0));
+            passiveHost = this.tunnelHost;
         } else {
             if (isInet6Address) {
                 return null; // Must use EPSV for IPV6
@@ -97,12 +105,13 @@ public class FTPHTTPClient extends FTPClient {
                 return null;
             }
             _parsePassiveModeReply(_replyLines.get(0));
+            passiveHost = this.getPassiveHost();
         }
 
         Socket socket = new Socket(proxyHost, proxyPort);
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
-        tunnelHandshake(this.getPassiveHost(), this.getPassivePort(), is, os);
+        tunnelHandshake(passiveHost, this.getPassivePort(), is, os);
         if ((getRestartOffset() > 0) && !restart(getRestartOffset())) {
             socket.close();
             return null;
@@ -138,6 +147,7 @@ public class FTPHTTPClient extends FTPClient {
         final String connectString = "CONNECT "  + host + ":" + port  + " HTTP/1.1";
         final String hostString = "Host: " + host + ":" + port;
 
+        this.tunnelHost = host;
         output.write(connectString.getBytes("UTF-8")); // TODO what is the correct encoding?
         output.write(CRLF);
         output.write(hostString.getBytes("UTF-8"));
@@ -153,7 +163,7 @@ public class FTPHTTPClient extends FTPClient {
 
         List<String> response = new ArrayList<String>();
         BufferedReader reader = new BufferedReader(
-                new InputStreamReader(input));
+                new InputStreamReader(input, getCharsetName())); // Java 1.6 can use getCharset()
 
         for (String line = reader.readLine(); line != null
         && line.length() > 0; line = reader.readLine()) {

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/sync_fld11"
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/sync_fld22"
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/sync_source"
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/sync_option"
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+        <TextView
+            android:id="@+id/SYNCTextFld1"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/sync_fld1"
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:id="@+id/SYNCTextFld2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text="@string/sync_fld2"
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <RadioGroup
+            android:id="@+id/SYNCRadioGrpFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <RadioButton
+                android:id="@+id/SYNCRadioBtnF1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/sync_fld1"/>
+            <RadioButton
+                android:id="@+id/SYNCRadioBtnF2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/sync_fld2"/>
+        </RadioGroup>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/basic_text_grey"
+            android:textSize="@dimen/edit_screen_text_size" />
+        <RadioGroup
+            android:id="@+id/SYNCRadioGrpOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <RadioButton
+                android:id="@+id/SYNCRadioBtnOpt1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/sync_update"/>
+            <RadioButton
+                android:id="@+id/SYNCRadioBtnOpt2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/sync_overwrite"/>
+            <RadioButton
+                android:id="@+id/SYNCRadioBtnOpt3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/sync_synchronize"/>
+        </RadioGroup>
+    </LinearLayout>
+</LinearLayout>

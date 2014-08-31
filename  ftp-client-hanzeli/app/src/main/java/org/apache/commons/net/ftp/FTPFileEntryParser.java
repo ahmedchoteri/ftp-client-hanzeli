@@ -75,7 +75,7 @@ import java.util.List;
  * which provides iterative access.
  *
  * @author <a href="mailto:scohen@apache.org">Steve Cohen</a>
- * @version $Id: FTPFileEntryParser.java 1081475 2011-03-14 17:07:53Z sebb $
+ * @version $Id: FTPFileEntryParser.java 1299238 2012-03-10 17:12:28Z sebb $
  * @see org.apache.commons.net.ftp.FTPFile
  * @see org.apache.commons.net.ftp.FTPClient#listFiles()
  */

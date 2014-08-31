@@ -70,7 +70,7 @@
                 android:drawableLeft="@drawable/download"
                 android:gravity="center_vertical"
                 android:textSize="15sp"
-                android:text="@string/frag_download" />
+                android:text="@string/frag_downloadB" />
 
             <Button
                 android:id="@+id/REMButtonAll"
@@ -110,7 +110,7 @@
                 android:drawableLeft="@drawable/delete"
                 android:gravity="center_vertical"
                 android:textSize="15sp"
-                android:text="@string/frag_delete" />
+                android:text="@string/frag_deleteB" />
 
             <Button
                 android:id="@+id/REMButtonRename"
@@ -120,7 +120,7 @@
                 android:drawableLeft="@drawable/rename"
                 android:gravity="center_vertical"
                 android:textSize="15sp"
-                android:text="@string/frag_rename" />
+                android:text="@string/frag_renameB" />
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,14 +179,14 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/REMdetail_icon"
+                        android:id="@+id/REMDetail_icon"
                         android:src="@drawable/image_unknown1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/detail_image"/>
 
                     <TextView
-                        android:id="@+id/REMdetail_name"
+                        android:id="@+id/REMDetail_name"
                         android:layout_marginLeft="50dip"
                         android:hint="@string/edit_screen_name"
                         android:layout_width="wrap_content"
@@ -198,7 +198,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -235,7 +236,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
                         <TextView
-                            android:id="@+id/REMdetail_location"
+                            android:id="@+id/REMDetail_location"
                             android:layout_width="wrap_content"
                             android:layout_height="60dp"
                             android:layout_marginLeft="20dip"
@@ -244,7 +245,7 @@
                             android:textColor="@color/basic_text_grey"
                             android:textSize="25sp"/>
                         <TextView
-                            android:id="@+id/REMdetail_size"
+                            android:id="@+id/REMDetail_size"
                             android:layout_width="wrap_content"
                             android:layout_height="60dp"
                             android:layout_marginLeft="20dip"
@@ -253,7 +254,7 @@
                             android:textColor="@color/basic_text_grey"
                             android:textSize="25sp"/>
                         <TextView
-                            android:id="@+id/REMdetail_timestamp"
+                            android:id="@+id/REMDetail_timestamp"
                             android:layout_width="wrap_content"
                             android:layout_height="60dp"
                             android:layout_marginLeft="20dip"

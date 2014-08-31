@@ -27,7 +27,7 @@ import org.apache.commons.net.ftp.FTPFile;
  *
  * @author  <a href="Winston.Ojeda@qg.com">Winston Ojeda</a>
  * @author <a href="mailto:scohen@apache.org">Steve Cohen</a>
- * @version $Id: NTFTPEntryParser.java 1081476 2011-03-14 17:09:59Z sebb $
+ * @version $Id: NTFTPEntryParser.java 1489361 2013-06-04 09:48:36Z sebb $
  * @see org.apache.commons.net.ftp.FTPFileEntryParser FTPFileEntryParser (for usage instructions)
  */
 public class NTFTPEntryParser extends ConfigurableFTPFileEntryParserImpl
@@ -39,7 +39,7 @@ public class NTFTPEntryParser extends ConfigurableFTPFileEntryParserImpl
     private static final String DEFAULT_DATE_FORMAT2
         = "MM-dd-yy kk:mm"; //11-09-01 18:30
 
-    private FTPTimestampParser timestampParser;
+    private final FTPTimestampParser timestampParser;
 
     /**
      * this is the regular expression used by this parser.
@@ -97,6 +97,7 @@ public class NTFTPEntryParser extends ConfigurableFTPFileEntryParserImpl
      * @param entry A line of text from the file listing
      * @return An FTPFile instance corresponding to the supplied entry
      */
+//    @Override
     public FTPFile parseFTPEntry(String entry)
     {
         FTPFile f = new FTPFile();

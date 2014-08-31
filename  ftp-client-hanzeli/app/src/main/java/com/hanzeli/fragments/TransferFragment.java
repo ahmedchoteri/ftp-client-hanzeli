@@ -3,23 +3,16 @@ package com.hanzeli.fragments;
 import com.hanzeli.karlftp.MainApplication;
 import com.hanzeli.karlftp.R;
 import com.hanzeli.managers.EventListener;
-import com.hanzeli.managers.ManagerEvent;
-import com.hanzeli.managers.Transfer;
+import com.hanzeli.resources.EventTypes;
+import com.hanzeli.resources.ManagerEvent;
 import com.hanzeli.managers.TransferManager;
-import com.hanzeli.managers.TransferService;
-import com.hanzeli.values.Values;
+import com.hanzeli.resources.Transfer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,23 +21,17 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.Button;
 
-import java.util.ArrayList;
-
 public class TransferFragment extends Fragment implements  OnClickListener, EventListener {
 	
 	private final String TAG = "TransferFragment";
 
     private Button stopButton;
-	protected Button clearButton;
-	protected ListView trfListView;
+	private Button clearButton;
+    private Button runButton;
+	private ListView transferListView;
 
-    private TransferAdapter trfAdapter;
-    private TransferManager trfManager;
-
-
-
-
-
+    private TransferAdapter transferAdapter;
+    private TransferManager transferManager;
 
 	public void onAttach(Activity a){
         super.onAttach(a);
@@ -52,17 +39,15 @@ public class TransferFragment extends Fragment implements  OnClickListener, Even
 
     @Override
     public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);     //TODO problem ked nekliknem na tento tab tak nemam vytvorene komponenty
-        trfManager = MainApplication.getInstance().getTransferManager();
-        trfManager.attachFragment(this);
-
-
+        super.onCreate(savedInstanceState);
+        transferManager = MainApplication.getInstance().getTransferManager();
+        transferManager.attachFragment(this);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        trfAdapter.notifyDataSetChanged();
+        transferAdapter.notifyDataSetChanged();
     }
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,45 +60,82 @@ public class TransferFragment extends Fragment implements  OnClickListener, Even
 	}
 
     public TransferAdapter getAdapter(){
-        return trfAdapter;
+        return transferAdapter;
     }
 
     @Override
     public void onDestroy(){
-        //tu bol unregister broadcast listener
+
         super.onDestroy();
     }
 	private void initTRFBrowser(View view){
 		stopButton = (Button) view.findViewById(R.id.TRFButtonStop);
 		clearButton = (Button) view.findViewById(R.id.TRFButtonClear);
+        runButton = (Button) view.findViewById(R.id.TRFButtonRun);
 		clearButton.setOnClickListener(this);
-		trfListView = (ListView) view.findViewById(R.id.listViewTransfer);
-		trfAdapter = new TransferAdapter(getActivity(), R.layout.list_view_transfer, this, trfManager.getTransfers());
-		trfListView.setAdapter(trfAdapter);
+        stopButton.setOnClickListener(this);
+        runButton.setOnClickListener(this);
+		transferListView = (ListView) view.findViewById(R.id.listViewTransfer);
+		transferAdapter = new TransferAdapter(getActivity(), R.layout.list_view_transfer, this, transferManager.getTransfers());
+		transferListView.setAdapter(transferAdapter);
+        transferAdapter.setCheckBoxListener(this);
 	}
 
-	public void onClick(View v) {
-		switch(v.getId()){
+	public void onClick(View view) {
+        Transfer[] transfers;
+		switch(view.getId()){
 		case R.id.TRFButtonClear:
 			Log.d(TAG,"Clear button pressed");
-            trfAdapter.clearSelected();
+            transferManager.clearSelected();
 			break;
 		case R.id.TRFButtonStop:
 			Log.d(TAG,"Stop button pressed");
-            throw new UnsupportedOperationException();
+            transfers = transferManager.getSelected();
+            if (transfers.length > 1){
+                onEvent(new ManagerEvent(EventTypes.SELECT_ONE));
+                break;
+            } else {
+                transferManager.stopProcess();
+                transfers[0].stopped = true;
+                transferAdapter.setTransferList(transferManager.getTransfers());
+            }
+            break;
+        case R.id.trf_checkbox:
+            int i = (Integer) view.getTag();
+            transferManager.selectTransfer(i);
+            break;
+        case R.id.TRFButtonRun:
+            Log.d(TAG,"Stop button pressed");
+            transfers = transferManager.getSelected();
+            if (transfers.length > 1){
+                onEvent(new ManagerEvent(EventTypes.SELECT_ONE));
+                break;
+            } else {
+                transferManager.startOne(transfers[0]);
+            }
 		}
-		
-	}
 
 
+    }
 
 	public void onEvent(ManagerEvent event) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Warning");
 		switch(event.getEvent()){
 			case TRANSFER_LIST_CHANGE:
-				trfAdapter.setTransferList(trfManager.getTransfers());
+				transferAdapter.setTransferList(transferManager.getTransfers());
 				break;
             case START_TRANSFER:
-                trfManager.processTransfers();
+                transferManager.processTransfers();
+                break;
+            case SELECT_ONE:
+                builder.setMessage("Select only one item");
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel(); 			           }
+                });
+                AlertDialog warning = builder.create();
+                warning.show();
                 break;
 			default:
 				break;

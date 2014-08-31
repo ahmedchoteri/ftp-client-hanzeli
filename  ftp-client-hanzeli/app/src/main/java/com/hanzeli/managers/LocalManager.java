@@ -8,8 +8,12 @@ import java.util.Collections;
 import android.os.Bundle;
 import android.os.Environment;
 
-import com.hanzeli.values.EventTypes;
-import com.hanzeli.values.Order;
+import com.hanzeli.karlftp.MainApplication;
+import com.hanzeli.resources.EventTypes;
+import com.hanzeli.resources.FileInfo;
+import com.hanzeli.resources.FileTypes;
+import com.hanzeli.resources.ManagerException;
+import com.hanzeli.resources.Order;
 
 public class LocalManager extends BasicFileManager{
 	
@@ -18,7 +22,7 @@ public class LocalManager extends BasicFileManager{
 
 		//ordering initialization
 		if (bundle.containsKey("local_order")) {
-			orderingCompare = new Ordering((Order) bundle.get("local.orderBy"),Order.ASC);
+			ordering = new Ordering((Order) bundle.get("local.orderBy"),Order.ASC);
 		}
 		//paths initialization
 		if (bundle.containsKey("local_dir")) {
@@ -59,13 +63,13 @@ public class LocalManager extends BasicFileManager{
 				fileList.add(fi);
 			}
 			//sorting of fileList
-			Collections.sort(fileList, orderingCompare);
+			Collections.sort(fileList, ordering);
 		}
 	}
 	
 	
 	@Override
-	protected void execConnect() throws ManagerException{
+	protected void execConnect() throws ManagerException {
 
 		File directory = new File(currentDir);
 		//testing if directory is accessible
@@ -81,17 +85,17 @@ public class LocalManager extends BasicFileManager{
 	}
 	
 	@Override
-	protected void execChngWorkDir(FileInfo file) throws ManagerException{
+	protected void execChangeWorkDir(FileInfo file) throws ManagerException{
 		File directory = new File(file.getAbsPath());
 		//testing if directory is accessible
-		if (directory.canRead() && directory.isDirectory()) {
-			currentDir = directory.getAbsolutePath();
-			loadFilesInfo();	//load the list of files in current directory
-		}
+        if (directory.canRead() && directory.isDirectory()) {
+            currentDir = directory.getAbsolutePath();
+            loadFilesInfo();    //load the list of files in current directory
+        }
 	}
 	
 	@Override
-	protected void execToParDir() throws ManagerException{
+	protected void execToParentDir() throws ManagerException{
 		File directory = new File(currentDir);		
 		currentDir = directory.getParent();
 		loadFilesInfo();	//load the list of files in current directory

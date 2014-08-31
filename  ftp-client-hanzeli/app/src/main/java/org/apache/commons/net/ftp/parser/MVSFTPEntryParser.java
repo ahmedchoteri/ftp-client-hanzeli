@@ -31,7 +31,7 @@ import org.apache.commons.net.ftp.FTPFile;
  * @author <a href="jnadler@srcginc.com">Jeff Nadler</a>
  * @author <a href="wnoto@openfinance.com">William Noto</a>
  *
- * @version $Id: MVSFTPEntryParser.java 1230358 2012-01-12 01:51:02Z sebb $
+ * @version $Id: MVSFTPEntryParser.java 1490237 2013-06-06 11:17:23Z sebb $
  * @see org.apache.commons.net.ftp.FTPFileEntryParser FTPFileEntryParser (for
  *      usage instructions)
  */
@@ -229,6 +229,7 @@ public class MVSFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
      *            A line of text from the file listing
      * @return An FTPFile instance corresponding to the supplied entry
      */
+//    @Override
     public FTPFile parseFTPEntry(String entry) {
         boolean isParsed = false;
         FTPFile f = new FTPFile();
@@ -352,10 +353,10 @@ public class MVSFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
      *
      * @param file
      * @param entry
-     * @return
+     * @return true if the entry string is non-null and non-empty
      */
     private boolean parseSimpleEntry(FTPFile file, String entry) {
-        if (entry != null && entry.length() > 0) {
+        if (entry != null && entry.trim().length() > 0) {
             file.setRawListing(entry);
             String name = entry.split(" ")[0];
             file.setName(name);

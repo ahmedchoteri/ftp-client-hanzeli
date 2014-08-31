@@ -41,7 +41,7 @@ import org.apache.commons.net.ftp.FTPClientConfig;
  *
  * @author  <a href="Winston.Ojeda@qg.com">Winston Ojeda</a>
  * @author <a href="sestegra@free.fr">Stephane ESTE-GRACIAS</a>
- * @version $Id: VMSVersioningFTPEntryParser.java 1084380 2011-03-22 22:23:35Z sebb $
+ * @version $Id: VMSVersioningFTPEntryParser.java 1299238 2012-03-10 17:12:28Z sebb $
  *
  * @see org.apache.commons.net.ftp.FTPFileEntryParser FTPFileEntryParser (for usage instructions)
  */

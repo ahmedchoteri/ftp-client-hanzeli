@@ -25,7 +25,7 @@ import java.io.IOException;
  * have been transferred before an I/O error as well as the IOException
  * responsible for the failure of a copy operation.
  * @see Util
- * @version $Id: CopyStreamException.java 1196051 2011-11-01 15:22:59Z sebb $
+ * @version $Id: CopyStreamException.java 1299238 2012-03-10 17:12:28Z sebb $
  */
 public class CopyStreamException extends IOException
 {

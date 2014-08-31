@@ -14,8 +14,23 @@
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
+                name="copy"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\copy.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
                 name="delete"
                 path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\delete.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="detail"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\detail.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="detail1"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\detail1.png"
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
@@ -24,13 +39,13 @@
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
-                name="ftp"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\ftp.png"
+                name="image_avi"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_avi.png"
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
-                name="ic_launcher"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\ic_launcher.png"
+                name="image_doc"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_doc.png"
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
@@ -49,8 +64,48 @@
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
+                name="image_jpg"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_jpg.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="image_pdf"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_pdf.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="image_png"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_png.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="image_txt"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_txt.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
                 name="image_unknown"
                 path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_unknown.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="image_unknown1"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_unknown1.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="logo_male_bar"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_bar.jpg"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="logo_male_ftp"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_ftp.jpg"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="music"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\music.png"
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
@@ -59,8 +114,18 @@
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
+                name="refresh"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\refresh.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
                 name="rename"
                 path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\rename.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="run"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\run.png"
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
@@ -79,33 +144,28 @@
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
+                name="sync"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\sync.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
                 name="upload"
                 path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\upload.png"
                 qualifiers="hdpi-v4"
                 type="drawable" />
             <file
-                name="ic_launcher"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-ldpi\ic_launcher.png"
+                name="logo_male_bar"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-ldpi\logo_male_bar.jpg"
                 qualifiers="ldpi-v4"
                 type="drawable" />
             <file
-                name="ic_action_search"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-mdpi\ic_action_search.png"
+                name="logo_male_ftp"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-mdpi\logo_male_ftp.jpg"
                 qualifiers="mdpi-v4"
                 type="drawable" />
             <file
-                name="ic_launcher"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-mdpi\ic_launcher.png"
-                qualifiers="mdpi-v4"
-                type="drawable" />
-            <file
-                name="ic_action_search"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-xhdpi\ic_action_search.png"
-                qualifiers="xhdpi-v4"
-                type="drawable" />
-            <file
-                name="ic_launcher"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-xhdpi\ic_launcher.png"
+                name="logo_male_ftp"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-xhdpi\logo_male_ftp.jpg"
                 qualifiers="xhdpi-v4"
                 type="drawable" />
             <file
@@ -121,6 +181,26 @@
             <file
                 name="activity_main"
                 path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\activity_main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="dialog_detail"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\dialog_detail.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="dialog_log"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\dialog_log.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="dialog_order"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\dialog_order.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="dialog_sync"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\dialog_sync.xml"
                 qualifiers=""
                 type="layout" />
             <file
@@ -157,6 +237,61 @@
                 name="transfer_fragment"
                 path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout\transfer_fragment.xml"
                 qualifiers=""
+                type="layout" />
+            <file
+                name="activity_main"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\activity_main.xml"
+                qualifiers="large-land-v4"
+                type="layout" />
+            <file
+                name="list_view_file"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\list_view_file.xml"
+                qualifiers="large-land-v4"
+                type="layout" />
+            <file
+                name="local_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
+                qualifiers="large-land-v4"
+                type="layout" />
+            <file
+                name="remote_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
+                qualifiers="large-land-v4"
+                type="layout" />
+            <file
+                name="activity_main"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-port\activity_main.xml"
+                qualifiers="large-port-v4"
+                type="layout" />
+            <file
+                name="local_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-port\local_manager_fragment.xml"
+                qualifiers="large-port-v4"
+                type="layout" />
+            <file
+                name="remote_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-port\remote_manager_fragment.xml"
+                qualifiers="large-port-v4"
+                type="layout" />
+            <file
+                name="activity_main"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\activity_main.xml"
+                qualifiers="normal-land-v4"
+                type="layout" />
+            <file
+                name="list_view_file"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\list_view_file.xml"
+                qualifiers="normal-land-v4"
+                type="layout" />
+            <file
+                name="local_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
+                qualifiers="normal-land-v4"
+                type="layout" />
+            <file
+                name="remote_manager_fragment"
+                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\remote_manager_fragment.xml"
+                qualifiers="normal-land-v4"
                 type="layout" />
             <file
                 name="activity_edit_server"
@@ -200,13 +335,21 @@
                 </string>
                 <string name="detail_image" >Image
                 </string>
+                <string name="frag_downloadB" >Download
+                </string>
+                <string name="frag_uploadB" >Upload
+                </string>
                 <string name="edit_screen_password" >Password
                 </string>
                 <string name="menu_sync_browsing" >SyncBrowse
                 </string>
+                <string name="frag_deleteB" >Delete
+                </string>
                 <string name="edit_screen_default_port" >default is 21
                 </string>
-                <string name="frag_download" >Downl
+                <string name="sync_source" >Source:
+                </string>
+                <string name="frag_download" >Dwnl
                 </string>
                 <string name="btn_delete" >Delete
                 </string>
@@ -218,11 +361,11 @@
                 </string>
                 <string name="edit_screen_username" >Username
                 </string>
-                <string name="title_activity_edit_server" >EditServerActivity
-                </string>
                 <string name="file_folder" >Folder
                 </string>
                 <string name="tab_local" >Local
+                </string>
+                <string name="status_stopped" >Stopped
                 </string>
                 <string name="menu_settings" >Settings
                 </string>
@@ -230,11 +373,17 @@
                 </string>
                 <string name="menu_paste" >Paste
                 </string>
-                <string name="edit_screen_local_dir" >Local dir.
-                </string>
                 <string name="menu_copy" >Copy
                 </string>
+                <string name="edit_screen_local_dir" >Local dir.
+                </string>
+                <string name="frag_run" >Run
+                </string>
+                <string name="order_name" >name
+                </string>
                 <string name="status_counting" >Counting
+                </string>
+                <string name="frag_renameB" >Rename
                 </string>
                 <string name="tab_transfer" >Transfer
                 </string>
@@ -246,7 +395,11 @@
                 </string>
                 <string name="frag_clear" >Clear
                 </string>
+                <string name="sync_synchronize" >synchronize
+                </string>
                 <string name="ftp_image" >ftp_image
+                </string>
+                <string name="menu_ordering" >Change ordering
                 </string>
                 <string name="edit_screen_btn_save" >Save
                 </string>
@@ -256,7 +409,11 @@
                 </string>
                 <string name="manager_gohome_image" >Home button
                 </string>
+                <string name="sync_overwrite" >overwrite
+                </string>
                 <string name="btn_connect" >Connect
+                </string>
+                <string name="sync_cancel" >Cancel
                 </string>
                 <string name="action_settings" >Settings
                 </string>
@@ -264,27 +421,35 @@
                 </string>
                 <string name="title_activity_example" >Example
                 </string>
-                <string name="title_activity_main" >MainActivity
-                </string>
                 <string name="tab_remote" >Remote
                 </string>
                 <string name="edit_screen_host" >Host
                 </string>
                 <string name="menu_synchronize" >Synchronize
                 </string>
+                <string name="menu_log" >Log
+                </string>
                 <string name="frag_delete" >Del
                 </string>
-                <string name="menu_options" >Options
+                <string name="order_time" >time
                 </string>
-                <string name="ok" >OK
+                <string name="status_fail" >Failed
+                </string>
+                <string name="log_text" >Log text
+                </string>
+                <string name="sync_option" >Option:
+                </string>
+                <string name="sync_fld22" >Remote:
                 </string>
                 <string name="edit_screen_local_text" >/sdcard
                 </string>
-                <string name="menu_about" >About
+                <string name="ok" >OK
                 </string>
-                <string name="frag_rename" >Rename
+                <string name="sync_start" >Start sync.
                 </string>
-                <string name="frag_upload" >Upload
+                <string name="frag_rename" >Rnm
+                </string>
+                <string name="frag_upload" >Upld
                 </string>
                 <string name="hello_world" >Hello world!
                 </string>
@@ -298,25 +463,37 @@
                 </string>
                 <string name="manager_working_direktory" >Working directory
                 </string>
-                <string name="edit_screen_remote_hint" >/folder
-                </string>
                 <string name="detail_file" >File details
+                </string>
+                <string name="edit_screen_remote_hint" >/folder
                 </string>
                 <string name="status_waiting" >Waiting
                 </string>
-                <string name="status_done" >Done
+                <string name="order_size" >size
                 </string>
                 <string name="menu_expr_select" >Expr. select
                 </string>
                 <string name="menu_refresh" >Refresh
                 </string>
+                <string name="status_done" >Done
+                </string>
                 <string name="edit_screen_remote_dir" >Remote dir.
                 </string>
+                <string name="sync_fld11" >Local:
+                </string>
                 <string name="menu_cut" >Cut
+                </string>
+                <string name="sync_update" >update
+                </string>
+                <string name="menu_sync_select" >Set sync. folder
                 </string>
                 <string name="detail_location" >Location:
                 </string>
                 <string name="app_name" >KarlFTP
+                </string>
+                <string name="sync_fld2" >remote
+                </string>
+                <string name="sync_fld1" >local
                 </string>
                 <string name="trf_icon" >icon
                 </string>
@@ -355,76 +532,6 @@
                 <dimen name="activity_horizontal_margin" >64dp
                 </dimen>
             </file>
-            <file
-                name="remote_manager_fragment"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\remote_manager_fragment.xml"
-                qualifiers="normal-land-v4"
-                type="layout" />
-            <file
-                name="remote_manager_fragment"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\remote_manager_fragment.xml"
-                qualifiers="large-land-v4"
-                type="layout" />
-            <file
-                name="image_unknown1"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\image_unknown1.png"
-                qualifiers="hdpi-v4"
-                type="drawable" />
-            <file
-                name="local_manager_fragment"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\local_manager_fragment.xml"
-                qualifiers="large-land-v4"
-                type="layout" />
-            <file
-                name="activity_main"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\activity_main.xml"
-                qualifiers="large-land-v4"
-                type="layout" />
-            <file
-                name="activity_main"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\activity_main.xml"
-                qualifiers="normal-land-v4"
-                type="layout" />
-            <file
-                name="list_view_file"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-large-land\list_view_file.xml"
-                qualifiers="large-land-v4"
-                type="layout" />
-            <file
-                name="local_manager_fragment"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\local_manager_fragment.xml"
-                qualifiers="normal-land-v4"
-                type="layout" />
-            <file
-                name="list_view_file"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\layout-normal-land\list_view_file.xml"
-                qualifiers="normal-land-v4"
-                type="layout" />
-            <file
-                name="detail"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\detail.png"
-                qualifiers="hdpi-v4"
-                type="drawable" />
-            <file
-                name="logo_male_ftp"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_ftp.jpg"
-                qualifiers="hdpi-v4"
-                type="drawable" />
-            <file
-                name="detail1"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\detail1.png"
-                qualifiers="hdpi-v4"
-                type="drawable" />
-            <file
-                name="logo_male_bar"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\logo_male_bar.jpg"
-                qualifiers="hdpi-v4"
-                type="drawable" />
-            <file
-                name="refresh"
-                path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\src\main\res\drawable-hdpi\refresh.png"
-                qualifiers="hdpi-v4"
-                type="drawable" />
         </source>
         <source path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\build\generated\res\rs\debug" />
         <source path="C:\Users\Mike\AndroidStudioProjects\KarlFTP\app\build\generated\res\generated\debug" />

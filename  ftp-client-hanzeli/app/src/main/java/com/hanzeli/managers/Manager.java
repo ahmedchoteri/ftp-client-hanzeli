@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import org.apache.commons.net.ftp.FTPClient;
 
+import com.hanzeli.fragments.FileAdapter;
 import com.hanzeli.karlftp.MainActivity;
-import com.hanzeli.values.Order;
+import com.hanzeli.resources.FileInfo;
+import com.hanzeli.resources.Order;
 
 import android.os.Bundle;
 
@@ -44,6 +46,10 @@ public interface Manager {
 	 * @param client
 	 */
 	public void setClient(FTPClient client);
+
+    public void setFileAdapter(FileAdapter a);
+
+    public FileAdapter getFileAdapter();
 	
 	public FTPClient getClient();
 	/**
@@ -62,7 +68,7 @@ public interface Manager {
 	/**
 	 * changing to parent directory 
 	 */
-	public void toParDir();
+	public void toParrentDir();
 
     /**
      * zmena oznacenia suboru podla stavu checkboxu
@@ -90,7 +96,7 @@ public interface Manager {
 	/**
 	 * change currently working directory
 	 */
-	public void chngWorkDir(String dirname);
+	public void changeWorkingDir(String dirname,boolean click);
 	
 	/**
 	 * create new folder
@@ -113,12 +119,12 @@ public interface Manager {
 	/**
 	 * change type of ordering
 	 */
-	public void chngOrdering(final Order order);
+	public void changeOrdering(final Order order);
 	/**
 	 * change asc/desc ordering
 	 * @param order
 	 */
-	public void chngOrderingAscDesc(final Order order);
+	public void changeOrderingAscDesc(final Order order);
 	/**
 	 * refreshing manager
 	 */
@@ -138,5 +144,10 @@ public interface Manager {
     public void attachActivity(MainActivity listener);
 
     public void detachActivity();
+
+    /**
+     * selecting files with pattern
+     */
+    public void patternSelect(String pattern);
 
 }

@@ -2,8 +2,8 @@ package com.hanzeli.fragments;
 
 import com.hanzeli.karlftp.MainApplication;
 import com.hanzeli.karlftp.R;
-import com.hanzeli.managers.FileInfo;
-import com.hanzeli.values.Order;
+import com.hanzeli.resources.FileInfo;
+import com.hanzeli.resources.Order;
 
 
 import android.content.res.Configuration;
@@ -33,7 +33,7 @@ public class RemoteFragment extends ManagerFragment{
         Log.d(TAG, "Creating fragment");
 		//get instance of local and transfer manager
 		fileManager = MainApplication.getInstance().getRemoteManager();
-		transfManager = MainApplication.getInstance().getTransferManager();
+		transferManager = MainApplication.getInstance().getTransferManager();
 		//initialize the rest of fragment creation in abstract class
 		//inflation of browser to parent ViewGroup
 		View view = inflater.inflate(fragmentId, container, false);
@@ -65,8 +65,9 @@ public class RemoteFragment extends ManagerFragment{
 		filesListView = (ListView) view.findViewById(R.id.listViewRemote);
 		filesListView.setOnItemClickListener(this);
 		//setup list adapter
-		fileAdapter = new FileAdapter(getActivity(), "Remote", fileManager.getFiles());
+		fileAdapter = new FileAdapter(getActivity(), fileManager.getFiles());
         fileAdapter.setCheckBoxListener(this);
+        fileManager.setFileAdapter(fileAdapter);
 		filesListView.setAdapter(fileAdapter);
 		//setup fragment buttons + add onClickListener
 		allButton = (Button)  view.findViewById(R.id.REMButtonAll);
@@ -93,11 +94,7 @@ public class RemoteFragment extends ManagerFragment{
 	@Override
 	protected void doTransfer(){
 		FileInfo[] transferFiles = fileManager.getSelectedFiles();
-        transfManager.addNewTransfer(transferFiles,0); //0 is download
-		/*for (FileInfo infoTransf : transferFiles){
-			transfManager.addNewTransfer(infoTransf, 0);
-		}
-		transfManager.processTransfers();*/
+        transferManager.addNewTransfer(transferFiles,0); //0 is download
 	}
 
 }
